@@ -159,4 +159,21 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+
+### Application Secrets & Environment ###
+
+.env
+.env.local
+application-local.properties
+application-local.yml
+
+### Docker ###
+
+.docker/
+docker-volumes/
+
+### OS temporary files ###
+.DS_Store
+Thumbs.db
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,maven
