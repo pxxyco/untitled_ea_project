@@ -1,9 +1,7 @@
 package it.unical.ea_project.services;
 
 import it.unical.ea_project.domain.Trip;
-import it.unical.ea_project.domain.Trip.TripStatus;
 import it.unical.ea_project.domain.User;
-import it.unical.ea_project.repositories.TripRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,50 +11,25 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class TripService {
 
-    private final TripRepository tripRepository;
+public interface TripService {
 
-    public TripService(TripRepository tripRepository) {
-        this.tripRepository = tripRepository;
-    }
+    List<Trip> getTripsByUser(User user);
 
-    public List<Trip> getTripsByUser(User user) {
-        return tripRepository.findByCreatedByAndDeletedAtIsNull(user);
-    }
+    List<Trip> getPublishedTrips();
 
-    public List<Trip> getPublishedTrips() {
-        return tripRepository.findByStatusAndDeletedAtIsNull(TripStatus.PUBLISHED);
-    }
+    List<Trip> searchByCountry(String country);
 
-    public List<Trip> searchByCountry(String country) {
-        return tripRepository.findByDestinationCountryContainingIgnoreCaseAndDeletedAtIsNull(country);
-    }
+    List<Trip> searchByCity(String city);
 
-    public List<Trip> searchByCity(String city) {
-        return tripRepository.findByDestinationCityContainingIgnoreCaseAndDeletedAtIsNull(city);
-    }
+    List<Trip> getTripsInDateRange(LocalDate start, LocalDate end);
 
-    public List<Trip> getTripsInDateRange(LocalDate start, LocalDate end) {
-        return tripRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndDeletedAtIsNull(start, end);
-    }
+    List<Trip> getAvailableTrips();
 
-    public List<Trip> getAvailableTrips() {
-        return tripRepository.findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus.PUBLISHED, 0);
-    }
+    Optional<Trip> getTripById(Long id);
 
-    public Optional<Trip> getTripById(Long id) {
-        return tripRepository.findByTripIdAndDeletedAtIsNull(id);
-    }
+    Trip saveTrip(Trip trip);
 
-    @Transactional
-    public Trip saveTrip(Trip trip) {
-        return tripRepository.save(trip);
-    }
+    void deleteTripLogically(Trip trip);
 
-    @Transactional
-    public void deleteTripLogically(Trip trip) {
-        trip.setDeletedAt(java.time.LocalDateTime.now());
-        tripRepository.save(trip);
-    }
 }
