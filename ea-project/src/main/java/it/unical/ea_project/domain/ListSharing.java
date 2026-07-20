@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 
 @IdClass(ListSharing.ListSharingId.class)
-@Table(name = "\"List_Sharing\"")
+@Table(name = "\"LIST_SHARING\"")
 public class ListSharing {
 
     @Id
