@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @IdClass(ListTrips.FavoriteListTripId.class)
-@Table(name = "\"ListTrips\"")
+@Table(name = "\"LIST_TRIPS\"")
 public class ListTrips {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

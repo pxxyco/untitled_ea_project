@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @IdClass(ListActivities.ListActivityId.class)
-@Table(name = "\"List_Activities\"")
+@Table(name = "\"LIST_ACTIVITIES\"")
 public class ListActivities {
 
     @Id
