@@ -13,8 +13,8 @@ public interface ListSharingRepository extends JpaRepository<ListSharing, ListSh
     List<ListSharing> findByFavoriteListId(Long listId);
 
     //trova tutte le liste condivise con uno specifico utente
-    List<ListSharing> findByUserUserId(Long userId);
+    List<ListSharing> findByUser_Id(Long userId);
 
     //verifica se una lista è già stata condivisa con un determinato utente
-    boolean existsByFavoriteListIdAndUserUserId(Long listId, Long userId);
+    boolean existsByFavoriteList_IdAndUser_Id(Long favoriteListId, Long userId);
 }

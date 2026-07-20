@@ -32,7 +32,7 @@ public class ListSharingServiceImpl implements ListSharingService {
         User user = userRepository.findById(userId) //fixme Controllare user
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + userId));
 
-        if (listSharingRepository.existsByFavoriteListIdAndUserUserId(listId, userId)) {
+        if (listSharingRepository.existsByFavoriteList_IdAndUser_Id(listId, userId)) {
             throw new IllegalStateException("La lista è già condivisa con questo utente. Usa l'aggiornamento dei permessi.");
         }
 
@@ -60,7 +60,7 @@ public class ListSharingServiceImpl implements ListSharingService {
         if (!userRepository.existsById(userId)) { // fixme Controllare User
             throw new IllegalArgumentException("Utente non trovato con ID: " + userId);
         }
-        return listSharingRepository.findByUserUserId(userId);
+        return listSharingRepository.findByUser_Id(userId);
     }
 
     @Override

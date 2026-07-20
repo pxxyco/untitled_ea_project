@@ -10,7 +10,7 @@ import java.util.List;
 public interface FavoriteListRepository extends JpaRepository<FavoriteList, Long> {
 
     //recupera le liste attive di un utente
-    List<FavoriteList> findByUserUserIdAndDeletedFalse(Long userId);
+    List<FavoriteList> findByUser_IdAndDeletedFalse(Long userId);
 
     //recupera tutte le liste pubbliche attive
     List<FavoriteList> findByVisibilityAndDeletedFalse(FavoriteList.Visibility visibility);
