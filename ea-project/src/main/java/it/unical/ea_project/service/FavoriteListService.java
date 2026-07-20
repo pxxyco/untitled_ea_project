@@ -1,0 +1,12 @@
+package it.unical.ea_project.service;
+
+
+import it.unical.ea_project.domain.FavoriteList;
+import java.util.List;
+
+public interface FavoriteListService {
+    FavoriteList createFavoriteList(Long userId, FavoriteList.Visibility visibility);
+    List<FavoriteList> getActiveListsByUser(Long userId);
+    FavoriteList getListById(Long id);
+    void softDeleteList(Long id);
+}

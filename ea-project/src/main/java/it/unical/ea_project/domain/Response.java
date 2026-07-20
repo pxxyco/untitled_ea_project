@@ -28,8 +28,9 @@ public class Response
     private User organizer;
 
     //FK review_id
-    @Column(name = "review_id", nullable = false)
-    private Long reviewId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", nullable = false)
+    private Review review;
 
     @Column(name = "comment")
     private String comment;
