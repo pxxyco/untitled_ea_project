@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "ACTIVITY")
+@Table(name = "\"ACTIVITY\"")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

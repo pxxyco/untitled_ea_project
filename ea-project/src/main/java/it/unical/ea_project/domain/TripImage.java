@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "TRIP_IMAGE")
+@Table(name = "\"TRIP_IMAGE\"")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,9 +19,9 @@ public class TripImage {
 
 
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "trip_id", nullable = false)
-//    private Trip trip;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trip_id", nullable = false)
+    private Trip trip;
 
 
     @Column(name = "image_url")
