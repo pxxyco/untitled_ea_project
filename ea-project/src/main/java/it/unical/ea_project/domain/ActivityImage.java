@@ -1,6 +1,5 @@
 package it.unical.ea_project.domain;
 
-import it.unical.ea_project.domain.Activity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
