@@ -17,12 +17,12 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name='id')
+    @Column(name= "id")
     private long bookingId;
 
 
     @ManyToOne
-    @JoinColumn(name='user_id', nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     @ManyToOne
@@ -30,18 +30,18 @@ public class Booking {
     private Trip trip;
 
     @ManyToOne
-    @JoinColumn(name='activity_id', nullable = false)
+    @JoinColumn(name="activity_id", nullable = false)
     private Activity activity;
 
-    @Column(name = 'seats')
+    @Column(name = "seats")
     private Integer seats;
 
     @Enumerated(EnumType.STRING)
-    @Column(name='type', nullable = false)
+    @Column(name="type", nullable = false)
     private BookingType bookingType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name='status', nullable = false)
+    @Column(name="status", nullable = false)
     private BookingStatus bookingStatus;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
