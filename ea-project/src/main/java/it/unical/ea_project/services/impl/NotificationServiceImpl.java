@@ -2,7 +2,7 @@ package it.unical.ea_project.services.impl;
 
 import it.unical.ea_project.domain.Notification;
 import it.unical.ea_project.domain.User;
-import it.unical.ea_project.repositories.NotificationRepository;
+import it.unical.ea_project.repository.NotificationRepository;
 import it.unical.ea_project.services.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

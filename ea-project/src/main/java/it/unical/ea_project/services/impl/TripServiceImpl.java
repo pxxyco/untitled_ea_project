@@ -3,7 +3,7 @@ package it.unical.ea_project.services.impl;
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.Trip.TripStatus;
 import it.unical.ea_project.domain.User;
-import it.unical.ea_project.repositories.TripRepository;
+import it.unical.ea_project.repository.TripRepository;
 import it.unical.ea_project.services.TripService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
