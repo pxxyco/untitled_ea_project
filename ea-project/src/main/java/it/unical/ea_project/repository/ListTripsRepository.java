@@ -1,4 +1,4 @@
-package it.unical.ea_project.repositories;
+package it.unical.ea_project.repository;
 
 import it.unical.ea_project.domain.ListTrips;
 import org.springframework.data.jpa.repository.JpaRepository;

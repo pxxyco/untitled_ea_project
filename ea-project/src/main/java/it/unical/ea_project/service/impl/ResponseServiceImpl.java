@@ -4,12 +4,11 @@ package it.unical.ea_project.service.impl;
 import it.unical.ea_project.domain.Response;
 import it.unical.ea_project.domain.Review;
 import it.unical.ea_project.domain.User;
-import it.unical.ea_project.repositories.ReviewRepository;
-import it.unical.ea_project.repositories.UserRepository;
+import it.unical.ea_project.repository.ReviewRepository;
+import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.ResponseService;
-import it.unical.ea_project.repositories.ResponseRepository;
-//import it.unical.ea_project.repository.ReviewRepository;
-//import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.repository.ResponseRepository;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

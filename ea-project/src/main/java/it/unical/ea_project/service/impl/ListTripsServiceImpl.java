@@ -2,8 +2,8 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.FavoriteList;
 import it.unical.ea_project.domain.ListTrips;
-import it.unical.ea_project.repositories.FavoriteListRepository;
-import it.unical.ea_project.repositories.ListTripsRepository;
+import it.unical.ea_project.repository.FavoriteListRepository;
+import it.unical.ea_project.repository.ListTripsRepository;
 import it.unical.ea_project.service.ListTripsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
