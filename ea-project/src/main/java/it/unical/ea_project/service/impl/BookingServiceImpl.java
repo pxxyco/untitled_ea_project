@@ -2,28 +2,28 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Booking;
 import it.unical.ea_project.repository.BookingRepository;
-import it.unical.ea_project.repository.ReviewRepository;
+import it.unical.ea_project.service.BookingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 @Service
-public class BookingService{
+public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
-    //private final UserRepository userRepository;
-    //private final TripRepository tripRepository;
+    private final UserRepository userRepository;
+    private final TripRepository tripRepository;
 
-    public BookingService(BookingRepository bookingRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
     }
 
     @Transactional
     public Booking creaPrenotazioneTrip(Long userId, Long tripId, Integer seats, BigDecimal price) {
         Booking b = new Booking();
-        //b.setUser(userRepository.getReferenceById(userId));
-        //b.setTrip(tripRepository.getReferenceById(tripId));
+        b.setUser(userRepository.getReferenceById(userId));
+        b.setTrip(tripRepository.getReferenceById(tripId));
         b.setSeats(seats);
         b.setBookingType(Booking.BookingType.TRIP);
         b.setBookingStatus(Booking.BookingStatus.PENDING);
@@ -34,8 +34,8 @@ public class BookingService{
     @Transactional
     public Booking creaPrenotazioneActivity(Long userId, Long activityId, Integer seats, BigDecimal price) {
         Booking b = new Booking();
-        //b.setUser(userRepository.getReferenceById(userId));
-        //b.setTrip(tripRepository.getReferenceById(activityId));
+        b.setUser(userRepository.getReferenceById(userId));
+        b.setTrip(tripRepository.getReferenceById(activityId));
         b.setSeats(seats);
         b.setBookingType(Booking.BookingType.ACTIVITY);
         b.setBookingStatus(Booking.BookingStatus.PENDING);

@@ -1,7 +1,6 @@
 package it.unical.ea_project.controller;
 
-import it.unical.ea_project.service.impl.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.unical.ea_project.service.impl.BookingServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-    private final BookingService bookingService;
+    private final BookingServiceImpl bookingService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingServiceImpl bookingService) {
         this.bookingService = bookingService;
     }
 

@@ -2,17 +2,18 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Review;
 import it.unical.ea_project.repository.ReviewRepository;
+import it.unical.ea_project.service.ReviewService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class ReviewService {
+public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 
@@ -21,24 +22,20 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public Review trovaPerId(Long id) {
+    public Review findById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Review non trovata"));
     }
 
-    public List<Review> trovaTutte() {
-        return reviewRepository.findAll();
-    }
-
-    public List<Review> trovaPerUtente(Long userId) {
+    public List<Review> findByUser(Long userId) {
         return reviewRepository.findAllByUserId(userId);
     }
 
-    public List<Review> trovaPerTrip(Long tripId) {
+    public List<Review> findByTrip(Long tripId) {
         return reviewRepository.findAllByTripTripId(tripId);
     }
 
-    public List<Review> trovaPerActivity(Long activityId) {
+    public List<Review> findByActivity(Long activityId) {
         return reviewRepository.findAllByActivityActivityId(activityId);
     }
 

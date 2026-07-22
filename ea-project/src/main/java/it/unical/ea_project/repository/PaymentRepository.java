@@ -15,15 +15,15 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment,Long> {
 
     @Query("SELECT p FROM Payment p WHERE p.booking.user.id = :userId")
-    public List<Payment> findAllByUserId(Long id);
+    List<Payment> findAllByUserId(Long id);
 
-    public Optional<Payment> findByBookingBookingId(Long bookingId);
+    Optional<Payment> findByBookingBookingId(Long bookingId);
 
-    public Optional<Payment> findByTransactionId(String transactionId);
+    Optional<Payment> findByTransactionId(String transactionId);
 
     @Transactional
     @Modifying
     @Query("UPDATE Payment p SET p.deletedAt = CURRENT_TIMESTAMP WHERE p.paymentId = :id")
-    public void softDeleteById(Long id);
+    void softDeleteById(Long id);
 
 }
