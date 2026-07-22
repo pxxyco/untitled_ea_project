@@ -26,11 +26,11 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="trip_id", nullable = false)
+    @JoinColumn(name="trip_id")
     private Trip trip;
 
     @ManyToOne
-    @JoinColumn(name="activity_id", nullable = false)
+    @JoinColumn(name="activity_id")
     private Activity activity;
 
     @Column(name = "seats")
@@ -66,17 +66,29 @@ public class Booking {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        validateTripOrActivity();
+        validateExclusivity();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        validateTripOrActivity();
+        validateExclusivity();
     }
 
-    private void validateTripOrActivity() {
-        if (this.trip == null && this.activity == null) {
-            throw new IllegalStateException("Una prenotazione deve essere associata a un Trip O a una Activity.");
+    protected void validateExclusivity() {
+
+        boolean hasTrip =  trip != null;
+        boolean hasActivity = activity != null;
+
+        if(hasTrip == hasActivity) {
+            throw new IllegalStateException("Booking può essere o Trip o Activity, non entrambi");
+        }
+
+        if(hasTrip && bookingType != BookingType.TRIP) {
+            throw new IllegalStateException("il TYPE non coincide con il campo inserito, TRIP");
+        }
+
+        if(hasActivity && bookingType == BookingType.ACTIVITY) {
+            throw new IllegalStateException("il TYPE non coincide con il campo inserito, ACTIVITY");
         }
     }
 
