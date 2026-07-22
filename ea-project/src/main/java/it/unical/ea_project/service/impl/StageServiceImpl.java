@@ -1,10 +1,10 @@
-package it.unical.ea_project.services.impl;
+package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Stage;
 import it.unical.ea_project.domain.Stage.StageCategory;
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.repository.StageRepository;
-import it.unical.ea_project.services.StageService;
+import it.unical.ea_project.service.StageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

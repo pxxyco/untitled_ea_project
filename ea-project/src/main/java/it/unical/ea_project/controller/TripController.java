@@ -1,6 +1,6 @@
-package it.unical.ea_project.controllers;
+package it.unical.ea_project.controller;
 
-import it.unical.ea_project.services.TripService;
+import it.unical.ea_project.service.TripService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
