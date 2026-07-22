@@ -36,6 +36,9 @@ public class Payment {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "deleted_at", updatable = false)
+    private LocalDateTime deletedAt;
+
     // --- Enum dedicato per lo Stato del Pagamento ---
     public enum PaymentStatus {
         PENDING, COMPLETED, CONFIRMED, CANCELLED
@@ -44,5 +47,6 @@ public class Payment {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.status == null) this.status = PaymentStatus.PENDING;
     }
 }
