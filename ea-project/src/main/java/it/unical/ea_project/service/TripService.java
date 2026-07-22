@@ -1,4 +1,4 @@
-package it.unical.ea_project.services;
+package it.unical.ea_project.service;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.User;
@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-
 public interface TripService {
 
     List<Trip> getTripsByUser(User user);

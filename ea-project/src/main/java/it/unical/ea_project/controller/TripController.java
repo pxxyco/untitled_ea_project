@@ -1,7 +1,8 @@
-package it.unical.ea_project.controllers;
+package it.unical.ea_project.controller;
 
-import it.unical.ea_project.services.TripService;
 import org.springframework.web.bind.annotation.*;
+
+import it.unical.ea_project.service.TripService;
 
 @RestController
 @RequestMapping("/api/trips")

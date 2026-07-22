@@ -1,4 +1,4 @@
-package it.unical.ea_project.repositories;
+package it.unical.ea_project.repository;
 
 import it.unical.ea_project.domain.Stage;
 import it.unical.ea_project.domain.Stage.StageCategory;

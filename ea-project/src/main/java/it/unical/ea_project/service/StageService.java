@@ -1,4 +1,4 @@
-package it.unical.ea_project.services;
+package it.unical.ea_project.service;
 
 import it.unical.ea_project.domain.Stage;
 import it.unical.ea_project.domain.Stage.StageCategory;
