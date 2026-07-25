@@ -192,6 +192,9 @@ build/
 ### Dev local files ###
 src/main/resources/application-dev.properties
 
+### Logs dir ###
+logs/
+
 ### Application Secrets & Environment ###
 .env
 .env.local

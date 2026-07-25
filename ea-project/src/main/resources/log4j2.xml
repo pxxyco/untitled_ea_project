@@ -15,7 +15,7 @@
         <!-- Appender per File -->
         <!-- rimettere immediateFlush="false" in consegna -->
         <RollingRandomAccessFile name="LogToRollingFile"
-                                fileName="${LOG_DIR}/app.log"
+                                fileName="ea-project/${LOG_DIR}/app.log"
                                 filePattern="${LOG_DIR}/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log.gz"
                                 immediateFlush="true"
                                 bufferSize="262144">
