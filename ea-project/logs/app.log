@@ -1,0 +1,39 @@
+2026-07-25 19:08:08.065 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 55833 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project)
+2026-07-25 19:08:08.068 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-25 19:08:08.068 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-25 19:08:08.415 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-25 19:08:08.457 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 38 ms. Found 14 JPA repository interfaces.
+2026-07-25 19:08:08.653 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-25 19:08:08.661 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-25 19:08:08.662 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-07-25 19:08:08.662 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-25 19:08:08.679 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 589 ms
+2026-07-25 19:08:08.786 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-25 19:08:08.817 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-25 19:08:09.034 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-25 19:08:09.051 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-07-25 19:08:09.102 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@74431832
+2026-07-25 19:08:09.103 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-25 19:08:09.149 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-25 19:08:09.803 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-25 19:08:09.871 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-25 19:08:09.913 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-25 19:08:10.571 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-25 19:08:10.576 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-07-25 19:08:10.579 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.682 seconds (process running for 3.353)
+2026-07-25 19:08:23.765 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-25 19:08:23.768 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-07-25 19:08:23.773 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-25 19:08:23.774 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-25 19:08:23.776 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
