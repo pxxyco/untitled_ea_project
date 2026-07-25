@@ -2,6 +2,8 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Booking;
 import it.unical.ea_project.repository.BookingRepository;
+import it.unical.ea_project.repository.TripRepository;
+import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.BookingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +17,12 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final TripRepository tripRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository,
+                              UserRepository userRepository,
+                              TripRepository tripRepository) {
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
+        this.tripRepository = tripRepository;
     }
 
     @Transactional
