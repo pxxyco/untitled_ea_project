@@ -161,14 +161,12 @@ buildNumber.properties
 
 
 ### Application Secrets & Environment ###
-
 .env
 .env.local
 application-local.properties
 application-local.yml
 
 ### Docker ###
-
 .docker/
 docker-volumes/
 
