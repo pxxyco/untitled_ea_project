@@ -71,4 +71,66 @@ public class TripServiceImpl implements TripService {
         trip.setDeletedAt(LocalDateTime.now());
         tripRepository.save(trip);
     }
+
+    @Override
+    public String exportTripToIcs(Long tripId) {
+        Trip trip = tripRepository.findByTripIdAndDeletedAtIsNull(tripId)
+                .orElseThrow(() -> new RuntimeException("Viaggio non trovato con ID: " + tripId));
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("BEGIN:VCALENDAR\r\n");
+        sb.append("VERSION:2.0\r\n");
+        sb.append("PRODID:-//Unical Enterprise Applications//ea-project//IT\r\n");
+        sb.append("CALSCALE:GREGORIAN\r\n");
+        sb.append("BEGIN:VEVENT\r\n");
+
+        String uid = trip.getIcsUid();
+        if (uid == null || uid.isBlank()) {
+            uid = "trip-" + trip.getTripId() + "-" + java.util.UUID.randomUUID() + "@ea-project.unical.it";
+        }
+        sb.append("UID:").append(uid).append("\r\n");
+
+        if (trip.getTitle() != null) {
+            sb.append("SUMMARY:").append(sanitizeIcsField(trip.getTitle())).append("\r\n");
+        }
+        if (trip.getDescription() != null) {
+            sb.append("DESCRIPTION:").append(sanitizeIcsField(trip.getDescription())).append("\r\n");
+        }
+
+        String location = buildLocation(trip.getDestinationCity(), trip.getDestinationCountry());
+        if (!location.isBlank()) {
+            sb.append("LOCATION:").append(sanitizeIcsField(location)).append("\r\n");
+        }
+
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        if (trip.getStartDate() != null) {
+            sb.append("DTSTART;VALUE=DATE:").append(trip.getStartDate().format(formatter)).append("\r\n");
+        }
+        if (trip.getEndDate() != null) {
+            sb.append("DTEND;VALUE=DATE:").append(trip.getEndDate().plusDays(1).format(formatter)).append("\r\n");
+        }
+
+        sb.append("END:VEVENT\r\n");
+        sb.append("END:VCALENDAR\r\n");
+
+        return sb.toString();
+    }
+
+    private String buildLocation(String city, String country) {
+        if (city != null && country != null) {
+            return city + ", " + country;
+        } else if (city != null) {
+            return city;
+        } else if (country != null) {
+            return country;
+        }
+        return "";
+    }
+
+    private String sanitizeIcsField(String text) {
+        if (text == null) return "";
+        return text.replace("\n", "\\n").replace(",", "\\,").replace(";", "\\;");
+    }
 }

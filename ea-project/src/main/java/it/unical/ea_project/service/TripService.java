@@ -31,4 +31,6 @@ public interface TripService {
 
     void deleteTripLogically(Trip trip);
 
+    String exportTripToIcs(Long tripId);
+
 }
