@@ -7,32 +7,47 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
- * JavaFX App
+ * JavaFX App Main Entry Point
  */
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("mainview"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage stage) {
+        try {
+            Parent root = loadFXML("mainview");
+            scene = new Scene(root, 1280, 720);
+            stage.setTitle("EA Project");
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Error (1-main)");
+            e.printStackTrace();
+        }
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("fxml/"+ fxml + ".fxml"));
+        String resourcePath = "fxml/" + fxml + ".fxml";
+        URL fxmlUrl = App.class.getResource(resourcePath);
+
+        if (fxmlUrl == null) {
+            throw new IOException("Error (2-main): FXML file not found: " + resourcePath);
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
         return fxmlLoader.load();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
-
 }
