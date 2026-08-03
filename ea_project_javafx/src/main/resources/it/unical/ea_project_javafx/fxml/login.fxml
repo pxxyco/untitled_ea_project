@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.LoginController" styleClass="root-pane">
+    <stylesheets>
+        <URL value="@../css/style.css" />
+        <URL value="@../css/login.css" />
+    </stylesheets>
+
+    <ImageView fx:id="bgImageView" pickOnBounds="true" preserveRatio="false">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1920&amp;q=80" />
+        </image>
+    </ImageView>
+    <Region styleClass="bg-overlay" />
+
+    <StackPane alignment="TOP_LEFT">
+        <padding>
+            <Insets top="20.0" left="20.0" />
+        </padding>
+        <HBox spacing="12.0">
+            <children>
+                <Button styleClass="control-btn" text="👤"/>
+                <Button onAction="#goToHome" styleClass="control-btn" text="🏠"/>
+            </children>
+        </HBox>
+    </StackPane>
+
+    <VBox alignment="CENTER" maxWidth="420.0" maxHeight="-Infinity" styleClass="auth-card">
+        <StackPane>
+
+            <VBox fx:id="stepLogin" spacing="20.0" styleClass="view-step">
+                <Label styleClass="header-title" text="Login Form" />
+
+                <VBox spacing="8.0">
+                    <Label styleClass="input-label" text="Email / Username" />
+                    <TextField promptText="Enter your email or username" styleClass="custom-input" />
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <Label styleClass="input-label" text="Password" />
+                    <PasswordField promptText="Enter your password" styleClass="custom-input" />
+                </VBox>
+
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <CheckBox styleClass="custom-checkbox" text="Remember me" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Hyperlink styleClass="custom-link" text="Forgot password?" />
+                    </children>
+                </HBox>
+
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleLoginSubmit" styleClass="btn-submit" text="Log In" />
+
+                <HBox alignment="CENTER" spacing="5.0">
+                    <Label styleClass="switch-text" text="Don't have an account?" />
+                    <Hyperlink onAction="#goToRoleSelection" styleClass="custom-link-bold" text="Register" />
+                </HBox>
+            </VBox>
+
+
+            <VBox fx:id="stepRole" spacing="20.0" styleClass="view-step" visible="false" managed="false">
+                <Button onAction="#goToLogin" styleClass="btn-back" text="← Torna al Login" />
+                <Label styleClass="header-title" text="Seleziona Account" />
+
+                <HBox onMouseClicked="#selectPersonalRole" spacing="16.0" styleClass="role-card">
+                    <Label styleClass="role-icon" text="🧑" />
+                    <VBox alignment="CENTER_LEFT">
+                        <Label styleClass="role-title" text="Account Personal" />
+                        <Label styleClass="role-desc" text="Per esploratori e viaggiatori singoli" />
+                    </VBox>
+                </HBox>
+
+                <HBox onMouseClicked="#selectBusinessRole" spacing="16.0" styleClass="role-card">
+                    <Label styleClass="role-icon" text="💼" />
+                    <VBox alignment="CENTER_LEFT">
+                        <Label styleClass="role-title" text="Account Business" />
+                        <Label styleClass="role-desc" text="Per organizzatori, hotel e guide" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="stepDetails" spacing="20.0" styleClass="view-step" visible="false" managed="false">
+                <Button onAction="#goToRoleSelection" styleClass="btn-back" text="← Torna indietro" />
+                <Label fx:id="wizardTitle" styleClass="header-title" text="Dettagli Profilo" />
+
+                <VBox spacing="16.0">
+                    <VBox spacing="8.0">
+                        <Label styleClass="input-label" text="Phone number" />
+                        <TextField promptText="+39 333 1234567" styleClass="custom-input" />
+                    </VBox>
+                    <VBox spacing="8.0">
+                        <Label styleClass="input-label" text="Date of birth" />
+                        <DatePicker maxWidth="1.7976931348623157E308" styleClass="custom-input" />
+                    </VBox>
+                    <VBox spacing="8.0">
+                        <Label styleClass="input-label" text="Nationality" />
+                        <ComboBox fx:id="nationalityCombo" maxWidth="1.7976931348623157E308" promptText="Select country/region" styleClass="custom-input" />
+                    </VBox>
+                    <VBox spacing="8.0">
+                        <Label styleClass="input-label" text="Address" />
+                        <TextField promptText="Add your address" styleClass="custom-input" />
+                    </VBox>
+                </VBox>
+
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleRegistrationSubmit" styleClass="btn-submit" text="Conferma e Registrati" />
+            </VBox>
+
+        </StackPane>
+    </VBox>
+</StackPane>

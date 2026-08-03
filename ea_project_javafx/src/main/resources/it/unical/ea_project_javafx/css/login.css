@@ -1,0 +1,141 @@
+.control-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.control-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.35);
+}
+
+.auth-card {
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-padding: 36px 32px;
+}
+
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-padding: 0 0 10 0;
+}
+
+.input-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.custom-input {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-padding: 10px;
+}
+
+.custom-input:focused {
+    -fx-border-color: #3b82f6;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.date-picker.custom-input {
+    -fx-padding: 0px;
+}
+
+.date-picker.custom-input > .text-field {
+    -fx-padding: 10px;
+}
+
+.combo-box.custom-input {
+    -fx-padding: 2px 10px;
+}
+
+.custom-checkbox {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.custom-link, .custom-link-bold {
+    -fx-text-fill: white;
+    -fx-underline: true;
+    -fx-border-color: transparent;
+}
+
+.custom-link-bold {
+    -fx-font-weight: bold;
+}
+
+.switch-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.btn-submit {
+    -fx-background-color: white;
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px;
+    -fx-cursor: hand;
+}
+
+.btn-submit:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.btn-back {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+}
+
+.btn-back:hover {
+    -fx-text-fill: white;
+}
+
+.role-card {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 16px;
+    -fx-cursor: hand;
+}
+
+.role-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: white;
+}
+
+.role-icon {
+    -fx-font-size: 28px;
+}
+
+.role-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.role-desc {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
