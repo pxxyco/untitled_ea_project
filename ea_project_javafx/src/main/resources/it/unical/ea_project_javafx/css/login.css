@@ -139,3 +139,21 @@
     -fx-font-size: 11px;
     -fx-text-fill: rgba(255, 255, 255, 0.7);
 }
+
+
+.loading-overlay {
+    -fx-background-color: rgba(15, 23, 42, 0.85);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+}
+
+.loading-overlay .progress-indicator {
+    -fx-progress-color: #3b82f6;
+}
+
+.loading-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
