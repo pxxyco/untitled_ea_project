@@ -45,7 +45,7 @@ public class User {
     private Role role;
 
     @Column(name = "oauth_provider")
-    private boolean oauthProvider;
+    private boolean oauthProvider=false;
 
     @Column(name = "oauth_subject")
     private String oauthSubject;
@@ -56,4 +56,9 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

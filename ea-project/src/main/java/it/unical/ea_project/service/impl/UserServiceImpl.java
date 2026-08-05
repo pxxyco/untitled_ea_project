@@ -2,10 +2,14 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.User;
 import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.service.LoginAttemptService;
 import it.unical.ea_project.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +19,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final LoginAttemptService loginAttemptService;
 
     @Override
     @Transactional(readOnly = true)
@@ -28,18 +34,30 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
+
     @Override
-    @Transactional
-    public User createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email già registrata!");
+    public Optional<User> login(String email, String password) {
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
+
+        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getHashedPassword())) {
+            loginAttemptService.loginSucceeded(email);
+            return userOpt;
+        } else {
+            loginAttemptService.loginFailed(email);
+            return Optional.empty();
         }
-        return userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public User registerUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username già in uso.");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email già registrata.");
+        }
+        user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
+        return userRepository.save(user);
     }
 }
