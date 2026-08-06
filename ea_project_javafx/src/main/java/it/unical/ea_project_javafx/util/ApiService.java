@@ -16,6 +16,11 @@ public class ApiService {
             .build();
 
     public static final String BASE_URL = "http://localhost:8080";
+    private static Runnable onNetworkFailureGlobal;
+
+    public static void setOnNetworkFailureGlobal(Runnable action) {
+        onNetworkFailureGlobal = action;
+    }
 
     public static void call(String url, String body, String method,
                             Consumer<HttpResponse<String>> onSuccess,
@@ -43,6 +48,12 @@ public class ApiService {
 
         task.setOnFailed(e -> {
             if (loadingSetter != null) loadingSetter.accept(false);
+            if (!isBackendReachable()) {
+                if (onNetworkFailureGlobal != null) {
+                    onNetworkFailureGlobal.run();
+                    return;
+                }
+            }
             if (onFailure != null) onFailure.run();
         });
 

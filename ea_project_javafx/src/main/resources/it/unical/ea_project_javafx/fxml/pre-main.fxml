@@ -3,19 +3,25 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <StackPane styleClass="splash-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.PreMainController">
     <VBox fx:id="splashContent" alignment="CENTER" spacing="20.0">
+        <ImageView fx:id="errorImageView" fitWidth="120.0" fitHeight="120.0" preserveRatio="true" visible="false" managed="false" />
+
         <Label fx:id="iconLabel"/>
         <ProgressIndicator fx:id="progressIndicator" />
+
+        <Label fx:id="errorTitleLabel" styleClass="splash-label" visible="false" managed="false" text="Oops, qualcosa è andato storto..." />
+
         <Label fx:id="statusLabel" styleClass="splash-label" text="Connessione al server..." />
 
         <HBox fx:id="buttonBox" alignment="CENTER" spacing="10.0" visible="false" managed="false">
-            <Button fx:id="retryButton" styleClass="btn-submit" text="Riprova" />
-            <Button fx:id="exitButton" styleClass="btn-back" text="Esci" />
+            <Button fx:id="retryButton" styleClass="btn-splash" text="Riprova" />
+            <Button fx:id="exitButton" styleClass="btn-splash" text="Esci" />
         </HBox>
     </VBox>
 </StackPane>

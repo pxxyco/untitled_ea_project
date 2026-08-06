@@ -148,7 +148,6 @@
     -fx-padding: 8px 0 0 0;
 }
 
-/* HEADER FIX (Rimozione grigio chiaro Modena) */
 .date-picker-popup .month-year-pane {
     -fx-background-color: transparent !important;
     -fx-background: transparent !important;
@@ -241,7 +240,7 @@
 }
 
 .splash-pane {
-    -fx-background-color: #0f172a;
+    -fx-background-color: #0b1628;
 }
 
 .splash-content {
@@ -257,6 +256,20 @@
     -fx-text-fill: rgba(255, 255, 255, 0.9);
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+}
+
+.btn-splash {
+    -fx-background-color: #8d9caf;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.btn-splash:hover {
+    -fx-background-color: #717d8c;
 }
 
 .splash-progress .percentage {
