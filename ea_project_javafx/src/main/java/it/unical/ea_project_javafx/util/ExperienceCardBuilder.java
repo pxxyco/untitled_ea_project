@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx;
+package it.unical.ea_project_javafx.util;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +21,6 @@ public class ExperienceCardBuilder {
         VBox card = new VBox(8);
         card.getStyleClass().add("experience-card");
         card.setPadding(new Insets(16));
-
         HBox.setHgrow(card, Priority.ALWAYS);
         card.setMaxWidth(Double.MAX_VALUE);
 
@@ -36,7 +35,6 @@ public class ExperienceCardBuilder {
 
         VBox spacer = new VBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-
         header.getChildren().addAll(categoryLabel, spacer, ratingLabel);
 
         Label titleLabel = new Label(data.title());
@@ -55,7 +53,6 @@ public class ExperienceCardBuilder {
 
         Label priceLabel = new Label("da " + data.price());
         priceLabel.getStyleClass().add("card-price");
-
         footer.getChildren().add(priceLabel);
 
         card.getChildren().addAll(header, titleLabel, locationLabel, verticalSpacer, footer);

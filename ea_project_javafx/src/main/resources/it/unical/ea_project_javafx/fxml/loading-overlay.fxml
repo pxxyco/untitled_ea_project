@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER" spacing="16.0" styleClass="loading-overlay"
+      visible="false" managed="false">
+    <ProgressIndicator prefWidth="50.0" prefHeight="50.0" />
+    <Label styleClass="loading-label" text="Caricamento in corso..." />
+</VBox>

@@ -239,3 +239,34 @@
 .date-picker-popup .next-month {
     -fx-text-fill: #4b5563 !important;
 }
+
+.splash-pane {
+    -fx-background-color: #0f172a;
+}
+
+.splash-content {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+}
+
+.splash-logo {
+    -fx-font-size: 40px;
+}
+
+.splash-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.splash-progress .percentage {
+    -fx-fill: transparent;
+}
+
+.splash-progress > .indicator {
+    -fx-background-color: transparent;
+}
+
+.splash-progress .spinner {
+    -fx-progress-color: #3b82f6;
+}
