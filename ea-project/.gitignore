@@ -180,3 +180,7 @@ Thumbs.db
 
 ### developer settings ###
 src/main/resources/application-dev.properties
+
+
+### Logs ###
+logs/
