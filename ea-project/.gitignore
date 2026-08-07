@@ -183,4 +183,4 @@ src/main/resources/application-dev.properties
 
 
 ### Logs ###
-logs/
+logs
