@@ -26,7 +26,7 @@
 
     <BorderPane>
         <top>
-            <fx:include fx:id="navbar" source="navbar.fxml" />
+            <StackPane fx:id="navbarContainer" />
         </top>
         <center>
             <ScrollPane fitToWidth="true" styleClass="main-scroll">

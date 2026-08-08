@@ -5,7 +5,6 @@ import it.unical.ea_project_javafx.util.ViewNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,11 +32,18 @@ public class AuthWizardController implements StepNavigator {
         goToLoginStep();
     }
 
-    @Override public void goToLoginStep() { showStep(stepLogin); }
-    @Override public void goToRoleStep() { showStep(stepRole); }
+    @Override public void goToLoginStep() {
+        stepLoginController.clearError();
+        showStep(stepLogin);
+    }
+
+    @Override public void goToRoleStep() {
+        showStep(stepRole);
+    }
 
     @Override
     public void goToDetailsStep(String selectedRole) {
+        stepDetailsController.clearError();
         stepDetailsController.setSelectedRole(selectedRole);
         showStep(stepDetails);
     }
@@ -59,12 +65,12 @@ public class AuthWizardController implements StepNavigator {
     }
 
     @Override
-    public void showAlert(Alert.AlertType type, String title, String content) { //todo da eliminare
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    public void showErrorMessage(String message) {
+        if (stepLogin.isVisible()) {
+            stepLoginController.showError(message);
+        } else if (stepDetails.isVisible()) {
+            stepDetailsController.showError(message);
+        }
     }
 
     private void showStep(VBox stepToShow) {

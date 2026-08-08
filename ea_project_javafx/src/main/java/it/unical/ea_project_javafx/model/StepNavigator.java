@@ -8,5 +8,6 @@ public interface StepNavigator {
     void goToDetailsStep(String selectedRole);
     void goToHome(ActionEvent event);
     void setLoading(boolean loading);
-    void showAlert(javafx.scene.control.Alert.AlertType type, String title, String content);
+
+    void showErrorMessage(String message);
 }

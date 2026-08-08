@@ -18,14 +18,12 @@ public class App extends Application {
         stage.setTitle("EA Project");
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/pre-main.fxml")));
-        Scene splashScene = new Scene(root, 355, 485);
-        splashScene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
+        Scene splashScene = new Scene(root, 1280, 720);
+        splashScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
 
         stage.setScene(splashScene);
-        stage.setMaximized(true);
-        stage.setResizable(false);
-        stage.setMinWidth(355);
-        stage.setMinHeight(485);
+        stage.setMinWidth(1280);
+        stage.setMinHeight(720);
         stage.show();
     }
 

@@ -3,9 +3,9 @@ package it.unical.ea_project_javafx.controller;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
 import it.unical.ea_project_javafx.util.JsonUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 public class RegistrationStepController {
 
     @FXML private Label wizardTitle;
+    @FXML private Label errorLabel;
     @FXML private TextField regFirstNameField, regLastNameField, regUsernameField, regEmailField;
     @FXML private PasswordField regPasswordField, regConfirmPasswordField;
     @FXML private Button btnRegister;
@@ -31,13 +32,33 @@ public class RegistrationStepController {
         btnRegister.setDefaultButton(true);
     }
 
+    public void showError(String message) {
+        Platform.runLater(() -> {
+            if (errorLabel != null) {
+                errorLabel.setText(message);
+                errorLabel.setVisible(true);
+                errorLabel.setManaged(true);
+            }
+        });
+    }
+
+    public void clearError() {
+        if (errorLabel != null) {
+            errorLabel.setText("");
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
+        }
+    }
+
     @FXML
     void backToRoleSelection() {
+        clearError();
         navigator.goToRoleStep();
     }
 
     @FXML
     void handleRegistrationSubmit(ActionEvent event) {
+        clearError();
         String firstName = regFirstNameField.getText().trim();
         String lastName = regLastNameField.getText().trim();
         String username = regUsernameField.getText().trim();
@@ -47,15 +68,15 @@ public class RegistrationStepController {
 
         if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || email.isEmpty() || password.isEmpty() || !password.equals(confirmPassword)) {
-            navigator.showAlert(Alert.AlertType.WARNING, "Attenzione", "Verifica che tutti i campi siano compilati e che le password coincidano.");
+            showError("Verifica che tutti i campi siano compilati e che le password coincidano.");
             return;
         }
         if (password.length() < 8) {
-            navigator.showAlert(Alert.AlertType.WARNING, "Attenzione", "La password deve contenere almeno 8 caratteri.");
+            showError("La password deve contenere almeno 8 caratteri.");
             return;
         }
         if (!email.contains("@")) {
-            navigator.showAlert(Alert.AlertType.WARNING, "Attenzione", "Inserisci un'email valida.");
+            showError("Inserisci un'email valida.");
             return;
         }
 
@@ -69,20 +90,19 @@ public class RegistrationStepController {
         );
 
         ApiService.call(
-                "http://localhost:8080/api/users",
+                ApiService.BASE_URL + "/api/users",
                 jsonBody, "POST",
-                res -> {
+                res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200 || res.statusCode() == 201) {
-                        navigator.showAlert(Alert.AlertType.INFORMATION, "Successo", "Registrazione completata!");
                         clearFields();
                         navigator.goToLoginStep();
                     } else if (res.statusCode() == 409) {
-                        navigator.showAlert(Alert.AlertType.ERROR, "Errore Registrazione", "Username o Email già registrati.");
+                        showError("Username o Email già registrati.");
                     } else {
-                        navigator.showAlert(Alert.AlertType.ERROR, "Errore Registrazione", "Impossibile completare la registrazione.");
+                        showError("Impossibile completare la registrazione.");
                     }
-                },
-                () -> navigator.showAlert(Alert.AlertType.ERROR, "Errore Connessione", "Impossibile contattare il server."),
+                }),
+                () -> Platform.runLater(() -> showError("Impossibile contattare il server.")),
                 navigator::setLoading
         );
     }

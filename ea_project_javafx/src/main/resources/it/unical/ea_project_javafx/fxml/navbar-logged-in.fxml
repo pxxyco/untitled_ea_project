@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.ea_project_javafx.controller.NavbarController"
-            styleClass="navbar">
+<BorderPane styleClass="navbar" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.NavbarController">
     <left>
         <HBox alignment="CENTER_LEFT" spacing="16.0">
             <children>
-                <Label styleClass="brand-logo" text="🧭" />
                 <Separator orientation="VERTICAL" styleClass="nav-divider" />
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="nav-links">
                     <children>
@@ -26,7 +21,13 @@
     <right>
         <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
             <children>
-                <Label onMouseClicked="#handleLogin" styleClass="btn-nav-login" text="Login" />
+                <!-- Menu a tendina che mostra il nome e apre Profilo / Logout -->
+                <MenuButton fx:id="userMenuButton" styleClass="btn-nav-login" text="Utente">
+                    <items>
+                        <MenuItem onAction="#handleProfilo" text="Profilo" />
+                        <MenuItem onAction="#handleLogout" text="Logout" />
+                    </items>
+                </MenuButton>
             </children>
         </HBox>
     </right>

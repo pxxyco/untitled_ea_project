@@ -1,6 +1,7 @@
 package it.unical.ea_project_javafx.controller;
 
 import it.unical.ea_project_javafx.util.ApiService;
+import it.unical.ea_project_javafx.util.ViewNavigator;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -48,6 +49,12 @@ public class PreMainController {
         buttonBox.setVisible(false);
         buttonBox.setManaged(false);
 
+        Task<Boolean> healthCheck = verifyServiceStatus();
+
+        new Thread(healthCheck).start();
+    }
+
+    private Task<Boolean> verifyServiceStatus() {
         Task<Boolean> healthCheck = new Task<>() {
             @Override
             protected Boolean call() {
@@ -69,8 +76,7 @@ public class PreMainController {
         });
 
         healthCheck.setOnFailed(e -> showErrorState());
-
-        new Thread(healthCheck).start();
+        return healthCheck;
     }
 
     private void showErrorState() {
@@ -138,34 +144,8 @@ public class PreMainController {
 
     private void loadView(String fxmlPath, boolean maximize) {
         Platform.runLater(() -> {
-            try {
-                Stage stage = null;
-                for (javafx.stage.Window window : javafx.stage.Window.getWindows()) {
-                    if (window instanceof Stage s && s.isShowing()) {
-                        stage = s;
-                        break;
-                    }
-                }
-
-                if (stage == null && statusLabel != null && statusLabel.getScene() != null) {
-                    stage = (Stage) statusLabel.getScene().getWindow();
-                }
-
-                if (stage != null) {
-                    Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
-                    Scene scene = new Scene(root, 1280, 720);
-                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/it/unical/ea_project_javafx/css/style.css")).toExternalForm());
-                    stage.setScene(scene);
-                    if (maximize) {
-                        stage.setMaximized(true);
-                    } else {
-                        stage.centerOnScreen();
-                    }
-                } else {
-                    System.err.println("Impossibile trovare lo stage attivo.");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (statusLabel != null && statusLabel.getScene() != null) {
+                ViewNavigator.loadScene(statusLabel, fxmlPath, maximize);
             }
         });
     }

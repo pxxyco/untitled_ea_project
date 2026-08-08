@@ -1,26 +1,53 @@
 package it.unical.ea_project_javafx.controller;
 
 import it.unical.ea_project_javafx.model.MainNavigator;
+import it.unical.ea_project_javafx.model.UserSession;
 import it.unical.ea_project_javafx.util.ViewNavigator;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 public class MainViewController implements MainNavigator {
 
     @FXML private ImageView bgImageView;
     @FXML private VBox cardsContainer;
 
-    @FXML private NavbarController navbarController;
+    @FXML private StackPane navbarContainer;
+
     @FXML private SearchBarController searchBarController;
     @FXML private ExperienceListController experienceListController;
 
     @FXML
     public void initialize() {
         setupBackgroundResize();
-        navbarController.setNavigator(this);
+        loadNavbar();
+    }
+
+    private void loadNavbar() {
+        if (navbarContainer == null) return;
+        try {
+            String fxmlFile = UserSession.getInstance().isLoggedIn()
+                    ? "/it/unical/ea_project_javafx/fxml/navbar-logged-in.fxml"
+                    : "/it/unical/ea_project_javafx/fxml/navbar-logged-out.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent navbarView = loader.load();
+
+            NavbarController navbarController = loader.getController();
+            if (navbarController != null) {
+                navbarController.setNavigator(this);
+            }
+
+            navbarContainer.getChildren().setAll(navbarView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupBackgroundResize() {

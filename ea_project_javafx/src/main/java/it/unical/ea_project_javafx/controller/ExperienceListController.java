@@ -86,7 +86,7 @@ public class ExperienceListController {
                 cardsContainer.getChildren().add(currentRow);
             }
             VBox card = ExperienceCardBuilder.createCard(cardsToDisplay.get(i));
-            if (currentRow != null) currentRow.getChildren().add(card);
+            currentRow.getChildren().add(card);
         }
     }
 }
