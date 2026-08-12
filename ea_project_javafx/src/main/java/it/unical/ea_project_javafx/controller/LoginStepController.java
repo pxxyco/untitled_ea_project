@@ -1,8 +1,8 @@
 package it.unical.ea_project_javafx.controller;
 
+import com.google.gson.Gson;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
-import it.unical.ea_project_javafx.util.JsonUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +22,12 @@ public class LoginStepController {
     @FXML private Label errorLabel;
 
     private StepNavigator navigator;
+
+    private static class LoginResponseDto {
+        String username;
+        String email;
+        String role;
+    }
 
     public void setNavigator(StepNavigator navigator) {
         this.navigator = navigator;
@@ -65,23 +71,27 @@ public class LoginStepController {
                 "", "POST",
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200) {
-                        String body = res.body();
-                        String username = JsonUtils.extractField(body, "username");
-                        String email = JsonUtils.extractField(body, "email");
-                        String role = JsonUtils.extractField(body, "role");
+                        try {
+                            Gson gson = new Gson();
+                            LoginResponseDto user = gson.fromJson(res.body(), LoginResponseDto.class);
 
-                        it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(
-                                username.isEmpty() ? identifier : username,
-                                email.isEmpty() ? identifier : email,
-                                role.isEmpty() ? "TRAVELER" : role
-                        );
+                            it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(
+                                    user != null && user.username != null && !user.username.isEmpty() ? user.username : identifier,
+                                    user != null && user.email != null && !user.email.isEmpty() ? user.email : identifier,
+                                    user != null && user.role != null && !user.role.isEmpty() ? user.role : "TRAVELER"
+                            );
 
-                        navigator.goToHome(event);
+                            navigator.goToHome(event);
+                        } catch (Exception e) {
+                            showError("Errore nella lettura della risposta del server.");
+                        }
                     } else {
                         showError("Credenziali non valide.");
                     }
                 }),
-                () -> Platform.runLater(() -> showError("Impossibile contattare il server o richiesta in timeout.")),
+                () -> Platform.runLater(() -> {
+                    it.unical.ea_project_javafx.util.ViewNavigator.loadScene(btnLogin, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+                }),
                 navigator::setLoading
         );
     }

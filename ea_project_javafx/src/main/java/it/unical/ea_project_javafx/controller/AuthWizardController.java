@@ -18,6 +18,7 @@ public class AuthWizardController implements StepNavigator {
     @FXML private RoleSelectionStepController stepRoleController;
     @FXML private RegistrationStepController stepDetailsController;
 
+
     @FXML
     public void initialize() {
         if (bgImageView != null && bgImageView.getParent() instanceof StackPane parentPane) {
@@ -58,6 +59,7 @@ public class AuthWizardController implements StepNavigator {
         goToHome(event);
     }
 
+
     @Override
     public void setLoading(boolean loading) {
         loadingOverlay.setVisible(loading);
@@ -79,4 +81,5 @@ public class AuthWizardController implements StepNavigator {
         stepDetails.setVisible(false); stepDetails.setManaged(false);
         stepToShow.setVisible(true);   stepToShow.setManaged(true);
     }
+
 }

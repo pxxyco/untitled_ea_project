@@ -144,8 +144,19 @@ public class PreMainController {
 
     private void loadView(String fxmlPath, boolean maximize) {
         Platform.runLater(() -> {
-            if (statusLabel != null && statusLabel.getScene() != null) {
+            if (statusLabel != null
+                    && statusLabel.getScene() != null
+                    && statusLabel.getScene().getWindow() != null) {
                 ViewNavigator.loadScene(statusLabel, fxmlPath, maximize);
+            } else {
+                javafx.stage.Window.getWindows().stream()
+                        .filter(javafx.stage.Window::isShowing)
+                        .findFirst()
+                        .ifPresent(window -> {
+                            if (window instanceof javafx.stage.Stage stage && stage.getScene() != null) {
+                                ViewNavigator.loadScene(stage.getScene().getRoot(), fxmlPath, maximize);
+                            }
+                        });
             }
         });
     }

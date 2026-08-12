@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="cardRoot" prefHeight="378.0" prefWidth="325.0" styleClass="experience-card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.ExperienceCardController">
+
+    <StackPane fx:id="imageContainer" styleClass="card-image-container" prefHeight="136.0" prefWidth="315.0">
+        <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+        </VBox.margin>
+        <children>
+            <ImageView fx:id="imageView" styleClass="card-image" fitHeight="199.0" fitWidth="315.0" preserveRatio="false" />
+            <ProgressIndicator fx:id="imageLoader" maxHeight="30.0" maxWidth="30.0" />
+        </children>
+    </StackPane>
+
+    <VBox prefHeight="192.0" prefWidth="325.0" spacing="4.0" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="10.0" />
+        </padding>
+        <children>
+            <HBox alignment="CENTER_LEFT">
+                <children>
+                    <Label fx:id="categoryLabel" styleClass="card-category" />
+                    <VBox HBox.hgrow="ALWAYS" />
+                    <Label fx:id="ratingLabel" styleClass="card-rating" />
+                </children>
+            </HBox>
+
+            <Label fx:id="titleLabel" styleClass="card-title" wrapText="true" />
+            <Label fx:id="locationLabel" styleClass="card-location" />
+
+            <VBox VBox.vgrow="ALWAYS" />
+
+            <HBox alignment="BOTTOM_RIGHT">
+                <children>
+                    <Label fx:id="priceLabel" styleClass="card-price" />
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+</VBox>

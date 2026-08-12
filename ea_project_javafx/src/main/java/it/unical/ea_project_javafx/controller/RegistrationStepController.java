@@ -1,8 +1,8 @@
 package it.unical.ea_project_javafx.controller;
 
+import com.google.gson.Gson;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
-import it.unical.ea_project_javafx.util.JsonUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +21,24 @@ public class RegistrationStepController {
 
     private StepNavigator navigator;
     private String selectedRole = "TRAVELER";
+
+    private static class RegistrationRequestDto {
+        String username;
+        String fullName;
+        String email;
+        String hashedPassword;
+        String role;
+        boolean oauthProvider;
+
+        public RegistrationRequestDto(String username, String fullName, String email, String hashedPassword, String role) {
+            this.username = username;
+            this.fullName = fullName;
+            this.email = email;
+            this.hashedPassword = hashedPassword;
+            this.role = role;
+            this.oauthProvider = false;
+        }
+    }
 
     public void setNavigator(StepNavigator navigator) {
         this.navigator = navigator;
@@ -80,14 +98,16 @@ public class RegistrationStepController {
             return;
         }
 
-        String jsonBody = String.format(
-                "{\"username\":\"%s\",\"fullName\":\"%s\",\"email\":\"%s\",\"hashedPassword\":\"%s\",\"role\":\"%s\",\"oauthProvider\":false}",
-                JsonUtils.escape(username),
-                JsonUtils.escape(firstName + " " + lastName),
-                JsonUtils.escape(email),
-                JsonUtils.escape(password),
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(
+                username,
+                firstName + " " + lastName,
+                email,
+                password,
                 selectedRole
         );
+
+        Gson gson = new Gson();
+        String jsonBody = gson.toJson(requestDto);
 
         ApiService.call(
                 ApiService.BASE_URL + "/api/users",
@@ -102,11 +122,12 @@ public class RegistrationStepController {
                         showError("Impossibile completare la registrazione.");
                     }
                 }),
-                () -> Platform.runLater(() -> showError("Impossibile contattare il server.")),
+                () -> Platform.runLater(() -> {
+                    it.unical.ea_project_javafx.util.ViewNavigator.loadScene(btnRegister, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+                }),
                 navigator::setLoading
         );
     }
-
     private void clearFields() {
         regFirstNameField.clear();
         regLastNameField.clear();
