@@ -1,6 +1,7 @@
 package it.unical.ea_project_javafx.controller;
 
 import com.google.gson.Gson;
+import it.unical.ea_project_javafx.dto.LoginResponseDto;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
@@ -13,7 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-//controller di login
+
 public class LoginStepController {
 
     @FXML private TextField loginUsernameField;
@@ -22,12 +23,6 @@ public class LoginStepController {
     @FXML private Label errorLabel;
 
     private StepNavigator navigator;
-
-    private static class LoginResponseDto {
-        String username;
-        String email;
-        String role;
-    }
 
     public void setNavigator(StepNavigator navigator) {
         this.navigator = navigator;
@@ -76,9 +71,10 @@ public class LoginStepController {
                             LoginResponseDto user = gson.fromJson(res.body(), LoginResponseDto.class);
 
                             it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(
-                                    user != null && user.username != null && !user.username.isEmpty() ? user.username : identifier,
-                                    user != null && user.email != null && !user.email.isEmpty() ? user.email : identifier,
-                                    user != null && user.role != null && !user.role.isEmpty() ? user.role : "TRAVELER"
+                                    user != null ? user.getId() : null,
+                                    user != null && user.getUsername() != null && !user.getUsername().isEmpty() ? user.getUsername() : identifier,
+                                    user != null && user.getEmail() != null && !user.getEmail().isEmpty() ? user.getEmail() : identifier,
+                                    user != null && user.getRole() != null && !user.getRole().isEmpty() ? user.getRole() : "TRAVELER"
                             );
 
                             navigator.goToHome(event);

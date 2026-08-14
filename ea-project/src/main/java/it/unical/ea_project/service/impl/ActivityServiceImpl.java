@@ -2,6 +2,7 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Activity;
 import it.unical.ea_project.domain.User;
+import it.unical.ea_project.security.ResourceNotFoundException;
 import it.unical.ea_project.repository.ActivityRepository;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.ActivityService;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,21 +23,21 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional(readOnly = true)
     public List<Activity> getAllActivities() {
-        return activityRepository.findAll();
+        return activityRepository.findByDeletedAtIsNull();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Attività non trovata con ID: " + id));
+        return activityRepository.findByActivityIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Attività non trovata con ID: " + id));
     }
 
     @Override
     @Transactional
     public Activity createActivity(Activity activity, Long creatorId) {
         User creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new RuntimeException("Utente organizzatore non trovato con ID: " + creatorId));
+                .orElseThrow(() -> new ResourceNotFoundException("Utente organizzatore non trovato con ID: " + creatorId));
         activity.setCreatedBy(creator);
         return activityRepository.save(activity);
     }
@@ -67,6 +69,8 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public void deleteActivity(Long id) {
-        activityRepository.deleteById(id);
+        Activity existing = getActivityById(id);
+        existing.setDeletedAt(LocalDateTime.now()); // soft delete, coerente con Trip
+        activityRepository.save(existing);
     }
 }

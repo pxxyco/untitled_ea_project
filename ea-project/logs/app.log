@@ -194,3 +194,296 @@ This generated password is for development use only. Your security configuration
 2026-08-14 15:40:28.935 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-08-14 15:40:28.937 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-08-14 15:40:28.939 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 18:27:51.447 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 34509 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 18:27:51.450 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 18:27:51.451 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 18:27:51.853 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 18:27:51.908 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 49 ms. Found 14 JPA repository interfaces.
+2026-08-14 18:27:52.130 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 18:27:52.138 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:27:52.139 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 18:27:52.139 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 18:27:52.155 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 668 ms
+2026-08-14 18:27:52.244 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 18:27:52.262 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 18:27:52.411 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 18:27:52.424 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 18:27:52.459 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@bc52a41
+2026-08-14 18:27:52.459 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 18:27:52.485 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 18:27:53.007 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 18:27:53.044 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:27:53.077 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 18:27:53.533 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: ad561e1a-40a9-4cf4-b362-c02ae4b75cde
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 18:27:53.536 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 18:27:53.698 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:27:53.704 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 18:27:53.706 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.432 seconds (process running for 2.867)
+2026-08-14 18:28:05.649 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-14 18:28:05.650 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-14 18:28:05.652 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Completed initialization in 1 ms
+2026-08-14 18:28:06.303 [http-nio-8080-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: Could not initialize proxy [it.unical.ea_project.domain.User#2] - no session]
+2026-08-14 18:28:30.236 [http-nio-8080-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: Could not initialize proxy [it.unical.ea_project.domain.User#2] - no session]
+2026-08-14 18:36:45.545 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 18:36:45.548 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 18:36:45.563 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:36:45.567 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 18:36:45.570 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 18:57:12.800 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 37949 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 18:57:12.804 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 18:57:12.804 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 18:57:13.096 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 18:57:13.145 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 14 JPA repository interfaces.
+2026-08-14 18:57:13.348 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 18:57:13.355 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:57:13.356 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 18:57:13.356 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 18:57:13.371 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 549 ms
+2026-08-14 18:57:13.449 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 18:57:13.467 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 18:57:13.613 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 18:57:13.627 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 18:57:13.669 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@c87787d
+2026-08-14 18:57:13.670 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 18:57:13.696 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 18:57:14.168 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 18:57:14.203 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:57:14.234 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 18:57:14.675 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: d7019356-6ba0-469e-a059-29f08fed371b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 18:57:14.678 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 18:57:14.848 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:57:14.854 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 18:57:14.857 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.2 seconds (process running for 2.611)
+2026-08-14 18:57:19.297 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 18:57:19.299 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 18:57:19.303 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:57:19.305 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 18:57:19.306 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 18:57:28.776 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 38131 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 18:57:28.779 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 18:57:28.780 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 18:57:29.087 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 18:57:29.124 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 33 ms. Found 14 JPA repository interfaces.
+2026-08-14 18:57:29.328 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 18:57:29.335 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:57:29.336 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 18:57:29.336 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 18:57:29.350 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 553 ms
+2026-08-14 18:57:29.435 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 18:57:29.454 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 18:57:29.606 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 18:57:29.619 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 18:57:29.652 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@321c2a7
+2026-08-14 18:57:29.652 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 18:57:29.679 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 18:57:30.286 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 18:57:30.337 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:57:30.384 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 18:57:31.001 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 7c8cc26d-bc1b-440d-aa51-7db34aab6aa4
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 18:57:31.004 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 18:57:31.250 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 18:57:31.260 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 18:57:31.265 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.632 seconds (process running for 3.034)
+2026-08-14 18:57:31.842 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-14 18:57:31.842 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-14 18:57:31.843 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Completed initialization in 1 ms
+2026-08-14 18:58:12.037 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 18:58:12.039 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 18:58:12.043 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 18:58:12.044 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 18:58:12.046 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 19:02:15.847 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 38820 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 19:02:15.857 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 19:02:15.858 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 19:02:16.239 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 19:02:16.289 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 14 JPA repository interfaces.
+2026-08-14 19:02:16.490 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 19:02:16.496 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:02:16.497 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 19:02:16.497 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 19:02:16.511 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 627 ms
+2026-08-14 19:02:16.583 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 19:02:16.600 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 19:02:16.756 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 19:02:16.769 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 19:02:16.804 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@c87787d
+2026-08-14 19:02:16.804 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 19:02:16.831 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 19:02:17.313 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 19:02:17.351 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:02:17.385 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 19:02:17.870 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 221f72c5-8fee-4a49-9caf-b0d2624923fd
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 19:02:17.874 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 19:02:18.117 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:02:18.129 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 19:02:18.135 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.512 seconds (process running for 3.008)
+2026-08-14 19:02:18.860 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-14 19:02:18.861 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-14 19:02:18.862 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Completed initialization in 0 ms
+2026-08-14 19:02:40.545 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 19:02:40.548 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 19:02:40.554 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:02:40.556 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 19:02:40.558 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 19:03:34.043 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 39122 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 19:03:34.047 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 19:03:34.047 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 19:03:34.428 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 19:03:34.474 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 41 ms. Found 14 JPA repository interfaces.
+2026-08-14 19:03:34.804 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 19:03:34.815 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:03:34.817 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 19:03:34.817 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 19:03:34.840 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 769 ms
+2026-08-14 19:03:34.981 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 19:03:35.019 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 19:03:35.266 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 19:03:35.289 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 19:03:35.345 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@ecf028c
+2026-08-14 19:03:35.346 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 19:03:35.391 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 19:03:36.012 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 19:03:36.063 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:03:36.114 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 19:03:36.719 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 937a7f99-7f15-4bdb-bfba-64c5c35d482d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 19:03:36.723 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 19:03:36.965 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:03:36.972 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 19:03:36.975 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 3.088 seconds (process running for 3.786)
+2026-08-14 19:03:38.567 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-14 19:03:38.567 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-14 19:03:38.568 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Completed initialization in 1 ms
+2026-08-14 19:04:39.993 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 19:04:39.995 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 19:04:39.999 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:04:40.000 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 19:04:40.001 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-08-14 19:05:41.014 [main] INFO  i.u.e.EaProjectApplication - Starting EaProjectApplication using Java 25.0.2 with PID 39713 (/home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project/ea-project/target/classes started by lucoilbasso in /home/lucoilbasso/Documenti/Unical/EnterPrise/untitled_ea_project)
+2026-08-14 19:05:41.017 [main] DEBUG i.u.e.EaProjectApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-14 19:05:41.017 [main] INFO  i.u.e.EaProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-14 19:05:41.313 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-14 19:05:41.352 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 35 ms. Found 14 JPA repository interfaces.
+2026-08-14 19:05:41.552 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-14 19:05:41.559 [main] INFO  o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:05:41.560 [main] INFO  o.a.c.c.StandardService - Starting service [Tomcat]
+2026-08-14 19:05:41.560 [main] INFO  o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-14 19:05:41.574 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 539 ms
+2026-08-14 19:05:41.655 [main] INFO  o.h.o.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-14 19:05:41.672 [main] INFO  o.h.o.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-14 19:05:41.815 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-14 19:05:41.828 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Starting...
+2026-08-14 19:05:41.861 [main] INFO  c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@93fb44
+2026-08-14 19:05:41.862 [main] INFO  c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-14 19:05:41.890 [main] INFO  o.h.o.c.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/eaproject_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.4
+	Default catalog/schema: eaproject_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-14 19:05:42.366 [main] INFO  o.h.o.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-14 19:05:42.402 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:05:42.435 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-14 19:05:42.873 [main] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: fb5ace02-8409-4725-a024-1262c280b06a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-14 19:05:42.875 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-14 19:05:43.044 [main] INFO  o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-14 19:05:43.051 [main] INFO  o.s.b.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-08-14 19:05:43.054 [main] INFO  i.u.e.EaProjectApplication - Started EaProjectApplication in 2.193 seconds (process running for 2.583)
+2026-08-14 19:05:45.148 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-14 19:05:45.148 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-14 19:05:45.149 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet - Completed initialization in 1 ms
+2026-08-14 19:06:17.280 [SpringApplicationShutdownHook] INFO  o.s.b.t.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-14 19:06:17.283 [tomcat-shutdown] INFO  o.s.b.t.GracefulShutdown - Graceful shutdown complete
+2026-08-14 19:06:17.286 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-14 19:06:17.287 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-14 19:06:17.289 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.

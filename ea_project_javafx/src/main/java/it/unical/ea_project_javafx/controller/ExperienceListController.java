@@ -32,7 +32,8 @@ public class ExperienceListController {
             String category,
             String price,
             String rating,
-            String imageUrl
+            String imageUrl,
+            String dateInfo
     ) {}
 
     private List<ExperienceData> allItems = new ArrayList<>();
@@ -97,7 +98,8 @@ public class ExperienceListController {
                             dto.getCategory() != null ? dto.getCategory() : "Attività",
                             String.format("€%.0f", dto.getPrice() != null ? dto.getPrice() : 0.0),
                             String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
-                            dto.getImageUrl() != null ? dto.getImageUrl() : ""
+                            dto.getImageUrl() != null ? dto.getImageUrl() : "",
+                            ""
                     ));
                 }
             }
@@ -136,7 +138,8 @@ public class ExperienceListController {
                             dateInfo,
                             String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice() : 0.0),
                             String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
-                            dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : ""
+                            dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : "",
+                            dateInfo
                     ));
                 }
             }
@@ -152,7 +155,6 @@ public class ExperienceListController {
 
         categoryChips = new ArrayList<>();
         categoryChips.add(new CategoryChipData("In Evidenza", "ALL"));
-        categoryChips.add(new CategoryChipData("Viaggi", "Viaggio"));
 
         List<String> uniqueCategories = allActivities.stream()
                 .map(ExperienceData::category)
@@ -240,10 +242,38 @@ public class ExperienceListController {
             filtered = allActivities;
         } else if ("Tutto".equalsIgnoreCase(categoryType)) {
             filtered = allItems;
+        } else if ("Viaggi Prenotati".equalsIgnoreCase(categoryType)) {
+            // CHIAMATA AL BACKEND PER I VIAGGI PRENOTATI
+            loadBookedTripsFromServer();
+            return; // Usciamo perché la chiamata è asincrona e renderizzerà le card dentro la callback
+        } else if ("Attività Prenotate".equalsIgnoreCase(categoryType)) {
+            // (Se vuoi farlo anche per le attività, puoi replicare la stessa logica)
+            return;
         } else {
             filtered = allItems;
         }
 
         renderCards(filtered);
+    }
+
+    private void loadBookedTripsFromServer() {
+        Long userId = it.unical.ea_project_javafx.model.UserSession.getInstance().getId();
+
+        if (userId == null) {
+            System.out.println("Errore: Utente non loggato o ID non disponibile.");
+            return;
+        }
+
+        ApiService.call(
+                ApiService.BASE_URL + "/api/bookings/user/" + userId + "/trips",
+                "", "GET",
+                res -> Platform.runLater(() -> {
+                    if (res.statusCode() == 200) {
+                        List<ExperienceData> bookedTripsCards = parseTrips(res.body());
+                        renderCards(bookedTripsCards);
+                    }
+                }),
+                () -> {}, null
+        );
     }
 }

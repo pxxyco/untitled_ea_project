@@ -4,6 +4,7 @@ public class UserSession {
 
     private static final UserSession INSTANCE = new UserSession();
 
+    private Long id; // AGGIUNTO L'ID
     private String username;
     private String email;
     private String role;
@@ -15,7 +16,9 @@ public class UserSession {
         return INSTANCE;
     }
 
-    public void setSession(String username, String email, String role) {
+    // Aggiornato per accettare anche l'id
+    public void setSession(Long id, String username, String email, String role) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
@@ -23,12 +26,14 @@ public class UserSession {
     }
 
     public void clear() {
+        id = null;
         username = null;
         email = null;
         role = null;
         loggedIn = false;
     }
 
+    public Long getId() { return id; } // METODO PER PRENDERE L'ID
     public String getUsername() { return username; }
     public String getEmail() { return email; }
     public String getRole() { return role; }

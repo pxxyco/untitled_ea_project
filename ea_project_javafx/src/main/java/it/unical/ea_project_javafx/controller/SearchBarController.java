@@ -1,5 +1,6 @@
 package it.unical.ea_project_javafx.controller;
 
+import it.unical.ea_project_javafx.model.UserSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,15 +24,30 @@ public class SearchBarController {
 
     @FXML
     public void initialize() {
-        if (categoryComboBox != null) {
+        createCombobox();
+        if (datePicker != null) {
+            datePicker.setValue(LocalDate.now());
+        }
+    }
+
+    void createCombobox()
+    {
+        boolean isLoggedIn = UserSession.getInstance().isLoggedIn();
+
+        if (categoryComboBox != null && isLoggedIn) {
             ObservableList<String> categories = FXCollections.observableArrayList(
                     "Tutto", "Attività", "Attività Prenotate",
                     "Viaggi", "Viaggi Prenotati");
             categoryComboBox.setItems(categories);
             categoryComboBox.getSelectionModel().selectFirst();
         }
-        if (datePicker != null) {
-            datePicker.setValue(LocalDate.now());
+        else if (categoryComboBox != null)
+        {
+            ObservableList<String> categories = FXCollections.observableArrayList(
+                    "Tutto", "Attività",
+                    "Viaggi");
+            categoryComboBox.setItems(categories);
+            categoryComboBox.getSelectionModel().selectFirst();
         }
     }
 

@@ -2,7 +2,7 @@ package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Activity;
 import it.unical.ea_project.domain.ActivityImage;
-import it.unical.ea_project.dto.ActivityResponseDto; // Crea questo DTO
+import it.unical.ea_project.dto.ActivityResponseDto;
 import it.unical.ea_project.service.ActivityImageService;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
@@ -18,44 +18,48 @@ import java.util.stream.Collectors;
 public class ActivityController {
 
     private final ActivityService activityService;
-    private final ActivityImageService activityImageService; // <-- Iniettiamo il servizio immagini
+    private final ActivityImageService activityImageService;
 
     @GetMapping
     public ResponseEntity<List<ActivityResponseDto>> getAllActivities() {
-        List<ActivityResponseDto> dtos = activityService.getAllActivities().stream()
-                .map(activity -> {
-                    // Recupera la prima immagine dell'attività per mostrarla nella card
-                    String imageUrl = activityImageService.getImagesByActivityId(activity.getActivityId()).stream()
-                            .findFirst()
-                            .map(ActivityImage::getImageUrl)
-                            .orElse("");
-
-                    return new ActivityResponseDto(
-                            activity.getActivityId(),
-                            activity.getTitle(),
-                            activity.getDescription(),
-                            activity.getCategory() != null ? activity.getCategory().name() : "OTHER",
-                            activity.getCity(),
-                            activity.getPrice(),
-                            activity.getAverageRating(),
-                            imageUrl
-                    );
-                })
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(
+                activityService.getAllActivities().stream()
+                        .map(this::toDto)
+                        .collect(Collectors.toList())
+        );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ActivityResponseDto> getActivityById(@PathVariable Long id) {
         Activity activity = activityService.getActivityById(id);
+        return ResponseEntity.ok(toDto(activity));
+    }
 
+    @PostMapping
+    public ResponseEntity<ActivityResponseDto> createActivity(@RequestBody Activity activity, @RequestParam Long creatorId) {
+        Activity saved = activityService.createActivity(activity, creatorId);
+        return ResponseEntity.ok(toDto(saved));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityResponseDto> updateActivity(@PathVariable Long id, @RequestBody Activity activity) {
+        Activity updated = activityService.updateActivity(id, activity);
+        return ResponseEntity.ok(toDto(updated));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
+        activityService.deleteActivity(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private ActivityResponseDto toDto(Activity activity) {
         String imageUrl = activityImageService.getImagesByActivityId(activity.getActivityId()).stream()
                 .findFirst()
                 .map(ActivityImage::getImageUrl)
                 .orElse("");
 
-        ActivityResponseDto dto = new ActivityResponseDto(
+        return new ActivityResponseDto(
                 activity.getActivityId(),
                 activity.getTitle(),
                 activity.getDescription(),
@@ -65,23 +69,5 @@ public class ActivityController {
                 activity.getAverageRating(),
                 imageUrl
         );
-
-        return ResponseEntity.ok(dto);
-    }
-
-    @PostMapping
-    public ResponseEntity<Activity> createActivity(@RequestBody Activity activity, @RequestParam Long creatorId) {
-        return ResponseEntity.ok(activityService.createActivity(activity, creatorId));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activity) {
-        return ResponseEntity.ok(activityService.updateActivity(id, activity));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
-        activityService.deleteActivity(id);
-        return ResponseEntity.noContent().build();
     }
 }
