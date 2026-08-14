@@ -1,8 +1,10 @@
 package it.unical.ea_project_javafx.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.unical.ea_project_javafx.dto.ActivityDto;
+import it.unical.ea_project_javafx.dto.TripDto;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,8 +15,11 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+
 //lista delle card
 public class ExperienceListController {
 
@@ -30,27 +35,44 @@ public class ExperienceListController {
             String imageUrl
     ) {}
 
+    private List<ExperienceData> allItems = new ArrayList<>();
     private List<ExperienceData> allActivities = new ArrayList<>();
+    private List<ExperienceData> allTrips = new ArrayList<>();
     private List<CategoryChipData> categoryChips = new ArrayList<>();
 
     private record CategoryChipData(String label, String categoryKey) {}
 
     @FXML
     public void initialize() {
-        loadActivitiesFromBackend();
+        loadDataFromBackend();
     }
 
-    private void loadActivitiesFromBackend() {
+    private void loadDataFromBackend() {
         ApiService.call(
                 ApiService.BASE_URL + "/api/activities",
                 "", "GET",
-                res -> Platform.runLater(() -> {
-                    if (res.statusCode() == 200) {
-                        allActivities = parseActivities(res.body());
-                        setupCategoryChips();
-                        renderCards(allActivities);
+                resAct -> {
+                    if (resAct.statusCode() == 200) {
+                        allActivities = parseActivities(resAct.body());
+
+                        ApiService.call(
+                                ApiService.BASE_URL + "/api/trips/published",
+                                "", "GET",
+                                resTrip -> Platform.runLater(() -> {
+                                    if (resTrip.statusCode() == 200) {
+                                        allTrips = parseTrips(resTrip.body());
+                                    }
+                                    allItems.clear();
+                                    allItems.addAll(allActivities);
+                                    allItems.addAll(allTrips);
+
+                                    setupCategoryChips();
+                                    renderCards(allItems);
+                                }),
+                                () -> {}, null
+                        );
                     }
-                }),
+                },
                 () -> Platform.runLater(() -> {
                     if (cardsContainer != null && cardsContainer.getScene() != null) {
                         it.unical.ea_project_javafx.util.ViewNavigator.loadScene(cardsContainer, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
@@ -72,10 +94,49 @@ public class ExperienceListController {
                     result.add(new ExperienceData(
                             dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
                             dto.getCity() != null ? dto.getCity() : "",
-                            dto.getCategory() != null ? dto.getCategory() : "OTHER",
+                            dto.getCategory() != null ? dto.getCategory() : "Attività",
                             String.format("€%.0f", dto.getPrice() != null ? dto.getPrice() : 0.0),
                             String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
                             dto.getImageUrl() != null ? dto.getImageUrl() : ""
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private List<ExperienceData> parseTrips(String jsonBody) {
+        List<ExperienceData> result = new ArrayList<>();
+        try {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, (com.google.gson.JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+                            LocalDate.parse(json.getAsString()))
+                    .create();
+
+            Type listType = new TypeToken<List<TripDto>>() {}.getType();
+            List<TripDto> dtos = gson.fromJson(jsonBody, listType);
+
+            if (dtos != null) {
+                for (TripDto dto : dtos) {
+                    String location = "";
+                    if (dto.getDestinationCity() != null) location += dto.getDestinationCity();
+                    if (dto.getDestinationCountry() != null) {
+                        location += (location.isEmpty() ? "" : ", ") + dto.getDestinationCountry();
+                    }
+                    String dateInfo = "Viaggio";
+                    if (dto.getStartDate() != null && dto.getEndDate() != null) {
+                        dateInfo = dto.getStartDate() + " ➔ " + dto.getEndDate();
+                    }
+
+                    result.add(new ExperienceData(
+                            dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
+                            location,
+                            dateInfo,
+                            String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice() : 0.0),
+                            String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
+                            dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : ""
                     ));
                 }
             }
@@ -89,13 +150,15 @@ public class ExperienceListController {
         if (categoriesBar == null) return;
         categoriesBar.getChildren().clear();
 
+        categoryChips = new ArrayList<>();
+        categoryChips.add(new CategoryChipData("In Evidenza", "ALL"));
+        categoryChips.add(new CategoryChipData("Viaggi", "Viaggio"));
+
         List<String> uniqueCategories = allActivities.stream()
                 .map(ExperienceData::category)
                 .distinct()
                 .toList();
 
-        categoryChips = new ArrayList<>();
-        categoryChips.add(new CategoryChipData("In Evidenza", "ALL"));
         uniqueCategories.forEach(cat -> categoryChips.add(new CategoryChipData(cat, cat)));
 
         for (int i = 0; i < categoryChips.size(); i++) {
@@ -120,10 +183,10 @@ public class ExperienceListController {
     private void filterCardsByCategory(String categoryKey) {
         List<ExperienceData> filtered;
         if ("ALL".equalsIgnoreCase(categoryKey)) {
-            filtered = allActivities;
+            filtered = allItems;
         } else {
             filtered = new ArrayList<>();
-            for (ExperienceData card : allActivities) {
+            for (ExperienceData card : allItems) {
                 if (card.category() != null && card.category().equalsIgnoreCase(categoryKey)) {
                     filtered.add(card);
                 }
@@ -162,11 +225,25 @@ public class ExperienceListController {
                         data.imageUrl()
                 );
 
-
                 currentRow.getChildren().add(cardNode);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public void filterBySearchCriteria(String categoryType, LocalDate date) {
+        List<ExperienceData> filtered = new ArrayList<>();
+
+        if ("Viaggi".equalsIgnoreCase(categoryType)) {
+            filtered = allTrips;
+        } else if ("Attività".equalsIgnoreCase(categoryType)) {
+            filtered = allActivities;
+        } else if ("Tutto".equalsIgnoreCase(categoryType)) {
+            filtered = allItems;
+        } else {
+            filtered = allItems;
+        }
+
+        renderCards(filtered);
     }
 }

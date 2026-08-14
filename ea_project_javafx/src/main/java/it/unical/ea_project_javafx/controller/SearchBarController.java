@@ -8,11 +8,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 
 import java.time.LocalDate;
+
 //logica barra di ricerca
 public class SearchBarController {
 
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private DatePicker datePicker;
+
+    private ExperienceListController experienceListController;
+
+    public void setExperienceListController(ExperienceListController controller) {
+        this.experienceListController = controller;
+    }
 
     @FXML
     public void initialize() {
@@ -33,7 +40,10 @@ public class SearchBarController {
         String selectedCategory = categoryComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
 
-        System.out.println("Fricerca avviata per: " + selectedCategory + " nella data: " + selectedDate);
+        System.out.println("Ricerca avviata per: " + selectedCategory + " nella data: " + selectedDate);
 
+        if (experienceListController != null) {
+            experienceListController.filterBySearchCriteria(selectedCategory, selectedDate);
+        }
     }
 }

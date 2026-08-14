@@ -26,6 +26,10 @@ public class MainViewController implements MainNavigator {
     public void initialize() {
         setupBackgroundResize();
         loadNavbar();
+
+        if (searchBarController != null && experienceListController != null) {
+            searchBarController.setExperienceListController(experienceListController);
+        }
     }
 
     private void loadNavbar() {
