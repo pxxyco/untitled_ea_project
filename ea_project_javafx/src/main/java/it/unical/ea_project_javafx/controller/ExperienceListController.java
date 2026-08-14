@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
+//lista delle card
 public class ExperienceListController {
 
     @FXML private HBox categoriesBar;
@@ -118,12 +118,17 @@ public class ExperienceListController {
     }
 
     private void filterCardsByCategory(String categoryKey) {
-        List<ExperienceData> filtered = "ALL".equals(categoryKey)
-                ? allActivities
-                : allActivities.stream()
-                .filter(card -> card.category().equalsIgnoreCase(categoryKey))
-                .toList();
-
+        List<ExperienceData> filtered;
+        if ("ALL".equalsIgnoreCase(categoryKey)) {
+            filtered = allActivities;
+        } else {
+            filtered = new ArrayList<>();
+            for (ExperienceData card : allActivities) {
+                if (card.category() != null && card.category().equalsIgnoreCase(categoryKey)) {
+                    filtered.add(card);
+                }
+            }
+        }
         renderCards(filtered);
     }
 

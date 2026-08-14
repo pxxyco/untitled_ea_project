@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+//Controller del login (LoginStepController, RoleSelectionStepController, RegistrationStepController)
 public class AuthWizardController implements StepNavigator {
 
     @FXML private ImageView bgImageView;

@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-
+//Controller della card di ogni esperienza
 public class ExperienceCardController {
 
     @FXML private VBox cardRoot;
@@ -57,6 +57,6 @@ public class ExperienceCardController {
     }
 
     private void handleCardClick() {
-        // TODO: Logica di navigazione al click sulla card
+        // TODO Logica di navigazione al click sulla card
     }
 }

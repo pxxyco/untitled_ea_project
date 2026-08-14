@@ -3,7 +3,7 @@ package it.unical.ea_project_javafx.controller;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
-
+//selezione ruolo nel login
 public class RoleSelectionStepController {
 
     private StepNavigator navigator;

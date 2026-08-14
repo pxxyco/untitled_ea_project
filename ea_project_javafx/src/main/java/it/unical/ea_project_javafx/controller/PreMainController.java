@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
-
+//prima della home il client esegue una connessione controllando se c'è la risposta per il backend questo accade per ogni chiamata
 public class PreMainController {
 
     @FXML private Label iconLabel;

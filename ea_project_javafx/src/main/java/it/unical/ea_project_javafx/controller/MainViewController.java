@@ -12,12 +12,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-
+//schermata home (navbar, search bar, cards)
 public class MainViewController implements MainNavigator {
 
     @FXML private ImageView bgImageView;
     @FXML private VBox cardsContainer;
-
     @FXML private StackPane navbarContainer;
 
     @FXML private SearchBarController searchBarController;
@@ -32,9 +31,14 @@ public class MainViewController implements MainNavigator {
     private void loadNavbar() {
         if (navbarContainer == null) return;
         try {
-            String fxmlFile = UserSession.getInstance().isLoggedIn()
-                    ? "/it/unical/ea_project_javafx/fxml/navbar-logged-in.fxml"
-                    : "/it/unical/ea_project_javafx/fxml/navbar-logged-out.fxml";
+            boolean isLoggedIn = UserSession.getInstance().isLoggedIn();
+
+            String fxmlFile;
+            if (isLoggedIn) {
+                fxmlFile = "/it/unical/ea_project_javafx/fxml/navbar-logged-in.fxml";
+            } else {
+                fxmlFile = "/it/unical/ea_project_javafx/fxml/navbar-logged-out.fxml";
+            }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent navbarView = loader.load();
@@ -60,18 +64,24 @@ public class MainViewController implements MainNavigator {
         });
     }
 
+
     @Override
     public void goToLogin(Node sourceNode) {
         ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/login.fxml");
     }
 
     @Override
-    public void onEsperienzeClicked() {
-        // TODO switcha scena verso vista Esperienze
+    public void goToExperiences(Node sourceNode) {
+        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/experiences.fxml");
     }
 
     @Override
-    public void onItinerariClicked() {
-        // TODO switcha scena verso vista Itinerari Pubblici
+    public void goToItinerari(Node sourceNode) {
+        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/itinerari.fxml");
+    }
+
+    @Override
+    public void goToProfile(Node sourceNode) {
+        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/profile.fxml");
     }
 }

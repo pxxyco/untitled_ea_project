@@ -10,7 +10,6 @@ public class ActivityDto {
     private Double averageRating;
     private String imageUrl;
 
-    // Getter e Setter
     public Long getActivityId() { return activityId; }
     public void setActivityId(Long activityId) { this.activityId = activityId; }
 

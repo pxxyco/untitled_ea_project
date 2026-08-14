@@ -5,9 +5,10 @@ import it.unical.ea_project_javafx.model.UserSession;
 import it.unical.ea_project_javafx.util.ViewNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.MenuButton;
 import javafx.scene.input.MouseEvent;
-
+//sarebbe la top bar della home
 public class NavbarController {
 
     private MainNavigator navigator;
@@ -28,13 +29,30 @@ public class NavbarController {
     @FXML
     void handleLogin(MouseEvent event) {
         if (navigator != null) {
-            navigator.goToLogin((javafx.scene.Node) event.getSource());
+            navigator.goToLogin((Node) event.getSource());
+        }
+    }
+
+    @FXML
+    void handleExperiences(MouseEvent event) {
+        if (navigator != null) {
+            navigator.goToExperiences((Node) event.getSource());
+        }
+    }
+
+    @FXML
+    void handleItinerari(MouseEvent event) {
+        if (navigator != null) {
+            navigator.goToItinerari((Node) event.getSource());
         }
     }
 
     @FXML
     void handleProfilo(ActionEvent event) {
-        // TODO inserisci il profilo
+        if (navigator != null) {
+            Node sourceNode = (userMenuButton != null) ? userMenuButton : (Node) event.getSource();
+            navigator.goToProfile(sourceNode);
+        }
     }
 
     @FXML
@@ -43,21 +61,6 @@ public class NavbarController {
 
         if (userMenuButton != null) {
             ViewNavigator.loadScene(userMenuButton, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
-        }
-
-    }
-
-    @FXML
-    void handleEsperienze(MouseEvent event) {
-        if (navigator != null) {
-            navigator.onEsperienzeClicked();
-        }
-    }
-
-    @FXML
-    void handleItinerari(MouseEvent event) {
-        if (navigator != null) {
-            navigator.onItinerariClicked();
         }
     }
 }
