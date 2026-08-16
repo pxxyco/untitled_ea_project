@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx;
+package it.unical.ea_project_javafx.controller;
 
 import java.io.IOException;
 import java.net.URI;

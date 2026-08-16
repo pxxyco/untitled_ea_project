@@ -62,6 +62,10 @@
     -fx-background-color: #2c3444;
 }
 
+.content-rows {
+    -fx-spacing: 10;
+}
+
 .content-scroll {
     -fx-background-color: transparent;
 }

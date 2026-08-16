@@ -1,8 +1,10 @@
-package it.unical.ea_project_javafx;
+package it.unical.ea_project_javafx.controller;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import it.unical.ea_project_javafx.ExperienceCardBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

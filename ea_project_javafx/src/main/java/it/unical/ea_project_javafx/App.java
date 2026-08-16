@@ -23,7 +23,6 @@ public class App extends Application {
             scene = new Scene(root, 1280, 720);
             stage.setTitle("EA Project");
             stage.setScene(scene);
-            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             System.err.println("Error (1-main)");
