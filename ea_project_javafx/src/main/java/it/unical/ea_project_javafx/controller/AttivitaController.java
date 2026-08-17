@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -20,15 +22,18 @@ public class AttivitaController {
     private Button btnFoto;
     @FXML
     private Button btnItinerario;
+    @FXML
+    private Spinner spinnerPartecipanti;
 
     private List<Button> sectionButtons;
 
     private Node itinerarioNode;
+    private Node descrizioneNode;
 
     @FXML
     void initialize(){
         sectionButtons = List.of(btnDescrizione, btnItinerario, btnFoto);
-
+        handleDescrizione(null);
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/it/unical/ea_project_javafx/fxml/attivita/Itinerario.fxml")
@@ -44,11 +49,22 @@ public class AttivitaController {
     @FXML
     private void handleDescrizione(ActionEvent event) {
         setActiveButton(btnDescrizione);
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/it/unical/ea_project_javafx/fxml/attivita/Descrizione.fxml")
+        );
+        try {
+             descrizioneNode= loader.load();
+             bodyContainer.getChildren().clear();
+             bodyContainer.getChildren().add(descrizioneNode);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleItinerario(ActionEvent event) {
-
+        bodyContainer.getChildren().clear();
         bodyContainer.getChildren().setAll(itinerarioNode);
 
         setActiveButton(btnItinerario);
