@@ -15,7 +15,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="760" prefWidth="1300" styleClass="app-root" stylesheets="@../css/attivita.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.AttivitaController">
+<?import java.net.URL?>
+<StackPane fx:id="root"
+           prefHeight="760"
+           prefWidth="1300"
+           styleClass="app-root"
+           xmlns="http://javafx.com/javafx/23.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="it.unical.ea_project_javafx.controller.AttivitaController">
+
+    <stylesheets>
+        <URL value="@../css/attivita.css" />
+
+    </stylesheets>
 
     <Region mouseTransparent="true" styleClass="bg-image" />
 
