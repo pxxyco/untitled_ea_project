@@ -35,6 +35,11 @@ public class AttivitaController {
         sectionButtons = List.of(btnDescrizione, btnItinerario, btnFoto);
         handleDescrizione(null);
 
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 1);
+        spinnerPartecipanti.setValueFactory(valueFactory);
+
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/it/unical/ea_project_javafx/fxml/attivita/Itinerario.fxml")
         );

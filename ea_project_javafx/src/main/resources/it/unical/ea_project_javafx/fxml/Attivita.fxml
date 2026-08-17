@@ -106,9 +106,9 @@
                               </children>
                            </HBox>
                            <Label styleClass="field-label" text="Data" />
-                           <DatePicker fx:id="datePicker" maxWidth="Infinity" />
+                           <DatePicker fx:id="datePicker" editable="false" maxWidth="Infinity" />
                            <Label styleClass="field-label" text="Partecipanti" />
-                           <Spinner fx:id="spinnerPartecipanti" editable="true" maxWidth="Infinity" />
+                           <Spinner fx:id="spinnerPartecipanti" maxWidth="Infinity" />
                            <Separator />
                            <HBox alignment="CENTER_LEFT">
                               <children>
