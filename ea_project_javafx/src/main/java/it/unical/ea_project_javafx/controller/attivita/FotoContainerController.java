@@ -7,9 +7,9 @@ import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 
-public class FotoController {
+public class FotoContainerController {
 
-    final private String path =  "/it/unical/ea_project_javafx/fxml/attivitaDir/fotoDir";
+    final private String path = "/it/unical/ea_project_javafx/fxml/attivita/fotoContainer";
 
 
     @FXML

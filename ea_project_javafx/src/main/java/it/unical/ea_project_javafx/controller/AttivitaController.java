@@ -33,7 +33,7 @@ public class AttivitaController {
     private Node descrizioneNode;
     private Node fotoNode;
 
-    final String path = "/it/unical/ea_project_javafx/fxml/attivitaDir";
+    final String path = "/it/unical/ea_project_javafx/fxml/attivita";
 
     @FXML
     void initialize(){
@@ -85,7 +85,7 @@ public class AttivitaController {
     protected void handleFoto(ActionEvent event) {
         setActiveButton(btnFoto);
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(path + "/Foto.fxml")
+                getClass().getResource(path + "/FotoContainer.fxml")
         );
 
         try {
