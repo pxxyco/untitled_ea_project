@@ -23,16 +23,21 @@ public class AttivitaController {
     @FXML
     private Button btnItinerario;
     @FXML
+    private Button btnRecensioni;
+    @FXML
     private Spinner spinnerPartecipanti;
 
     private List<Button> sectionButtons;
 
     private Node itinerarioNode;
     private Node descrizioneNode;
+    private Node fotoNode;
+
+    final String path = "/it/unical/ea_project_javafx/fxml/attivitaDir";
 
     @FXML
     void initialize(){
-        sectionButtons = List.of(btnDescrizione, btnItinerario, btnFoto);
+        sectionButtons = List.of(btnDescrizione, btnItinerario, btnFoto, btnRecensioni);
         handleDescrizione(null);
 
         SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
@@ -41,7 +46,7 @@ public class AttivitaController {
 
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/it/unical/ea_project_javafx/fxml/attivita/Itinerario.fxml")
+                getClass().getResource(path + "/Itinerario.fxml")
         );
         try {
             itinerarioNode = loader.load();
@@ -56,7 +61,7 @@ public class AttivitaController {
         setActiveButton(btnDescrizione);
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/it/unical/ea_project_javafx/fxml/attivita/Descrizione.fxml")
+                getClass().getResource(path + "/Descrizione.fxml")
         );
         try {
              descrizioneNode= loader.load();
@@ -79,6 +84,23 @@ public class AttivitaController {
     @FXML
     protected void handleFoto(ActionEvent event) {
         setActiveButton(btnFoto);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(path + "/Foto.fxml")
+        );
+
+        try {
+            fotoNode= loader.load();
+            bodyContainer.getChildren().clear();
+            bodyContainer.getChildren().add(fotoNode);
+
+        }catch (IOException e){
+
+        }
+    }
+
+    @FXML
+    protected void handleRecensioni(ActionEvent event) {
+        setActiveButton(btnRecensioni);
     }
 
 
