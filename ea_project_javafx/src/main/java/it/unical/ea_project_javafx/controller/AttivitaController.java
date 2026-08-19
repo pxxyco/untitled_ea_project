@@ -94,7 +94,7 @@ public class AttivitaController {
             bodyContainer.getChildren().add(fotoNode);
 
         }catch (IOException e){
-
+            e.printStackTrace();
         }
     }
 

@@ -36,6 +36,7 @@
     -fx-border-color: transparent transparent rgba(255,255,255,0.08) transparent;
     -fx-border-width: 0 0 1 0;
 }
+
 .logo {
     -fx-text-fill: white;
     -fx-font-size: 16px;
@@ -62,10 +63,6 @@
     -fx-background-color: #2c3444;
 }
 
-.content-rows {
-    -fx-spacing: 10;
-}
-
 .content-scroll {
     -fx-background-color: transparent;
 }
@@ -75,6 +72,10 @@
 .content-scroll .scroll-bar:vertical,
 .content-scroll .scroll-bar:horizontal {
     -fx-background-color: transparent;
+}
+
+.content-rows {
+    -fx-spacing: 10;
 }
 .content-wrapper {
     -fx-background-color: transparent;
