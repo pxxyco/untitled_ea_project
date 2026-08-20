@@ -19,7 +19,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = loadFXML("mainview");
+            Parent root = loadFXML("Attivita");
             scene = new Scene(root, 1280, 720);
             stage.setTitle("EA Project");
             stage.setScene(scene);

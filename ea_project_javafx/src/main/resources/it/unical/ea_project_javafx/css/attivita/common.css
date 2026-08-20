@@ -3,7 +3,7 @@
     -fx-font-size: 12px;
 }
 
-.itinerario, .descrizione, .foto{
+.itinerario, .descrizione, .foto, .recensione-container{
     -fx-background-color: rgba(0, 0, 0, 0.50);
     -fx-background-radius: 12;
 
@@ -27,4 +27,40 @@
     -fx-text-fill: white;
     -fx-font-size: 18;
     -fx-font-weight: bold;
+}
+
+.add-button{
+    -fx-background-color: rgba(255, 255, 255, 0.50);
+    -fx-background-radius: 40;
+    -fx-text-fill: black;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.add-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+.add-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.45);
+}
+
+.next, .previous {
+    -fx-background-color: transparent;
+    -fx-text-fill: #d5d9e0;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4, 0, 0, 1);
+}
+
+.next:hover, .previous:hover {
+    -fx-text-fill: white;
 }

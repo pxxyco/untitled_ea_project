@@ -101,6 +101,21 @@ public class AttivitaController {
     @FXML
     protected void handleRecensioni(ActionEvent event) {
         setActiveButton(btnRecensioni);
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(path + "/RecensioniContainer.fxml")
+        );
+
+        try {
+            fotoNode= loader.load();
+            bodyContainer.getChildren().clear();
+            bodyContainer.getChildren().add(fotoNode);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
     }
 
 
