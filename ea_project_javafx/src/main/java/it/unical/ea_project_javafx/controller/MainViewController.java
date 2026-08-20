@@ -24,6 +24,27 @@ public class MainViewController implements MainNavigator {
 
     @FXML
     public void initialize() {
+        String savedToken = it.unical.ea_project_javafx.util.TokenStorage.getAccessToken();
+
+        if (savedToken != null && !savedToken.isBlank()) {
+            boolean expired = it.unical.ea_project_javafx.util.JwtUtils.isExpired(savedToken);
+
+            if (!expired) {
+                String savedRefreshToken = it.unical.ea_project_javafx.util.TokenStorage.getRefreshToken();
+                UserSession.getInstance().setTokens(savedToken, savedRefreshToken);
+                String email = it.unical.ea_project_javafx.util.JwtUtils.extractEmail(savedToken);
+                if (email != null) {
+                    it.unical.ea_project_javafx.dto.UserDTO restoredUser = it.unical.ea_project_javafx.dto.UserDTO.builder()
+                            .email(email)
+                            .username(email.split("@")[0])
+                            .build();
+                    UserSession.getInstance().setSession(restoredUser);
+                }
+            } else {
+                it.unical.ea_project_javafx.util.TokenStorage.clear();
+            }
+        }
+
         setupBackgroundResize();
         loadNavbar();
 

@@ -9,10 +9,7 @@ import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 
 import java.net.URLEncoder;
@@ -26,6 +23,7 @@ public class LoginStepController {
     @FXML private PasswordField loginPasswordField;
     @FXML private Button btnLogin;
     @FXML private Label errorLabel;
+    @FXML private CheckBox rememberMeCheckBox;
 
     private StepNavigator navigator;
 
@@ -87,6 +85,10 @@ public class LoginStepController {
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200) {
                         try {
+                            String authHeader = res.headers().firstValue("Authorization").orElse("");
+                            String accessToken = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
+                            String refreshToken = res.headers().firstValue("X-Refresh-Token").orElse(null);
+
                             Gson gson = new GsonBuilder()
                                     .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfT, context) ->
                                             LocalDateTime.parse(json.getAsString()))
@@ -98,6 +100,15 @@ public class LoginStepController {
 
                             if (user != null) {
                                 it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(user);
+                                it.unical.ea_project_javafx.model.UserSession.getInstance().setTokens(accessToken, refreshToken);
+
+                                if (rememberMeCheckBox != null && rememberMeCheckBox.isSelected()) {
+                                    it.unical.ea_project_javafx.util.TokenStorage.saveTokens(accessToken, refreshToken);
+                                } else {
+                                    it.unical.ea_project_javafx.util.TokenStorage.clear();
+                                }
+                                //System.out.println("Access Token salvato: " + UserSession.getInstance().getAccessToken());
+
                                 if (event != null) {
                                     navigator.goToHome(event);
                                 } else {

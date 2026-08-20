@@ -4,6 +4,7 @@ module it.unical.ea_project_javafx {
     requires java.net.http;
     requires com.google.gson;
     requires static lombok;
+    requires java.prefs;
 
     opens it.unical.ea_project_javafx to javafx.fxml;
     opens it.unical.ea_project_javafx.controller to javafx.fxml, com.google.gson;

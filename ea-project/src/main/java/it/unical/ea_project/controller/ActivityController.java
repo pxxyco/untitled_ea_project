@@ -31,8 +31,9 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ActivityDTO> getActivityById(@PathVariable Long id) {
-        Activity activity = activityService.getActivityById(id);
-        return ResponseEntity.ok(toDto(activity));
+        return activityService.getActivityById(id)
+                .map(activity -> ResponseEntity.ok(toDto(activity)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -63,14 +64,9 @@ public class ActivityController {
                         .build())
                 .collect(Collectors.toList());
 
-        Long creatorId = null;
-        if (activity.getCreatedBy() != null) {
-            creatorId = activity.getCreatedBy().getId();
-        }
-
         return ActivityDTO.builder()
                 .activityId(activity.getActivityId())
-                .createdByUserId(creatorId)
+                .createdByUserId(activity.getCreatedBy() != null ? activity.getCreatedBy().getId() : null)
                 .title(activity.getTitle())
                 .description(activity.getDescription())
                 .category(activity.getCategory() != null ? activity.getCategory().name() : "OTHER")

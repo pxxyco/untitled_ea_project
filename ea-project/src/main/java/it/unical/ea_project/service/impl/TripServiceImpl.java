@@ -5,7 +5,6 @@ import it.unical.ea_project.domain.Trip.TripStatus;
 import it.unical.ea_project.domain.User;
 import it.unical.ea_project.repository.TripRepository;
 import it.unical.ea_project.repository.UserRepository;
-import it.unical.ea_project.security.ResourceNotFoundException;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,7 @@ public class TripServiceImpl implements TripService {
     @Transactional
     public Trip createTrip(Trip trip, Long creatorId) {
         User creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Utente non trovato con ID: " + creatorId));
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + creatorId));
         trip.setCreatedBy(creator);
         return tripRepository.save(trip);
     }

@@ -1,9 +1,7 @@
 package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Trip;
-import it.unical.ea_project.dto.StageDTO;
 import it.unical.ea_project.dto.TripDTO;
-import it.unical.ea_project.security.ResourceNotFoundException;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,9 +32,9 @@ public class TripController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TripDTO> getTripById(@PathVariable Long id) {
-        Trip trip = tripService.getTripById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Viaggio non trovato con ID: " + id));
-        return ResponseEntity.ok(toDto(trip));
+        return tripService.getTripById(id)
+                .map(trip -> ResponseEntity.ok(toDto(trip)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/search/country")
@@ -64,40 +62,40 @@ public class TripController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TripDTO> updateTrip(@PathVariable Long id, @RequestBody Trip details) {
-        Trip existing = tripService.getTripById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Viaggio non trovato con ID: " + id));
+        return tripService.getTripById(id)
+                .map(existing -> {
+                    existing.setTitle(details.getTitle());
+                    existing.setDescription(details.getDescription());
+                    existing.setDestinationCountry(details.getDestinationCountry());
+                    existing.setDestinationCity(details.getDestinationCity());
+                    existing.setStartDate(details.getStartDate());
+                    existing.setEndDate(details.getEndDate());
+                    existing.setTotalPrice(details.getTotalPrice());
+                    existing.setMaxSeats(details.getMaxSeats());
+                    existing.setAvailableSeats(details.getAvailableSeats());
+                    existing.setStatus(details.getStatus());
+                    existing.setCoverPhotoUrl(details.getCoverPhotoUrl());
 
-        existing.setTitle(details.getTitle());
-        existing.setDescription(details.getDescription());
-        existing.setDestinationCountry(details.getDestinationCountry());
-        existing.setDestinationCity(details.getDestinationCity());
-        existing.setStartDate(details.getStartDate());
-        existing.setEndDate(details.getEndDate());
-        existing.setTotalPrice(details.getTotalPrice());
-        existing.setMaxSeats(details.getMaxSeats());
-        existing.setAvailableSeats(details.getAvailableSeats());
-        existing.setStatus(details.getStatus());
-        existing.setCoverPhotoUrl(details.getCoverPhotoUrl());
-
-        Trip saved = tripService.saveTrip(existing);
-        return ResponseEntity.ok(toDto(saved));
+                    Trip saved = tripService.saveTrip(existing);
+                    return ResponseEntity.ok(toDto(saved));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrip(@PathVariable Long id) {
-        Trip existing = tripService.getTripById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Viaggio non trovato con ID: " + id));
-        tripService.deleteTripLogically(existing);
-        return ResponseEntity.noContent().build();
+        return tripService.getTripById(id)
+                .map(existing -> {
+                    tripService.deleteTripLogically(existing);
+                    return ResponseEntity.noContent().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     private List<TripDTO> toDtoList(List<Trip> trips) {
         return trips.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    /**
-     * Converte l'entità Trip nel nuovo TripDTO, mappando in modo sicuro anche l'ID del creatore e le tappe.
-     */
     private TripDTO toDto(Trip trip) {
         Long creatorId = null;
         if (trip.getCreatedBy() != null) {

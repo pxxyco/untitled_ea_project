@@ -16,7 +16,6 @@
 
     <Label styleClass="header-title" text="Login" />
 
-    <!-- Label per i messaggi di errore (inizialmente nascosta e non gestita nel layout) -->
     <Label fx:id="errorLabel" managed="false" visible="false" style="-fx-text-fill: #ef4444; -fx-font-size: 13px; -fx-font-weight: bold; -fx-wrap-text: true;" />
 
     <VBox spacing="8.0">
@@ -31,7 +30,7 @@
 
     <HBox alignment="CENTER_LEFT">
         <children>
-            <CheckBox styleClass="custom-checkbox" text="Ricordami" />
+            <CheckBox fx:id="rememberMeCheckBox" styleClass="custom-checkbox" text="Ricordami" />
             <Region HBox.hgrow="ALWAYS" />
             <Hyperlink styleClass="custom-link" text="Password dimenticata?" />
         </children>

@@ -1,5 +1,6 @@
 package it.unical.ea_project_javafx.util;
 
+import it.unical.ea_project_javafx.model.UserSession;
 import javafx.concurrent.Task;
 import lombok.Setter;
 
@@ -33,6 +34,11 @@ public class ApiService {
                 HttpRequest.Builder builder = HttpRequest.newBuilder()
                         .uri(URI.create(url))
                         .timeout(Duration.ofSeconds(30));
+
+                String token = UserSession.getInstance().getAccessToken();
+                if (token != null && !token.isBlank()) {
+                    builder.header("Authorization", "Bearer " + token);
+                }
 
                 if ("POST".equalsIgnoreCase(method)) {
                     builder.header("Content-Type", "application/json");

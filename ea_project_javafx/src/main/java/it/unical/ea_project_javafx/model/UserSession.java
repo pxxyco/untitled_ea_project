@@ -17,6 +17,10 @@ public class UserSession {
     private boolean oauthProvider;
     private boolean loggedIn = false;
 
+    private String jwtToken;
+    private String accessToken;
+    private String refreshToken;
+
     private UserSession() {}
 
     public static UserSession getInstance() {
@@ -32,6 +36,8 @@ public class UserSession {
             this.profilePhotoUrl = userDTO.getProfilePhotoUrl();
             this.role = userDTO.getRole();
             this.oauthProvider = userDTO.isOauthProvider();
+            this.jwtToken = jwtToken;
+            this.accessToken = accessToken;
             this.loggedIn = true;
         }
     }
@@ -44,7 +50,15 @@ public class UserSession {
         this.profilePhotoUrl = null;
         this.role = null;
         this.oauthProvider = false;
+        this.jwtToken = null;
+        this.accessToken = null;
+        this.refreshToken = null;
         this.loggedIn = false;
     }
 
+    public void setTokens(String access, String refresh) {
+        this.accessToken = access;
+        this.jwtToken = access;
+        this.refreshToken = refresh;
+    }
 }

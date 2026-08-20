@@ -2,7 +2,6 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Activity;
 import it.unical.ea_project.domain.User;
-import it.unical.ea_project.security.ResourceNotFoundException;
 import it.unical.ea_project.repository.ActivityRepository;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.ActivityService;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +28,15 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional(readOnly = true)
-    public Activity getActivityById(Long id) {
-        return activityRepository.findByActivityIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Attività non trovata con ID: " + id));
+    public Optional<Activity> getActivityById(Long id) {
+        return activityRepository.findByActivityIdAndDeletedAtIsNull(id);
     }
 
     @Override
     @Transactional
     public Activity createActivity(Activity activity, Long creatorId) {
         User creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Utente organizzatore non trovato con ID: " + creatorId));
+                .orElseThrow(() -> new RuntimeException("Utente organizzatore non trovato con ID: " + creatorId));
         activity.setCreatedBy(creator);
         return activityRepository.save(activity);
     }
@@ -45,8 +44,12 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public Activity updateActivity(Long id, Activity details) {
-        Activity existing = getActivityById(id);
+        Optional<Activity> existingOpt = getActivityById(id);
+        if (existingOpt.isEmpty()) {
+            throw new RuntimeException("Attività non trovata con ID: " + id);
+        }
 
+        Activity existing = existingOpt.get();
         existing.setTitle(details.getTitle());
         existing.setDescription(details.getDescription());
         existing.setCategory(details.getCategory());
@@ -69,8 +72,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public void deleteActivity(Long id) {
-        Activity existing = getActivityById(id);
-        existing.setDeletedAt(LocalDateTime.now()); // soft delete, coerente con Trip
-        activityRepository.save(existing);
+        Optional<Activity> existingOpt = getActivityById(id);
+        if (existingOpt.isPresent()) {
+            Activity existing = existingOpt.get();
+            existing.setDeletedAt(LocalDateTime.now());
+            activityRepository.save(existing);
+        }
     }
 }
