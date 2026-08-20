@@ -1,0 +1,119 @@
+package it.unical.ea_project_javafx.controller;
+
+import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.ActivityImageDTO;
+import it.unical.ea_project_javafx.dto.TripDTO;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+
+import java.util.List;
+
+//Controller della card di ogni esperienza
+public class ExperienceCardController {
+
+    @FXML private VBox cardRoot;
+    @FXML private StackPane imageContainer;
+    @FXML private ImageView imageView;
+    @FXML private Label categoryLabel;
+    @FXML private Label ratingLabel;
+    @FXML private Label titleLabel;
+    @FXML private Label locationLabel;
+    @FXML private Label priceLabel;
+    @FXML private ProgressIndicator imageLoader;
+
+    @FXML
+    public void initialize() {
+        Rectangle clip = new Rectangle();
+        clip.setWidth(315);
+        clip.setArcWidth(24);
+        clip.setArcHeight(24);
+        clip.heightProperty().bind(imageView.fitHeightProperty());
+        imageView.setClip(clip);
+    }
+
+    public void setData(String title, String location, String category, String price, String rating, String imageUrl) {
+        titleLabel.setText(title);
+        locationLabel.setText(location);
+        categoryLabel.setText(category);
+        priceLabel.setText("da " + price);
+        ratingLabel.setText("⭐ " + rating);
+
+        if (imageUrl != null && !imageUrl.isBlank()) {
+            try {
+                Image image = new Image(imageUrl, true);
+                imageView.setImage(image);
+
+                image.progressProperty().addListener((obs, old, newVal) -> {
+                    if (newVal.doubleValue() >= 1.0) {
+                        hideImageLoader();
+                    }
+                });
+                if (image.isError()) {
+                    hideImageLoader();
+                }
+            } catch (Exception e) {
+                hideImageLoader();
+            }
+        } else {
+            hideImageLoader();
+        }
+
+        cardRoot.setOnMouseClicked(event -> handleCardClick());
+    }
+
+    private void hideImageLoader() {
+        if (imageLoader != null) {
+            imageLoader.setVisible(false);
+            imageLoader.setManaged(false);
+        }
+    }
+
+    public void setData(ActivityDTO dto) {
+        setData(
+                dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
+                dto.getCity() != null ? dto.getCity() : "",
+                dto.getCategory() != null ? dto.getCategory() : "Attività",
+                String.format("€%.0f", dto.getPrice() != null ? dto.getPrice() : 0.0),
+                String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
+                firstImageUrl(dto.getImages())
+        );
+    }
+
+    private String firstImageUrl(List<ActivityImageDTO> images) {
+        if (images == null || images.isEmpty()) {
+            return null;
+        }
+        return images.stream()
+                .filter(img -> img.getImageUrl() != null)
+                .min(java.util.Comparator.comparing(img ->
+                        img.getOrderIndex() != null ? img.getOrderIndex() : Integer.MAX_VALUE))
+                .map(it.unical.ea_project_javafx.dto.ActivityImageDTO::getImageUrl)
+                .orElse(null);
+    }
+
+    public void setData(TripDTO dto) {
+        String location = "";
+        if (dto.getDestinationCity() != null) location += dto.getDestinationCity();
+        if (dto.getDestinationCountry() != null) {
+            location += (location.isEmpty() ? "" : ", ") + dto.getDestinationCountry();
+        }
+        setData(
+                dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
+                location,
+                "Viaggio",
+                String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice().doubleValue() : 0.0),
+                String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating().doubleValue() : 5.0),
+                dto.getCoverPhotoUrl()
+        );
+    }
+
+    private void handleCardClick() {
+        // TODO Logica di navigazione al click sulla card
+    }
+}

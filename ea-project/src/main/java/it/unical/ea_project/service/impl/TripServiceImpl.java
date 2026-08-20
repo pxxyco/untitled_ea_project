@@ -2,10 +2,11 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.Trip.TripStatus;
-import it.unical.ea_project.repository.TripRepository;
-import it.unical.ea_project.service.TripService;
 import it.unical.ea_project.domain.User;
-
+import it.unical.ea_project.repository.TripRepository;
+import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.service.TripService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TripServiceImpl implements TripService {
 
     private final TripRepository tripRepository;
-
-    public TripServiceImpl(TripRepository tripRepository) {
-        this.tripRepository = tripRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public List<Trip> getTripsByUser(User user) {
@@ -57,6 +56,15 @@ public class TripServiceImpl implements TripService {
     @Override
     public Optional<Trip> getTripById(Long id) {
         return tripRepository.findByTripIdAndDeletedAtIsNull(id);
+    }
+
+    @Override
+    @Transactional
+    public Trip createTrip(Trip trip, Long creatorId) {
+        User creator = userRepository.findById(creatorId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + creatorId));
+        trip.setCreatedBy(creator);
+        return tripRepository.save(trip);
     }
 
     @Override

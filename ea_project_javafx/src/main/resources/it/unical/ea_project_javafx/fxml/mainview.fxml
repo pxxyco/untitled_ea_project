@@ -1,124 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.net.URL?>
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.MainController">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="it.unical.ea_project_javafx.controller.MainViewController">
     <stylesheets>
         <URL value="@../css/style.css" />
         <URL value="@../css/home.css" />
     </stylesheets>
-    <children>
-        <ImageView fx:id="bgImageView" pickOnBounds="true" preserveRatio="false">
-            <image>
-                <Image url="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1920&amp;q=80" />
-            </image>
-        </ImageView>
-        <Region styleClass="bg-overlay" />
-        <BorderPane>
-            <top>
-                <BorderPane styleClass="navbar" BorderPane.alignment="CENTER">
-                    <left>
-                        <HBox alignment="CENTER_LEFT" spacing="16.0">
-                            <children>
-                                <Label styleClass="brand-logo" text="🧭" />
-                                <Separator orientation="VERTICAL" styleClass="nav-divider" />
-                                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="nav-links">
-                                    <children>
-                                        <Label onMouseClicked="#handleEsperienze" styleClass="nav-item" text="Esperienze" />
-                                        <Label onMouseClicked="#handleItinerari" styleClass="nav-item" text="Itinerari Pubblici" />
-                                    </children>
-                                </HBox>
-                            </children>
-                        </HBox>
-                    </left>
-                    <right>
-                        <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
-                            <children>
-                                <Label onMouseClicked="#handleLogin" styleClass="btn-nav-login" text="Login" />
-                            </children>
-                        </HBox>
-                    </right>
-                    <padding>
-                        <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
-                    </padding>
-                </BorderPane>
-            </top>
-            <center>
-                <ScrollPane fitToWidth="true" styleClass="main-scroll">
-                    <content>
-                        <VBox alignment="TOP_CENTER" spacing="30.0">
-                            <padding>
-                                <Insets bottom="40.0" left="20.0" right="20.0" top="20.0" />
-                            </padding>
-                            <children>
-                                <VBox alignment="CENTER" maxWidth="1000.0" spacing="16.0" styleClass="hero-container">
-                                    <children>
-                                        <Label styleClass="hero-title" text="Trova la tua prossima esperienza in Calabria" textAlignment="CENTER" wrapText="true" />
-                                        <Label styleClass="hero-subtitle" text="Esplora escursioni guidate, tour enogastronomici, visite culturali e itinerari condivisi." textAlignment="CENTER" wrapText="true" />
-                                        <HBox alignment="CENTER" spacing="12.0" styleClass="booking-search-box">
-                                            <children>
-                                                <VBox minWidth="140.0" styleClass="search-field" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label styleClass="field-label" text="DOVE VUOI ANDARE?" />
-                                                        <TextField promptText="Cerca città o attività..." styleClass="transparent-input" />
-                                                    </children>
-                                                </VBox>
-                                                <VBox minWidth="130.0" prefHeight="59.0" prefWidth="286.0" styleClass="search-field" HBox.hgrow="NEVER">
-                                                    <children>
-                                                        <Label styleClass="field-label" text="CATEGORIA" />
-                                                        <ComboBox fx:id="categoryComboBox" maxWidth="1.7976931348623157E308" prefWidth="254.0" styleClass="transparent-combo" />
-                                                    </children>
-                                                </VBox>
-                                                <VBox minWidth="130.0" styleClass="search-field" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label styleClass="field-label" text="DATA" />
-                                                        <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" styleClass="transparent-datepicker" />
-                                                    </children>
-                                                </VBox>
-                                                <Button onAction="#handleSearch" styleClass="btn-search" text="Cerca" HBox.hgrow="NEVER" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
-                                            </padding>
-                                        </HBox>
-                                    </children>
-                                </VBox>
-                                <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxWidth="1000.0" styleClass="category-scroll" vbarPolicy="NEVER">
-                                    <content>
-                                        <HBox fx:id="categoriesBar" alignment="CENTER_LEFT" spacing="10.0" styleClass="categories-bar" />
-                                    </content>
-                                </ScrollPane>
-                                <VBox maxWidth="1000.0" spacing="15.0" VBox.vgrow="ALWAYS">
-                                    <children>
-                                        <VBox spacing="4.0">
-                                            <children>
-                                                <Label styleClass="section-title" text="Esperienze più apprezzate dai viaggiatori" wrapText="true" />
-                                                <Label styleClass="section-subtitle" text="Valutate da utenti reali che hanno partecipato alle attività" wrapText="true" />
-                                            </children>
-                                        </VBox>
-                                        <VBox fx:id="cardsContainer" spacing="16.0" VBox.vgrow="ALWAYS" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-            </center>
-        </BorderPane>
-    </children>
+
+    <ImageView fx:id="bgImageView" pickOnBounds="true" preserveRatio="false">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1920&amp;q=80" />
+        </image>
+    </ImageView>
+    <Region styleClass="bg-overlay" />
+
+    <BorderPane>
+        <top>
+            <StackPane fx:id="navbarContainer" />
+        </top>
+        <center>
+            <ScrollPane fitToWidth="true" styleClass="main-scroll">
+                <content>
+                    <VBox alignment="TOP_CENTER" spacing="30.0">
+                        <padding>
+                            <Insets bottom="40.0" left="20.0" right="20.0" top="20.0" />
+                        </padding>
+                        <children>
+                            <fx:include fx:id="searchBar" source="search-bar.fxml" />
+                            <fx:include fx:id="experienceList" source="experience-list.fxml" />
+                        </children>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </center>
+    </BorderPane>
 </StackPane>

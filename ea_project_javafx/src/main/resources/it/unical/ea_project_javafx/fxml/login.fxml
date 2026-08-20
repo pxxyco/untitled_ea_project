@@ -3,12 +3,6 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -16,7 +10,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.LoginController" styleClass="root-pane">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="it.unical.ea_project_javafx.controller.AuthWizardController"
+           styleClass="root-pane">
     <stylesheets>
         <URL value="@../css/style.css" />
         <URL value="@../css/login.css" />
@@ -30,118 +26,21 @@
     <Region styleClass="bg-overlay" />
 
     <StackPane alignment="TOP_LEFT">
-        <padding>
-            <Insets top="20.0" left="20.0" />
-        </padding>
+        <padding><Insets top="20.0" left="20.0" /></padding>
         <HBox spacing="12.0">
             <children>
-                <Button styleClass="control-btn" text="👤"/>
-                <Button onAction="#goToHome" styleClass="control-btn" text="🏠"/>
+                <Button onAction="#goToHomeFromButton" styleClass="control-btn" text="←"/>
+                <!--- <Button onAction="#stopAnimation" styleClass="control-btn" text="▣"/>  cambio animazione schermata-->
             </children>
         </HBox>
     </StackPane>
 
     <VBox alignment="CENTER" maxWidth="420.0" maxHeight="-Infinity" styleClass="auth-card">
         <StackPane>
-
-            <VBox fx:id="stepLogin" spacing="20.0" styleClass="view-step">
-                <Label styleClass="header-title" text="Login Form" />
-
-                <VBox spacing="8.0">
-                    <Label styleClass="input-label" text="Email / Username" />
-                    <TextField fx:id="loginUsernameField" promptText="Enter your email or username" styleClass="custom-input" />
-                </VBox>
-
-                <VBox spacing="8.0">
-                    <Label styleClass="input-label" text="Password" />
-                    <PasswordField fx:id="loginPasswordField" promptText="Enter your password" styleClass="custom-input" />
-                </VBox>
-
-                <HBox alignment="CENTER_LEFT">
-                    <children>
-                        <CheckBox styleClass="custom-checkbox" text="Remember me" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Hyperlink styleClass="custom-link" text="Forgot password?" />
-                    </children>
-                </HBox>
-
-                <Button fx:id="btnLogin" maxWidth="1.7976931348623157E308" onAction="#handleLoginSubmit" styleClass="btn-submit" text="Log In" />
-
-                <HBox alignment="CENTER" spacing="5.0">
-                    <Label styleClass="switch-text" text="Don't have an account?" />
-                    <Hyperlink onAction="#goToRoleSelection" styleClass="custom-link-bold" text="Register" />
-                </HBox>
-            </VBox>
-
-            <VBox fx:id="stepRole" spacing="20.0" styleClass="view-step" visible="false" managed="false">
-                <Button onAction="#goToLogin" styleClass="btn-back" text="← Torna al Login" />
-                <Label styleClass="header-title" text="Seleziona Account" />
-
-                <HBox onMouseClicked="#selectPersonalRole" spacing="16.0" styleClass="role-card">
-                    <VBox alignment="CENTER_LEFT">
-                        <Label styleClass="role-title" text="Account Personal" />
-                        <Label styleClass="role-desc" text="Per esploratori e viaggiatori singoli" />
-                    </VBox>
-                </HBox>
-
-                <HBox onMouseClicked="#selectBusinessRole" spacing="16.0" styleClass="role-card">
-                    <VBox alignment="CENTER_LEFT">
-                        <Label styleClass="role-title" text="Account Business" />
-                        <Label styleClass="role-desc" text="Per organizzatori, hotel e guide" />
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <VBox fx:id="stepDetails" spacing="16.0" styleClass="view-step" visible="false" managed="false">
-                <Button onAction="#goToRoleSelection" styleClass="btn-back" text="← Torna indietro" />
-                <Label fx:id="wizardTitle" styleClass="header-title" text="Dettagli Profilo" />
-
-                <VBox spacing="10.0">
-                    <HBox spacing="10.0">
-                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="input-label" text="Nome" />
-                            <TextField fx:id="regFirstNameField" promptText="Nome" styleClass="custom-input" />
-                        </VBox>
-                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="input-label" text="Cognome" />
-                            <TextField fx:id="regLastNameField" promptText="Cognome" styleClass="custom-input" />
-                        </VBox>
-                    </HBox>
-
-                    <VBox spacing="4.0">
-                        <Label styleClass="input-label" text="Username" />
-                        <TextField fx:id="regUsernameField" promptText="Scegli uno username" styleClass="custom-input" />
-                    </VBox>
-
-                    <VBox spacing="4.0">
-                        <Label styleClass="input-label" text="Email" />
-                        <TextField fx:id="regEmailField" promptText="Enter your email" styleClass="custom-input" />
-                    </VBox>
-
-                    <VBox spacing="4.0">
-                        <Label styleClass="input-label" text="Password" />
-                        <PasswordField fx:id="regPasswordField" promptText="Enter your password" styleClass="custom-input" />
-                    </VBox>
-
-                    <VBox spacing="4.0">
-                        <Label styleClass="input-label" text="Confirm Password" />
-                        <PasswordField fx:id="regConfirmPasswordField" promptText="Confirm your password" styleClass="custom-input" />
-                    </VBox>
-                </VBox>
-
-                <Button fx:id="btnRegister" maxWidth="1.7976931348623157E308" onAction="#handleRegistrationSubmit" styleClass="btn-submit" text="Conferma e Registrati" />
-            </VBox>
-
-            <VBox fx:id="loadingOverlay"
-                  alignment="CENTER"
-                  spacing="16.0"
-                  styleClass="loading-overlay"
-                  visible="false"
-                  managed="false">
-                <ProgressIndicator prefWidth="50.0" prefHeight="50.0" />
-                <Label styleClass="loading-label" text="Caricamento in corso..." />
-            </VBox>
-
+            <fx:include fx:id="stepLogin" source="step-login.fxml" />
+            <fx:include fx:id="stepRole" source="step-role.fxml" />
+            <fx:include fx:id="stepDetails" source="step-details.fxml" />
+            <fx:include fx:id="loadingOverlay" source="loading-overlay.fxml" />
         </StackPane>
     </VBox>
 </StackPane>

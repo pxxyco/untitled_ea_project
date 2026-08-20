@@ -1,6 +1,8 @@
 package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.User;
+import it.unical.ea_project.dto.UserDTO;
+import it.unical.ea_project.service.JwtService;
 import it.unical.ea_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -30,17 +33,50 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(user));
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setFullName(dto.getFullName());
+        user.setRole(User.Role.valueOf(dto.getRole()));
+        user.setOauthProvider(dto.isOauthProvider());
+        user.setOauthSubject(dto.getOauthSubject());
+        user.setHashedPassword(dto.getPassword());
+        User savedUser = userService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertToDto(savedUser));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        Optional<User> user = userService.login(email, password);
+    public ResponseEntity<UserDTO> login(@RequestParam String email, @RequestParam String password) {
+        Optional<User> userOpt = userService.login(email, password);
 
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            UserDTO userDto = convertToDto(user);
+
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            return ResponseEntity.ok()
+                    .header("Authorization", "Bearer " + accessToken)
+                    .header("X-Refresh-Token", refreshToken)
+                    .body(userDto);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenziali non valide");
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    private UserDTO convertToDto(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .role(user.getRole() != null ? user.getRole().name() : null)
+                .oauthProvider(user.isOauthProvider())
+                .oauthSubject(user.getOauthSubject())
+                .createdAt(user.getCreatedAt())
+                .deletedAt(user.getDeletedAt())
+                .build();
     }
 }

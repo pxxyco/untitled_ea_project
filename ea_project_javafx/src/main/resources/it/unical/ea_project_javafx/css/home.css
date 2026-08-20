@@ -181,3 +181,73 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
+
+/* Stile del MenuButton per farlo sembrare coerente con il btn-nav-login */
+.menu-button {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-padding: 4px 12px;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #38bdf8;
+    -fx-border-color: #38bdf8;
+}
+
+/* Colore e stile del testo dentro il bottone principale */
+.menu-button > .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.menu-button:hover > .label {
+    -fx-text-fill: #0f172a;
+}
+
+/* Nasconde o adatta la freccetta del MenuButton (opzionale, per un look più pulito) */
+.menu-button > .arrow-button > .arrow {
+    -fx-background-color: #ffffff;
+}
+
+.menu-button:hover > .arrow-button > .arrow {
+    -fx-background-color: #0f172a;
+}
+
+/* Stile del menu a tendina (popup) che si apre al click */
+.context-menu {
+    -fx-background-color: #1e293b;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 6px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 16, 0, 0, 8);
+}
+
+/* Stile delle singole voci (MenuItem) nel menu a tendina */
+.context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 14px;
+    -fx-cursor: hand;
+}
+
+.context-menu .menu-item > .label {
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+/* Effetto hover sulle voci del menu */
+.context-menu .menu-item:hover,
+.context-menu .menu-item:focused {
+    -fx-background-color: #3b82f6;
+}
+
+.context-menu .menu-item:hover > .label,
+.context-menu .menu-item:focused > .label {
+    -fx-text-fill: #ffffff;
+}

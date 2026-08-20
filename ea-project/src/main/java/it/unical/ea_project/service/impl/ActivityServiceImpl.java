@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,14 +23,13 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional(readOnly = true)
     public List<Activity> getAllActivities() {
-        return activityRepository.findAll();
+        return activityRepository.findByDeletedAtIsNull();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Activity getActivityById(Long id) {
-        return activityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Attività non trovata con ID: " + id));
+    public Optional<Activity> getActivityById(Long id) {
+        return activityRepository.findByActivityIdAndDeletedAtIsNull(id);
     }
 
     @Override
@@ -43,8 +44,12 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public Activity updateActivity(Long id, Activity details) {
-        Activity existing = getActivityById(id);
+        Optional<Activity> existingOpt = getActivityById(id);
+        if (existingOpt.isEmpty()) {
+            throw new RuntimeException("Attività non trovata con ID: " + id);
+        }
 
+        Activity existing = existingOpt.get();
         existing.setTitle(details.getTitle());
         existing.setDescription(details.getDescription());
         existing.setCategory(details.getCategory());
@@ -67,6 +72,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public void deleteActivity(Long id) {
-        activityRepository.deleteById(id);
+        Optional<Activity> existingOpt = getActivityById(id);
+        if (existingOpt.isPresent()) {
+            Activity existing = existingOpt.get();
+            existing.setDeletedAt(LocalDateTime.now());
+            activityRepository.save(existing);
+        }
     }
 }
