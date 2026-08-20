@@ -57,6 +57,7 @@ public class NavbarController {
     @FXML
     void handleLogout(ActionEvent event) {
         UserSession.getInstance().clear();
+        it.unical.ea_project_javafx.util.TokenStorage.clear();
 
         if (userMenuButton != null) {
             ViewNavigator.loadScene(userMenuButton, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
