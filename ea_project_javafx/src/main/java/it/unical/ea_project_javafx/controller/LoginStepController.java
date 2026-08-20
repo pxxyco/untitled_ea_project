@@ -1,7 +1,9 @@
 package it.unical.ea_project_javafx.controller;
 
 import com.google.gson.Gson;
-import it.unical.ea_project_javafx.dto.LoginResponseDto;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import it.unical.ea_project_javafx.dto.UserDTO;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
@@ -11,9 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class LoginStepController {
 
@@ -23,6 +28,21 @@ public class LoginStepController {
     @FXML private Label errorLabel;
 
     private StepNavigator navigator;
+
+    @FXML
+    public void initialize() {
+        loginUsernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLoginSubmit(null);
+            }
+        });
+
+        loginPasswordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLoginSubmit(null);
+            }
+        });
+    }
 
     public void setNavigator(StepNavigator navigator) {
         this.navigator = navigator;
@@ -54,7 +74,7 @@ public class LoginStepController {
         String password = loginPasswordField.getText().trim();
 
         if (identifier.isEmpty() || password.isEmpty()) {
-            showError("Inserisci email/username e password.");
+            showError("Inserisci email o username e password.");
             return;
         }
 
@@ -67,18 +87,27 @@ public class LoginStepController {
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200) {
                         try {
-                            Gson gson = new Gson();
-                            LoginResponseDto user = gson.fromJson(res.body(), LoginResponseDto.class);
+                            Gson gson = new GsonBuilder()
+                                    .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfT, context) ->
+                                            LocalDateTime.parse(json.getAsString()))
+                                    .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+                                            LocalDate.parse(json.getAsString()))
+                                    .create();
 
-                            it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(
-                                    user != null ? user.getId() : null,
-                                    user != null && user.getUsername() != null && !user.getUsername().isEmpty() ? user.getUsername() : identifier,
-                                    user != null && user.getEmail() != null && !user.getEmail().isEmpty() ? user.getEmail() : identifier,
-                                    user != null && user.getRole() != null && !user.getRole().isEmpty() ? user.getRole() : "TRAVELER"
-                            );
+                            UserDTO user = gson.fromJson(res.body(), UserDTO.class);
 
-                            navigator.goToHome(event);
+                            if (user != null) {
+                                it.unical.ea_project_javafx.model.UserSession.getInstance().setSession(user);
+                                if (event != null) {
+                                    navigator.goToHome(event);
+                                } else {
+                                    navigator.goToHome(new ActionEvent(btnLogin, null));
+                                }
+                            } else {
+                                showError("Errore il profilo utente è vuoto.");
+                            }
                         } catch (Exception e) {
+                            e.printStackTrace();
                             showError("Errore nella lettura della risposta del server.");
                         }
                     } else {
@@ -86,7 +115,7 @@ public class LoginStepController {
                     }
                 }),
                 () -> Platform.runLater(() -> {
-                    it.unical.ea_project_javafx.util.ViewNavigator.loadScene(btnLogin, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+                    showError("Errore di connessione al server.");
                 }),
                 navigator::setLoading
         );

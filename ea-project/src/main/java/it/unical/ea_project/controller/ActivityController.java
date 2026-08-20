@@ -1,8 +1,8 @@
 package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Activity;
-import it.unical.ea_project.domain.ActivityImage;
-import it.unical.ea_project.dto.ActivityResponseDto;
+import it.unical.ea_project.dto.ActivityDTO;
+import it.unical.ea_project.dto.ActivityImageDTO;
 import it.unical.ea_project.service.ActivityImageService;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class ActivityController {
     private final ActivityImageService activityImageService;
 
     @GetMapping
-    public ResponseEntity<List<ActivityResponseDto>> getAllActivities() {
+    public ResponseEntity<List<ActivityDTO>> getAllActivities() {
         return ResponseEntity.ok(
                 activityService.getAllActivities().stream()
                         .map(this::toDto)
@@ -30,19 +30,19 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityResponseDto> getActivityById(@PathVariable Long id) {
+    public ResponseEntity<ActivityDTO> getActivityById(@PathVariable Long id) {
         Activity activity = activityService.getActivityById(id);
         return ResponseEntity.ok(toDto(activity));
     }
 
     @PostMapping
-    public ResponseEntity<ActivityResponseDto> createActivity(@RequestBody Activity activity, @RequestParam Long creatorId) {
+    public ResponseEntity<ActivityDTO> createActivity(@RequestBody Activity activity, @RequestParam Long creatorId) {
         Activity saved = activityService.createActivity(activity, creatorId);
         return ResponseEntity.ok(toDto(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityResponseDto> updateActivity(@PathVariable Long id, @RequestBody Activity activity) {
+    public ResponseEntity<ActivityDTO> updateActivity(@PathVariable Long id, @RequestBody Activity activity) {
         Activity updated = activityService.updateActivity(id, activity);
         return ResponseEntity.ok(toDto(updated));
     }
@@ -53,21 +53,44 @@ public class ActivityController {
         return ResponseEntity.noContent().build();
     }
 
-    private ActivityResponseDto toDto(Activity activity) {
-        String imageUrl = activityImageService.getImagesByActivityId(activity.getActivityId()).stream()
-                .findFirst()
-                .map(ActivityImage::getImageUrl)
-                .orElse("");
+    private ActivityDTO toDto(Activity activity) {
+        List<ActivityImageDTO> imageDtos = activityImageService.getImagesByActivityId(activity.getActivityId()).stream()
+                .map(img -> ActivityImageDTO.builder()
+                        .imageId(img.getImageId())
+                        .activityId(activity.getActivityId())
+                        .imageUrl(img.getImageUrl())
+                        .orderIndex(img.getOrderIndex())
+                        .build())
+                .collect(Collectors.toList());
 
-        return new ActivityResponseDto(
-                activity.getActivityId(),
-                activity.getTitle(),
-                activity.getDescription(),
-                activity.getCategory() != null ? activity.getCategory().name() : "OTHER",
-                activity.getCity(),
-                activity.getPrice(),
-                activity.getAverageRating(),
-                imageUrl
-        );
+        Long creatorId = null;
+        if (activity.getCreatedBy() != null) {
+            creatorId = activity.getCreatedBy().getId();
+        }
+
+        return ActivityDTO.builder()
+                .activityId(activity.getActivityId())
+                .createdByUserId(creatorId)
+                .title(activity.getTitle())
+                .description(activity.getDescription())
+                .category(activity.getCategory() != null ? activity.getCategory().name() : "OTHER")
+                .latitude(activity.getLatitude())
+                .longitude(activity.getLongitude())
+                .placeName(activity.getPlaceName())
+                .city(activity.getCity())
+                .startDate(activity.getStartDate())
+                .endDate(activity.getEndDate())
+                .durationMinutes(activity.getDurationMinutes())
+                .price(activity.getPrice())
+                .maxSeats(activity.getMaxSeats())
+                .availableSeats(activity.getAvailableSeats())
+                .status(activity.getStatus() != null ? activity.getStatus().name() : null)
+                .averageRating(activity.getAverageRating())
+                .notes(activity.getNotes())
+                .createdAt(activity.getCreatedAt())
+                .updatedAt(activity.getUpdatedAt())
+                .deletedAt(activity.getDeletedAt())
+                .images(imageDtos)
+                .build();
     }
 }

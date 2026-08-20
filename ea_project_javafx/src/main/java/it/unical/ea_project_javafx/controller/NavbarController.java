@@ -8,9 +8,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuButton;
 import javafx.scene.input.MouseEvent;
+import lombok.Setter;
+
 //sarebbe la top bar della home
 public class NavbarController {
 
+    @Setter
     private MainNavigator navigator;
 
     @FXML private MenuButton userMenuButton;
@@ -20,10 +23,6 @@ public class NavbarController {
         if (userMenuButton != null && UserSession.getInstance().isLoggedIn()) {
             userMenuButton.setText(UserSession.getInstance().getUsername());
         }
-    }
-
-    public void setNavigator(MainNavigator navigator) {
-        this.navigator = navigator;
     }
 
     @FXML

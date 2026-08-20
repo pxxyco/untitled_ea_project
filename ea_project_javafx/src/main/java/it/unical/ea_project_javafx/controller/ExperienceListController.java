@@ -3,8 +3,9 @@ package it.unical.ea_project_javafx.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import it.unical.ea_project_javafx.dto.ActivityDto;
-import it.unical.ea_project_javafx.dto.TripDto;
+import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.ActivityImageDTO;
+import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,11 +17,13 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-
-//lista delle card
 public class ExperienceListController {
 
     @FXML private HBox categoriesBar;
@@ -36,12 +39,35 @@ public class ExperienceListController {
             String dateInfo
     ) {}
 
-    private List<ExperienceData> allItems = new ArrayList<>();
+    private final List<ExperienceData> allItems = new ArrayList<>();
     private List<ExperienceData> allActivities = new ArrayList<>();
     private List<ExperienceData> allTrips = new ArrayList<>();
     private List<CategoryChipData> categoryChips = new ArrayList<>();
 
+    private boolean activitiesLoaded = false;
+    private boolean tripsLoaded = false;
+
     private record CategoryChipData(String label, String categoryKey) {}
+
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class,
+                    (com.google.gson.JsonDeserializer<LocalDate>) (json, typeOfT, context) -> {
+                        String val = json.getAsString();
+                        return (val == null || val.isEmpty()) ? null : LocalDate.parse(val.substring(0, 10));
+                    })
+            .registerTypeAdapter(LocalDateTime.class,
+                    (com.google.gson.JsonDeserializer<LocalDateTime>) (json, typeOfT, context) -> {
+                        String val = json.getAsString();
+                        return (val == null || val.isEmpty()) ? null : LocalDateTime.parse(val);
+                    })
+            .registerTypeAdapter(LocalTime.class,
+                    (com.google.gson.JsonDeserializer<LocalTime>) (json, typeOfT, context) -> {
+                        String val = json.getAsString();
+                        return (val == null || val.isEmpty()) ? null : LocalTime.parse(val);
+                    })
+            .create();
+
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML
     public void initialize() {
@@ -49,56 +75,76 @@ public class ExperienceListController {
     }
 
     private void loadDataFromBackend() {
+        activitiesLoaded = false;
+        tripsLoaded = false;
+        allActivities.clear();
+        allTrips.clear();
+
         ApiService.call(
                 ApiService.BASE_URL + "/api/activities",
                 "", "GET",
                 resAct -> {
                     if (resAct.statusCode() == 200) {
                         allActivities = parseActivities(resAct.body());
-
-                        ApiService.call(
-                                ApiService.BASE_URL + "/api/trips/published",
-                                "", "GET",
-                                resTrip -> Platform.runLater(() -> {
-                                    if (resTrip.statusCode() == 200) {
-                                        allTrips = parseTrips(resTrip.body());
-                                    }
-                                    allItems.clear();
-                                    allItems.addAll(allActivities);
-                                    allItems.addAll(allTrips);
-
-                                    setupCategoryChips();
-                                    renderCards(allItems);
-                                }),
-                                () -> {}, null
-                        );
                     }
+                    markActivitiesLoaded();
                 },
-                () -> Platform.runLater(() -> {
-                    if (cardsContainer != null && cardsContainer.getScene() != null) {
-                        it.unical.ea_project_javafx.util.ViewNavigator.loadScene(cardsContainer, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
-                    }
-                }),
+                this::markActivitiesLoaded,
                 null
         );
+
+        ApiService.call(
+                ApiService.BASE_URL + "/api/trips/published",
+                "", "GET",
+                resTrip -> {
+                    if (resTrip.statusCode() == 200) {
+                        allTrips = parseTrips(resTrip.body());
+                    }
+                    markTripsLoaded();
+                },
+                this::markTripsLoaded,
+                null
+        );
+    }
+
+    private synchronized void markActivitiesLoaded() {
+        activitiesLoaded = true;
+        checkAndRenderAll();
+    }
+
+    private synchronized void markTripsLoaded() {
+        tripsLoaded = true;
+        checkAndRenderAll();
+    }
+
+    private void checkAndRenderAll() {
+        if (activitiesLoaded && tripsLoaded) {
+            Platform.runLater(() -> {
+                allItems.clear();
+                allItems.addAll(allActivities);
+                allItems.addAll(allTrips);
+
+                setupCategoryChips();
+                renderCards(allItems);
+            });
+        }
     }
 
     private List<ExperienceData> parseActivities(String jsonBody) {
         List<ExperienceData> result = new ArrayList<>();
         try {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<ActivityDto>>() {}.getType();
-            List<ActivityDto> dtos = gson.fromJson(jsonBody, listType);
+            Type listType = new TypeToken<List<ActivityDTO>>() {}.getType();
+            List<ActivityDTO> dtos = GSON.fromJson(jsonBody, listType);
 
             if (dtos != null) {
-                for (ActivityDto dto : dtos) {
+                for (ActivityDTO dto : dtos) {
                     result.add(new ExperienceData(
                             dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
                             dto.getCity() != null ? dto.getCity() : "",
                             dto.getCategory() != null ? dto.getCategory() : "Attività",
                             String.format("€%.0f", dto.getPrice() != null ? dto.getPrice() : 0.0),
                             String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
-                            dto.getImageUrl() != null ? dto.getImageUrl() : "",
+                            firstImageUrl(dto.getImages()),
                             ""
                     ));
                 }
@@ -109,35 +155,43 @@ public class ExperienceListController {
         return result;
     }
 
+    private String firstImageUrl(List<ActivityImageDTO> images) {
+        if (images == null || images.isEmpty()) {
+            return "";
+        }
+        return images.stream()
+                .filter(img -> img.getImageUrl() != null)
+                .min(Comparator.comparing(img ->
+                        img.getOrderIndex() != null ? img.getOrderIndex() : Integer.MAX_VALUE))
+                .map(ActivityImageDTO::getImageUrl)
+                .orElse("");
+    }
+
     private List<ExperienceData> parseTrips(String jsonBody) {
         List<ExperienceData> result = new ArrayList<>();
         try {
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, (com.google.gson.JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
-                            LocalDate.parse(json.getAsString()))
-                    .create();
-
-            Type listType = new TypeToken<List<TripDto>>() {}.getType();
-            List<TripDto> dtos = gson.fromJson(jsonBody, listType);
+            Type listType = new TypeToken<List<TripDTO>>() {}.getType();
+            List<TripDTO> dtos = GSON.fromJson(jsonBody, listType);
 
             if (dtos != null) {
-                for (TripDto dto : dtos) {
+                for (TripDTO dto : dtos) {
                     String location = "";
                     if (dto.getDestinationCity() != null) location += dto.getDestinationCity();
                     if (dto.getDestinationCountry() != null) {
                         location += (location.isEmpty() ? "" : ", ") + dto.getDestinationCountry();
                     }
-                    String dateInfo = "Viaggio";
+
+                    String dateInfo = "";
                     if (dto.getStartDate() != null && dto.getEndDate() != null) {
-                        dateInfo = dto.getStartDate() + " ➔ " + dto.getEndDate();
+                        dateInfo = dto.getStartDate().format(DATE_FMT) + " ➔ " + dto.getEndDate().format(DATE_FMT);
                     }
 
                     result.add(new ExperienceData(
                             dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
                             location,
-                            dateInfo,
-                            String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice() : 0.0),
-                            String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
+                            "Viaggi",
+                            String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice().doubleValue() : 0.0),
+                            String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating().doubleValue() : 5.0),
                             dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : "",
                             dateInfo
                     ));
@@ -156,7 +210,7 @@ public class ExperienceListController {
         categoryChips = new ArrayList<>();
         categoryChips.add(new CategoryChipData("In Evidenza", "ALL"));
 
-        List<String> uniqueCategories = allActivities.stream()
+        List<String> uniqueCategories = allItems.stream()
                 .map(ExperienceData::category)
                 .distinct()
                 .toList();
@@ -233,8 +287,9 @@ public class ExperienceListController {
             }
         }
     }
+
     public void filterBySearchCriteria(String categoryType, LocalDate date) {
-        List<ExperienceData> filtered = new ArrayList<>();
+        List<ExperienceData> filtered;
 
         if ("Viaggi".equalsIgnoreCase(categoryType)) {
             filtered = allTrips;
@@ -243,11 +298,9 @@ public class ExperienceListController {
         } else if ("Tutto".equalsIgnoreCase(categoryType)) {
             filtered = allItems;
         } else if ("Viaggi Prenotati".equalsIgnoreCase(categoryType)) {
-            // CHIAMATA AL BACKEND PER I VIAGGI PRENOTATI
             loadBookedTripsFromServer();
-            return; // Usciamo perché la chiamata è asincrona e renderizzerà le card dentro la callback
+            return;
         } else if ("Attività Prenotate".equalsIgnoreCase(categoryType)) {
-            // (Se vuoi farlo anche per le attività, puoi replicare la stessa logica)
             return;
         } else {
             filtered = allItems;
@@ -260,7 +313,6 @@ public class ExperienceListController {
         Long userId = it.unical.ea_project_javafx.model.UserSession.getInstance().getId();
 
         if (userId == null) {
-            System.out.println("Errore: Utente non loggato o ID non disponibile.");
             return;
         }
 

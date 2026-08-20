@@ -3,14 +3,13 @@ package it.unical.ea_project_javafx.controller;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
+import lombok.Setter;
+
 //selezione ruolo nel login
+@Setter
 public class RoleSelectionStepController {
 
     private StepNavigator navigator;
-
-    public void setNavigator(StepNavigator navigator) {
-        this.navigator = navigator;
-    }
 
     @FXML
     void goToLogin() {

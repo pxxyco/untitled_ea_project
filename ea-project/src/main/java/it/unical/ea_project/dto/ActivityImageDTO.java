@@ -1,19 +1,21 @@
 package it.unical.ea_project.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityResponseDto {
+@Builder
+public class ActivityImageDTO {
+
+    private Long imageId;
+
     private Long activityId;
-    private String title;
-    private String description;
-    private String category;
-    private String city;
-    private Double price;
-    private Double averageRating;
+
     private String imageUrl;
+
+    private Integer orderIndex;
 }

@@ -36,6 +36,7 @@ public class User {
     @Column(name = "profile_photo_url")
     private String profilePhotoUrl;
 
+
     public enum Role {
         ORGANIZER,
         TRAVELER

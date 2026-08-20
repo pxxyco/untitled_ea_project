@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -16,11 +17,8 @@ public class SearchBarController {
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private DatePicker datePicker;
 
+    @Setter
     private ExperienceListController experienceListController;
-
-    public void setExperienceListController(ExperienceListController controller) {
-        this.experienceListController = controller;
-    }
 
     @FXML
     public void initialize() {

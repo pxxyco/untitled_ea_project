@@ -1,6 +1,11 @@
 package it.unical.ea_project_javafx.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
+import it.unical.ea_project_javafx.dto.UserDTO;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
@@ -10,6 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 //registrazione
 public class RegistrationStepController {
 
@@ -19,29 +31,22 @@ public class RegistrationStepController {
     @FXML private PasswordField regPasswordField, regConfirmPasswordField;
     @FXML private Button btnRegister;
 
+    @Setter
     private StepNavigator navigator;
     private String selectedRole = "TRAVELER";
 
-    private static class RegistrationRequestDto {
-        String username;
-        String fullName;
-        String email;
-        String hashedPassword;
-        String role;
-        boolean oauthProvider;
-
-        public RegistrationRequestDto(String username, String fullName, String email, String hashedPassword, String role) {
-            this.username = username;
-            this.fullName = fullName;
-            this.email = email;
-            this.hashedPassword = hashedPassword;
-            this.role = role;
-            this.oauthProvider = false;
+    @FXML
+    public void initialize() {
+        TextField[] fields = {regFirstNameField, regLastNameField, regUsernameField, regEmailField, regPasswordField, regConfirmPasswordField};
+        for (TextField field : fields) {
+            if (field != null) {
+                field.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        handleRegistrationSubmit(null);
+                    }
+                });
+            }
         }
-    }
-
-    public void setNavigator(StepNavigator navigator) {
-        this.navigator = navigator;
     }
 
     public void setSelectedRole(String role) {
@@ -98,15 +103,26 @@ public class RegistrationStepController {
             return;
         }
 
-        RegistrationRequestDto requestDto = new RegistrationRequestDto(
-                username,
-                firstName + " " + lastName,
-                email,
-                password,
-                selectedRole
-        );
+        UserDTO requestDto = UserDTO.builder()
+                .username(username)
+                .fullName(firstName + " " + lastName)
+                .email(email)
+                .password(password)
+                .role(selectedRole)
+                .oauthProvider(false)
+                .build();
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
+                        src == null ? null : new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfT, context) ->
+                        LocalDateTime.parse(json.getAsString()))
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
+                        src == null ? null : new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+                        LocalDate.parse(json.getAsString()))
+                .create();
+
         String jsonBody = gson.toJson(requestDto);
 
         ApiService.call(
@@ -128,6 +144,7 @@ public class RegistrationStepController {
                 navigator::setLoading
         );
     }
+
     private void clearFields() {
         regFirstNameField.clear();
         regLastNameField.clear();

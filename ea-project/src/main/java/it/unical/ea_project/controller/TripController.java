@@ -1,7 +1,8 @@
 package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Trip;
-import it.unical.ea_project.dto.TripResponseDto;
+import it.unical.ea_project.dto.StageDTO;
+import it.unical.ea_project.dto.TripDTO;
 import it.unical.ea_project.security.ResourceNotFoundException;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,47 +23,47 @@ public class TripController {
     private final TripService tripService;
 
     @GetMapping("/published")
-    public ResponseEntity<List<TripResponseDto>> getPublishedTrips() {
+    public ResponseEntity<List<TripDTO>> getPublishedTrips() {
         return ResponseEntity.ok(toDtoList(tripService.getPublishedTrips()));
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<TripResponseDto>> getAvailableTrips() {
+    public ResponseEntity<List<TripDTO>> getAvailableTrips() {
         return ResponseEntity.ok(toDtoList(tripService.getAvailableTrips()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TripResponseDto> getTripById(@PathVariable Long id) {
+    public ResponseEntity<TripDTO> getTripById(@PathVariable Long id) {
         Trip trip = tripService.getTripById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Viaggio non trovato con ID: " + id));
-        return ResponseEntity.ok(TripResponseDto.fromEntity(trip));
+        return ResponseEntity.ok(toDto(trip));
     }
 
     @GetMapping("/search/country")
-    public ResponseEntity<List<TripResponseDto>> searchByCountry(@RequestParam String country) {
+    public ResponseEntity<List<TripDTO>> searchByCountry(@RequestParam String country) {
         return ResponseEntity.ok(toDtoList(tripService.searchByCountry(country)));
     }
 
     @GetMapping("/search/city")
-    public ResponseEntity<List<TripResponseDto>> searchByCity(@RequestParam String city) {
+    public ResponseEntity<List<TripDTO>> searchByCity(@RequestParam String city) {
         return ResponseEntity.ok(toDtoList(tripService.searchByCity(city)));
     }
 
     @GetMapping("/search/date-range")
-    public ResponseEntity<List<TripResponseDto>> getTripsInDateRange(
+    public ResponseEntity<List<TripDTO>> getTripsInDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         return ResponseEntity.ok(toDtoList(tripService.getTripsInDateRange(start, end)));
     }
 
     @PostMapping
-    public ResponseEntity<TripResponseDto> createTrip(@RequestBody Trip trip, @RequestParam Long creatorId) {
+    public ResponseEntity<TripDTO> createTrip(@RequestBody Trip trip, @RequestParam Long creatorId) {
         Trip saved = tripService.createTrip(trip, creatorId);
-        return ResponseEntity.ok(TripResponseDto.fromEntity(saved));
+        return ResponseEntity.ok(toDto(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TripResponseDto> updateTrip(@PathVariable Long id, @RequestBody Trip details) {
+    public ResponseEntity<TripDTO> updateTrip(@PathVariable Long id, @RequestBody Trip details) {
         Trip existing = tripService.getTripById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Viaggio non trovato con ID: " + id));
 
@@ -78,7 +80,7 @@ public class TripController {
         existing.setCoverPhotoUrl(details.getCoverPhotoUrl());
 
         Trip saved = tripService.saveTrip(existing);
-        return ResponseEntity.ok(TripResponseDto.fromEntity(saved));
+        return ResponseEntity.ok(toDto(saved));
     }
 
     @DeleteMapping("/{id}")
@@ -89,7 +91,39 @@ public class TripController {
         return ResponseEntity.noContent().build();
     }
 
-    private List<TripResponseDto> toDtoList(List<Trip> trips) {
-        return trips.stream().map(TripResponseDto::fromEntity).collect(Collectors.toList());
+    private List<TripDTO> toDtoList(List<Trip> trips) {
+        return trips.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Converte l'entità Trip nel nuovo TripDTO, mappando in modo sicuro anche l'ID del creatore e le tappe.
+     */
+    private TripDTO toDto(Trip trip) {
+        Long creatorId = null;
+        if (trip.getCreatedBy() != null) {
+            creatorId = trip.getCreatedBy().getId();
+        }
+
+        return TripDTO.builder()
+                .tripId(trip.getTripId())
+                .createdByUserId(creatorId)
+                .title(trip.getTitle())
+                .description(trip.getDescription())
+                .destinationCountry(trip.getDestinationCountry())
+                .destinationCity(trip.getDestinationCity())
+                .startDate(trip.getStartDate())
+                .endDate(trip.getEndDate())
+                .totalPrice(trip.getTotalPrice())
+                .maxSeats(trip.getMaxSeats())
+                .availableSeats(trip.getAvailableSeats())
+                .status(trip.getStatus() != null ? trip.getStatus().name() : null)
+                .icsUid(trip.getIcsUid())
+                .averageRating(trip.getAverageRating())
+                .coverPhotoUrl(trip.getCoverPhotoUrl())
+                .createdAt(trip.getCreatedAt())
+                .updatedAt(trip.getUpdatedAt())
+                .deletedAt(trip.getDeletedAt())
+                .stages(Collections.emptyList())
+                .build();
     }
 }

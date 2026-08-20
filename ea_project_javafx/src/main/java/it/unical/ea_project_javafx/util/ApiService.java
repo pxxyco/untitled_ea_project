@@ -1,6 +1,7 @@
 package it.unical.ea_project_javafx.util;
 
 import javafx.concurrent.Task;
+import lombok.Setter;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,11 +17,8 @@ public class ApiService {
             .build();
 
     public static final String BASE_URL = "http://localhost:8080";
+    @Setter
     private static Runnable onNetworkFailureGlobal;
-
-    public static void setOnNetworkFailureGlobal(Runnable action) {
-        onNetworkFailureGlobal = action;
-    }
 
     public static void call(String url, String body, String method,
                             Consumer<HttpResponse<String>> onSuccess,
