@@ -23,4 +23,10 @@
     </VBox>
 
     <VBox fx:id="cardsContainer" spacing="16.0" VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
+        <children>
+            <Label fx:id="loadMoreLabel" text="Carica altro" onMouseClicked="#handleLoadMore" styleClass="load-more-label" style="-fx-cursor: hand; -fx-font-weight: bold;" />
+        </children>
+    </HBox>
 </VBox>

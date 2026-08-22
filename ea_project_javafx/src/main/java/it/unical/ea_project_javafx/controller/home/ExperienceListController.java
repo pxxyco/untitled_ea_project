@@ -5,12 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
 import it.unical.ea_project_javafx.dto.ActivityImageDTO;
-import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -19,7 +20,6 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +28,7 @@ public class ExperienceListController {
 
     @FXML private HBox categoriesBar;
     @FXML private VBox cardsContainer;
+    @FXML private Label loadMoreLabel;
 
     public record ExperienceData(
             String title,
@@ -39,15 +40,9 @@ public class ExperienceListController {
             String dateInfo
     ) {}
 
-    private final List<ExperienceData> allItems = new ArrayList<>();
-    private List<ExperienceData> allActivities = new ArrayList<>();
-    private List<ExperienceData> allTrips = new ArrayList<>();
-    private List<CategoryChipData> categoryChips = new ArrayList<>();
-
-    private boolean activitiesLoaded = false;
-    private boolean tripsLoaded = false;
-
-    private record CategoryChipData(String label, String categoryKey) {}
+    private final List<ExperienceData> items = new ArrayList<>();
+    private int currentPage = 0;
+    private final int pageSize = 9;
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class,
@@ -67,64 +62,97 @@ public class ExperienceListController {
                     })
             .create();
 
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     @FXML
     public void initialize() {
-        loadDataFromBackend();
+        loadActivities();
     }
 
-    private void loadDataFromBackend() {
-        activitiesLoaded = false;
-        tripsLoaded = false;
-        allActivities.clear();
-        allTrips.clear();
+    private void loadActivities() {
+        String url = String.format("%s/api/activities/top?page=%d&size=%d", ApiService.BASE_URL, currentPage, pageSize);
 
         ApiService.get(
-                ApiService.BASE_URL + "/api/activities",
+                url,
                 resAct -> {
                     if (resAct.statusCode() == 200) {
-                        allActivities = parseActivities(resAct.body());
+                        List<ExperienceData> newActivities = parseActivities(resAct.body());
+
+                        Platform.runLater(() -> {
+                            synchronized (items) {
+                                items.addAll(newActivities);
+                            }
+
+                            if (newActivities.isEmpty() || newActivities.size() < pageSize) {
+                                disableLoadMore();
+                            }
+
+                            setupCategoryChips();
+                            renderCards(items);
+                        });
                     }
-                    markActivitiesLoaded();
                 },
-                this::markActivitiesLoaded,
+                () -> Platform.runLater(this::disableLoadMore),
                 null
         );
-
-        ApiService.get(
-                ApiService.BASE_URL + "/api/trips/published",
-                resTrip -> {
-                    if (resTrip.statusCode() == 200) {
-                        allTrips = parseTrips(resTrip.body());
-                    }
-                    markTripsLoaded();
-                },
-                this::markTripsLoaded,
-                null
-        );
     }
 
-    private synchronized void markActivitiesLoaded() {
-        activitiesLoaded = true;
-        checkAndRenderAll();
+    @FXML
+    public void handleLoadMore(MouseEvent mouseEvent) {
+        if (loadMoreLabel != null && loadMoreLabel.isDisabled()) return;
+
+        currentPage++;
+        loadActivities();
     }
 
-    private synchronized void markTripsLoaded() {
-        tripsLoaded = true;
-        checkAndRenderAll();
+    private void disableLoadMore() {
+        if (loadMoreLabel != null) {
+            loadMoreLabel.setText("Nessun'altra attività da mostrare");
+            loadMoreLabel.setDisable(true);
+            loadMoreLabel.setStyle("-fx-opacity: 0.6; -fx-cursor: default; -fx-font-weight: normal;");
+        }
     }
 
-    private void checkAndRenderAll() {
-        if (activitiesLoaded && tripsLoaded) {
-            Platform.runLater(() -> {
-                allItems.clear();
-                allItems.addAll(allActivities);
-                allItems.addAll(allTrips);
+    private void setupCategoryChips() {
+        if (categoriesBar == null) return;
+        categoriesBar.getChildren().clear();
 
-                setupCategoryChips();
-                renderCards(allItems);
+        List<String> categories = new ArrayList<>();
+        categories.add("Tutte");
+
+        items.stream()
+                .map(ExperienceData::category)
+                .filter(cat -> cat != null && !cat.isEmpty())
+                .distinct()
+                .forEach(categories::add);
+
+        for (int i = 0; i < categories.size(); i++) {
+            String category = categories.get(i);
+            Button chipBtn = new Button(category);
+            chipBtn.getStyleClass().add("category-chip");
+            if (i == 0) {
+                chipBtn.getStyleClass().add("chip-active");
+            }
+
+            chipBtn.setOnAction(e -> {
+                categoriesBar.getChildren().forEach(node -> node.getStyleClass().remove("chip-active"));
+                chipBtn.getStyleClass().add("chip-active");
+                filterByCategory(category);
             });
+
+            categoriesBar.getChildren().add(chipBtn);
+        }
+    }
+
+    private void filterByCategory(String category) {
+        if ("Tutte".equalsIgnoreCase(category)) {
+            renderCards(items);
+        } else {
+            List<ExperienceData> filtered = new ArrayList<>();
+            for (ExperienceData item : items) {
+                if (category.equalsIgnoreCase(item.category())) {
+                    filtered.add(item);
+                }
+            }
+            renderCards(filtered);
         }
     }
 
@@ -165,90 +193,6 @@ public class ExperienceListController {
                 .orElse("");
     }
 
-    private List<ExperienceData> parseTrips(String jsonBody) {
-        List<ExperienceData> result = new ArrayList<>();
-        try {
-            Type listType = new TypeToken<List<TripDTO>>() {}.getType();
-            List<TripDTO> dtos = GSON.fromJson(jsonBody, listType);
-
-            if (dtos != null) {
-                for (TripDTO dto : dtos) {
-                    String location = "";
-                    if (dto.getDestinationCity() != null) location += dto.getDestinationCity();
-                    if (dto.getDestinationCountry() != null) {
-                        location += (location.isEmpty() ? "" : ", ") + dto.getDestinationCountry();
-                    }
-
-                    String dateInfo = "";
-                    if (dto.getStartDate() != null && dto.getEndDate() != null) {
-                        dateInfo = dto.getStartDate().format(DATE_FMT) + " ➔ " + dto.getEndDate().format(DATE_FMT);
-                    }
-
-                    result.add(new ExperienceData(
-                            dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
-                            location,
-                            "Viaggi",
-                            String.format("€%.0f", dto.getTotalPrice() != null ? dto.getTotalPrice().doubleValue() : 0.0),
-                            String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating().doubleValue() : 5.0),
-                            dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : "",
-                            dateInfo
-                    ));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    private void setupCategoryChips() {
-        if (categoriesBar == null) return;
-        categoriesBar.getChildren().clear();
-
-        categoryChips = new ArrayList<>();
-        categoryChips.add(new CategoryChipData("In Evidenza", "ALL"));
-
-        List<String> uniqueCategories = allItems.stream()
-                .map(ExperienceData::category)
-                .distinct()
-                .toList();
-
-        uniqueCategories.forEach(cat -> categoryChips.add(new CategoryChipData(cat, cat)));
-
-        for (int i = 0; i < categoryChips.size(); i++) {
-            createCategoryButton(categoryChips.get(i), i == 0);
-        }
-    }
-
-    private void createCategoryButton(CategoryChipData chipData, boolean isActive) {
-        Button chipBtn = new Button(chipData.label());
-        chipBtn.getStyleClass().add("category-chip");
-        if (isActive) chipBtn.getStyleClass().add("chip-active");
-
-        chipBtn.setOnAction(e -> {
-            categoriesBar.getChildren().forEach(node -> node.getStyleClass().remove("chip-active"));
-            chipBtn.getStyleClass().add("chip-active");
-            filterCardsByCategory(chipData.categoryKey());
-        });
-
-        categoriesBar.getChildren().add(chipBtn);
-    }
-
-    private void filterCardsByCategory(String categoryKey) {
-        List<ExperienceData> filtered;
-        if ("ALL".equalsIgnoreCase(categoryKey)) {
-            filtered = allItems;
-        } else {
-            filtered = new ArrayList<>();
-            for (ExperienceData card : allItems) {
-                if (card.category() != null && card.category().equalsIgnoreCase(categoryKey)) {
-                    filtered.add(card);
-                }
-            }
-        }
-        renderCards(filtered);
-    }
-
     private void renderCards(List<ExperienceData> cardsToDisplay) {
         if (cardsContainer == null) return;
         cardsContainer.getChildren().clear();
@@ -284,45 +228,5 @@ public class ExperienceListController {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void filterBySearchCriteria(String categoryType, LocalDate date) {
-        List<ExperienceData> filtered;
-
-        if ("Viaggi".equalsIgnoreCase(categoryType)) {
-            filtered = allTrips;
-        } else if ("Attività".equalsIgnoreCase(categoryType)) {
-            filtered = allActivities;
-        } else if ("Tutto".equalsIgnoreCase(categoryType)) {
-            filtered = allItems;
-        } else if ("Viaggi Prenotati".equalsIgnoreCase(categoryType)) {
-            loadBookedTripsFromServer();
-            return;
-        } else if ("Attività Prenotate".equalsIgnoreCase(categoryType)) {
-            return;
-        } else {
-            filtered = allItems;
-        }
-
-        renderCards(filtered);
-    }
-
-    private void loadBookedTripsFromServer() {
-        Long userId = it.unical.ea_project_javafx.model.UserSession.getInstance().getId();
-
-        if (userId == null) {
-            return;
-        }
-
-        ApiService.get(
-                ApiService.BASE_URL + "/api/bookings/user/" + userId + "/trips",
-                res -> {
-                    if (res.statusCode() == 200) {
-                        List<ExperienceData> bookedTripsCards = parseTrips(res.body());
-                        renderCards(bookedTripsCards);
-                    }
-                },
-                () -> {}, null
-        );
     }
 }

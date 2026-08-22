@@ -4,6 +4,7 @@ import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.dto.TripDTO;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +91,18 @@ public class TripController {
                     return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<TripDTO>> getTopTrips(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        return ResponseEntity.ok(
+                tripService.getTopTrips(page, size).stream()
+                        .map(this::toDto)
+                        .collect(Collectors.toList())
+        );
     }
 
     private List<TripDTO> toDtoList(List<Trip> trips) {

@@ -54,10 +54,5 @@ public class SearchBarController {
         String selectedCategory = categoryComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
 
-        System.out.println("Ricerca avviata per: " + selectedCategory + " nella data: " + selectedDate);
-
-        if (experienceListController != null) {
-            experienceListController.filterBySearchCriteria(selectedCategory, selectedDate);
-        }
     }
 }

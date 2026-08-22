@@ -54,6 +54,27 @@ public class ActivityController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/top")
+    public ResponseEntity<List<ActivityDTO>> getTopActivities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+
+        return ResponseEntity.ok(
+                activityService.getTopActivities(page, size).stream()
+                        .map(this::toDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ActivityDTO>> getActivitiesByCategory(@PathVariable Activity.Category category) {
+        return ResponseEntity.ok(
+                activityService.getActivitiesByCategory(category).stream()
+                        .map(this::toDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
     private ActivityDTO toDto(Activity activity) {
         List<ActivityImageDTO> imageDtos = activityImageService.getImagesByActivityId(activity.getActivityId()).stream()
                 .map(img -> ActivityImageDTO.builder()
