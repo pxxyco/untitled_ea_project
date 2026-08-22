@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.login;
 
 import it.unical.ea_project_javafx.model.StepNavigator;
 import javafx.fxml.FXML;

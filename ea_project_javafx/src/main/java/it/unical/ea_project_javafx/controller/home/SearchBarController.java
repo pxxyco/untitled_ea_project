@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.home;
 
 import it.unical.ea_project_javafx.model.UserSession;
 import javafx.collections.FXCollections;

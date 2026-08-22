@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unical.ea_project_javafx.controller.ExperienceListController"
+      fx:controller="it.unical.ea_project_javafx.controller.home.ExperienceListController"
       maxWidth="1000.0" spacing="15.0" VBox.vgrow="ALWAYS">
 
     <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxWidth="1000.0" styleClass="category-scroll" vbarPolicy="NEVER">

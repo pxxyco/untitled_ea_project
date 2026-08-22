@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.home;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -265,7 +265,7 @@ public class ExperienceListController {
             }
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unical/ea_project_javafx/fxml/experience-card.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unical/ea_project_javafx/fxml/home/experience-card.fxml"));
                 VBox cardNode = loader.load();
 
                 ExperienceCardController controller = loader.getController();

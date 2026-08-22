@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.login;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

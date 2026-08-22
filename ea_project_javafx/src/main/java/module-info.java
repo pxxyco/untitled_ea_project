@@ -11,4 +11,6 @@ module it.unical.ea_project_javafx {
     opens it.unical.ea_project_javafx.dto to com.google.gson;
 
     exports it.unical.ea_project_javafx;
+    opens it.unical.ea_project_javafx.controller.login to com.google.gson, javafx.fxml;
+    opens it.unical.ea_project_javafx.controller.home to com.google.gson, javafx.fxml;
 }

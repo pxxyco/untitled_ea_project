@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.login;
 
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ViewNavigator;
@@ -52,7 +52,7 @@ public class AuthWizardController implements StepNavigator {
 
     @Override
     public void goToHome(ActionEvent event) {
-        ViewNavigator.switchScene((Node) event.getSource(), "/it/unical/ea_project_javafx/fxml/mainview.fxml");
+        ViewNavigator.switchScene((Node) event.getSource(), "/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
     }
 
     @FXML
