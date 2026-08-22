@@ -80,9 +80,8 @@ public class ExperienceListController {
         allActivities.clear();
         allTrips.clear();
 
-        ApiService.call(
+        ApiService.get(
                 ApiService.BASE_URL + "/api/activities",
-                "", "GET",
                 resAct -> {
                     if (resAct.statusCode() == 200) {
                         allActivities = parseActivities(resAct.body());
@@ -93,9 +92,8 @@ public class ExperienceListController {
                 null
         );
 
-        ApiService.call(
+        ApiService.get(
                 ApiService.BASE_URL + "/api/trips/published",
-                "", "GET",
                 resTrip -> {
                     if (resTrip.statusCode() == 200) {
                         allTrips = parseTrips(resTrip.body());
@@ -316,15 +314,14 @@ public class ExperienceListController {
             return;
         }
 
-        ApiService.call(
+        ApiService.get(
                 ApiService.BASE_URL + "/api/bookings/user/" + userId + "/trips",
-                "", "GET",
-                res -> Platform.runLater(() -> {
+                res -> {
                     if (res.statusCode() == 200) {
                         List<ExperienceData> bookedTripsCards = parseTrips(res.body());
                         renderCards(bookedTripsCards);
                     }
-                }),
+                },
                 () -> {}, null
         );
     }

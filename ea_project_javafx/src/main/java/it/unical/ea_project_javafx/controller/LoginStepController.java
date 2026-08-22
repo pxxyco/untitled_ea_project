@@ -79,9 +79,9 @@ public class LoginStepController {
         String encodedId = URLEncoder.encode(identifier, StandardCharsets.UTF_8);
         String encodedPwd = URLEncoder.encode(password, StandardCharsets.UTF_8);
 
-        ApiService.call(
+        ApiService.post(
                 ApiService.BASE_URL + "/api/users/login?email=" + encodedId + "&password=" + encodedPwd,
-                "", "POST",
+                null,
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200) {
                         try {
