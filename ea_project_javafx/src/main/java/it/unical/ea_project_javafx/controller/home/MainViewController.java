@@ -1,5 +1,6 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.home;
 
+import it.unical.ea_project_javafx.controller.NavbarController;
 import it.unical.ea_project_javafx.model.MainNavigator;
 import it.unical.ea_project_javafx.model.UserSession;
 import it.unical.ea_project_javafx.util.ViewNavigator;
@@ -92,7 +93,7 @@ public class MainViewController implements MainNavigator {
 
     @Override
     public void goToLogin(Node sourceNode) {
-        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/login.fxml");
+        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/login/login.fxml");
     }
 
     @Override

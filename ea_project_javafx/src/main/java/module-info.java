@@ -15,4 +15,6 @@ module it.unical.ea_project_javafx {
     opens it.unical.ea_project_javafx.controller.attivita.recensioni to javafx.fxml;
 
     exports it.unical.ea_project_javafx;
+    opens it.unical.ea_project_javafx.controller.login to com.google.gson, javafx.fxml;
+    opens it.unical.ea_project_javafx.controller.home to com.google.gson, javafx.fxml;
 }

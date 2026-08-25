@@ -5,18 +5,13 @@ import it.unical.ea_project_javafx.util.ViewNavigator;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Objects;
 //prima della home il client esegue una connessione controllando se c'è la risposta per il backend questo accade per ogni chiamata
 public class PreMainController {
@@ -139,7 +134,7 @@ public class PreMainController {
     }
 
     private void loadMainApp() {
-        loadView("/it/unical/ea_project_javafx/fxml/mainview.fxml", true);
+        loadView("/it/unical/ea_project_javafx/fxml/home/mainview.fxml", true);
     }
 
     private void loadView(String fxmlPath, boolean maximize) {

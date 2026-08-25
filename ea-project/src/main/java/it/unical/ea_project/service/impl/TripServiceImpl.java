@@ -7,8 +7,10 @@ import it.unical.ea_project.repository.TripRepository;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -79,4 +81,12 @@ public class TripServiceImpl implements TripService {
         trip.setDeletedAt(LocalDateTime.now());
         tripRepository.save(trip);
     }
+
+    @Override
+    public List<Trip> getTopTrips(int page, int size) {
+        return tripRepository.findByStatusAndDeletedAtIsNullOrderByAverageRatingDesc(
+                TripStatus.PUBLISHED, PageRequest.of(page, size)
+        );
+    }
+
 }

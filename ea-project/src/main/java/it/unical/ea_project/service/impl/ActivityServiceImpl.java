@@ -8,6 +8,8 @@ import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +41,18 @@ public class ActivityServiceImpl implements ActivityService {
                 .orElseThrow(() -> new RuntimeException("Utente organizzatore non trovato con ID: " + creatorId));
         activity.setCreatedBy(creator);
         return activityRepository.save(activity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Activity> getActivitiesByCategory(Activity.Category category) {
+        return activityRepository.findByDeletedAtIsNullAndCategory(category);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Activity> getTopActivities(int page,int size) {
+        return activityRepository.findByDeletedAtIsNullOrderByAverageRatingDesc(PageRequest.of(page, size));
     }
 
     @Override

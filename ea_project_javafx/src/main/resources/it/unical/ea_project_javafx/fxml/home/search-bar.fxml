@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unical.ea_project_javafx.controller.SearchBarController"
+      fx:controller="it.unical.ea_project_javafx.controller.home.SearchBarController"
       alignment="CENTER" maxWidth="1000.0" spacing="16.0" >
 
     <Label styleClass="hero-title" text="Trova la tua prossima esperienza in Calabria" textAlignment="CENTER" wrapText="true" />

@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.login;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -125,9 +125,9 @@ public class RegistrationStepController {
 
         String jsonBody = gson.toJson(requestDto);
 
-        ApiService.call(
+        ApiService.post(
                 ApiService.BASE_URL + "/api/users",
-                jsonBody, "POST",
+                jsonBody,
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200 || res.statusCode() == 201) {
                         clearFields();

@@ -1,4 +1,4 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.home;
 
 import it.unical.ea_project_javafx.model.UserSession;
 import javafx.collections.FXCollections;
@@ -54,10 +54,5 @@ public class SearchBarController {
         String selectedCategory = categoryComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
 
-        System.out.println("Ricerca avviata per: " + selectedCategory + " nella data: " + selectedDate);
-
-        if (experienceListController != null) {
-            experienceListController.filterBySearchCriteria(selectedCategory, selectedDate);
-        }
     }
 }

@@ -28,4 +28,7 @@ public interface TripService {
     Trip saveTrip(Trip trip);
 
     void deleteTripLogically(Trip trip);
+
+
+    List<Trip> getTopTrips(int page, int size);
 }

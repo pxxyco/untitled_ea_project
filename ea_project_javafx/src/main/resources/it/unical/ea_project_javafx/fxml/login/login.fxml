@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="it.unical.ea_project_javafx.controller.AuthWizardController"
+           fx:controller="it.unical.ea_project_javafx.controller.login.AuthWizardController"
            styleClass="root-pane">
     <stylesheets>
-        <URL value="@../css/style.css" />
-        <URL value="@../css/login.css" />
+        <URL value="@../../css/style.css" />
+        <URL value="@../../css/login.css" />
     </stylesheets>
 
     <ImageView fx:id="bgImageView" pickOnBounds="true" preserveRatio="false">
@@ -40,7 +40,7 @@
             <fx:include fx:id="stepLogin" source="step-login.fxml" />
             <fx:include fx:id="stepRole" source="step-role.fxml" />
             <fx:include fx:id="stepDetails" source="step-details.fxml" />
-            <fx:include fx:id="loadingOverlay" source="loading-overlay.fxml" />
+            <fx:include fx:id="loadingOverlay" source="../loading-overlay.fxml" />
         </StackPane>
     </VBox>
 </StackPane>

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unical.ea_project_javafx.controller.LoginStepController"
+      fx:controller="it.unical.ea_project_javafx.controller.login.LoginStepController"
       spacing="20.0">
 
     <Label styleClass="header-title" text="Login" />

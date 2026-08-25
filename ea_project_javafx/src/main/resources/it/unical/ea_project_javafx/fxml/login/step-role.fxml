@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unical.ea_project_javafx.controller.RoleSelectionStepController"
+      fx:controller="it.unical.ea_project_javafx.controller.login.RoleSelectionStepController"
       spacing="20.0">
 
     <Button onAction="#goToLogin" styleClass="btn-back" text="← Torna al Login" />
