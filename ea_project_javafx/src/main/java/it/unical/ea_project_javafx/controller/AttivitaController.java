@@ -3,6 +3,8 @@ package it.unical.ea_project_javafx.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import it.unical.ea_project_javafx.controller.attivita.ActivitySectionController;
+import it.unical.ea_project_javafx.controller.attivita.DescrizioneController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.event.ActionEvent;
@@ -18,7 +20,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AttivitaController {
 
@@ -71,7 +75,7 @@ public class AttivitaController {
     @FXML
     private StackPane hero;
 
-
+    private final List<ActivitySectionController> sectionControllers = new ArrayList<>();
 
     private List<Button> sectionButtons;
 
@@ -106,6 +110,7 @@ public class AttivitaController {
                     activity = GSON.fromJson(response.body(), ActivityDTO.class);
 
                     setData();
+                    handleDescrizione(null);
                     contentScroll.setManaged(true);
                     contentScroll.setVisible(true);
                     loadingOverlay.setVisible(false);
@@ -150,9 +155,20 @@ public class AttivitaController {
     }
 
     private Node loadSection(String fxmlName) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(path + "/" + fxmlName));
         try {
-            return loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path + "/" + fxmlName));
+            Node node = loader.load();
+            Object controller = loader.getController();
+
+            if(controller instanceof ActivitySectionController asc){
+                sectionControllers.add(asc);
+
+                if (activity != null) {
+                    asc.setData(activity);
+                }
+            }
+
+            return node;
         } catch (IOException e) {
             throw new UncheckedIOException("Impossibile caricare la sezione: " + fxmlName, e);
         }
@@ -192,7 +208,6 @@ public class AttivitaController {
 
     private void btnInitialize(){
         sectionButtons = List.of(btnDescrizione, btnItinerario, btnFoto, btnRecensioni);
-        handleDescrizione(null);
 
         SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 1);
