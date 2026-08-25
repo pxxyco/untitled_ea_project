@@ -131,4 +131,7 @@ fabric.properties
 ### Logs ###
 logs/
 
+### Photos ###
+photo/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,intellij

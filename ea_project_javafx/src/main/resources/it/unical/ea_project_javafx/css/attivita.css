@@ -153,7 +153,8 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 6, 0, 0, 1);
 }
 .badge-category {
-    -fx-background-color: rgba(47,155,240,0.18);
+    -fx-background-color: rgba(0,0,0, 0.65);
+    -fx-border-color: rgba(47,155,240,0.4);
     -fx-text-fill: #6cbaf5;
     -fx-border-color: #2f9bf0;
     -fx-border-radius: 12;
@@ -163,14 +164,15 @@
     -fx-font-weight: bold;
 }
 .badge-rating {
-    -fx-background-color: rgba(245,166,35,0.15);
-    -fx-text-fill: #f5a623;
+    -fx-background-color: rgba(0,0,0, 0.65); /* Superficie della palette, opaca */
+    -fx-text-fill: #f5a623;                     /* oro invariato */
+    -fx-border-color: rgba(245,166,35,0.4);     /* bordo sottile oro per riconoscibilità */
+    -fx-border-radius: 12;
     -fx-background-radius: 12;
     -fx-padding: 3 10 3 10;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
-
 .booking-card {
     -fx-background-color: #1b212c;
     -fx-background-radius: 14;

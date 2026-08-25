@@ -64,3 +64,19 @@
 .next:hover, .previous:hover {
     -fx-text-fill: white;
 }
+
+.loading-text {
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
+
+.loading-error {
+    -fx-text-fill: red;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.loading-spinner {
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+}
