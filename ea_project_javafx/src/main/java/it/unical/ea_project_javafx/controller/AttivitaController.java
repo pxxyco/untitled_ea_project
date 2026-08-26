@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializer;
 import it.unical.ea_project_javafx.controller.attivita.ActivitySectionController;
 import it.unical.ea_project_javafx.controller.attivita.DescrizioneController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,7 +67,7 @@ public class AttivitaController {
     private Label lblTotale;
 
     @FXML
-    private Label loadingLabel;
+    private LoadingOverlayController loadingCardController;
 
     @FXML
     private ScrollPane contentScroll;
@@ -84,9 +85,9 @@ public class AttivitaController {
     private Node fotoNode;
     private Node recensioniNode;
     private ActivityDTO activity;
-
-
+    private TripDTO trip;
     private String id = "1";
+
     private final static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, ctx) ->
                     LocalDateTime.parse(json.getAsString()))
@@ -116,15 +117,12 @@ public class AttivitaController {
                     loadingOverlay.setVisible(false);
                 },
                 () -> {
-                    loadingOverlay.setVisible(false);
-                    loadingLabel.getStyleClass().clear();
-                    loadingLabel.getStyleClass().add("loading-error");
-                    loadingLabel.setText("Errore nel caricamento");
+                    loadingOverlay.setVisible(true);
+                    loadingCardController.setError("Errore nel caricamento");
                 },
                 loading -> {
                     loadingOverlay.setVisible(true);
-                    loadingLabel.getStyleClass().clear();
-                    loadingLabel.getStyleClass().add("loading-text");
+                    loadingCardController.setMessage("Caricamento...");
                 }
         );
 

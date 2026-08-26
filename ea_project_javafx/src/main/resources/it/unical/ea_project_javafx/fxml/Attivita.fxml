@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -46,16 +45,9 @@
             <children>
                 <StackPane fx:id="loadingOverlay" alignment="CENTER" styleClass="loading-overlay">
                     <children>
-                     <Button fx:id="btnIndietro1" styleClass="back-link" text="←  Torna alle esperienze" StackPane.alignment="TOP_LEFT" />
-                        <VBox alignment="CENTER" prefWidth="1300.0" spacing="16" styleClass="loading-card">
-                            <children>
-                                <ProgressIndicator fx:id="loadingSpinner" styleClass="loading-spinner" />
-                                <Label fx:id="loadingLabel" styleClass="loading-text" text="Caricamento..." />
-                            </children>
-                        <StackPane.margin>
-                           <Insets top="20.0" />
-                        </StackPane.margin>
-                        </VBox>
+                        <Button fx:id="btnIndietro1" styleClass="back-link" text="←  Torna alle esperienze" StackPane.alignment="TOP_LEFT" />
+                        <fx:include fx:id="loadingCard" source="loading-overlay.fxml">
+                        </fx:include>
                     </children>
                 </StackPane>
                   <ScrollPane fx:id="contentScroll" fitToWidth="true" managed="false" styleClass="content-scroll" visible="false">
