@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AttivitaController {
@@ -113,7 +113,8 @@ public class AttivitaController {
         btnInitialize();
         itinerarioNode = loadSection("Itinerario.fxml");
 
-        loadData(Type.TRIP, "1");
+        // USE FOR DEBUG AND TEST
+        //loadData(Type.TRIP, "1");
     }
 
     public void loadData(Type type, String id) {
