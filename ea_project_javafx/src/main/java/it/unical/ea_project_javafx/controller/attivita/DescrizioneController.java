@@ -1,10 +1,11 @@
 package it.unical.ea_project_javafx.controller.attivita;
 
 import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.TripDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class DescrizioneController implements  ActivitySectionController{
+public class DescrizioneController implements  ActivitySectionController, TripSectionController{
 
     @FXML
     private Label lblDescrizione;
@@ -15,7 +16,6 @@ public class DescrizioneController implements  ActivitySectionController{
     public void setData(ActivityDTO activity) {
 
         if(activity.getDescription() !=null){
-            System.out.println(activity.getDescription());
             lblDescrizione.setText(activity.getDescription());
         }
 
@@ -26,4 +26,12 @@ public class DescrizioneController implements  ActivitySectionController{
 
     }
 
+    @Override
+    public void setData(TripDTO trip) {
+        lblNota.setVisible(false);
+
+        if(trip.getDescription() != null) {
+            lblDescrizione.setText(trip.getDescription());
+        }
+    }
 }

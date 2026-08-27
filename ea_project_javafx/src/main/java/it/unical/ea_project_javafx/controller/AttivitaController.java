@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import it.unical.ea_project_javafx.controller.attivita.ActivitySectionController;
-import it.unical.ea_project_javafx.controller.attivita.DescrizioneController;
+import it.unical.ea_project_javafx.controller.attivita.TripSectionController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
 import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.ApiService;
@@ -19,11 +19,12 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
+import java.util.ArrayList; 
 import java.util.List;
-import java.util.Objects;
 
 public class AttivitaController {
 
@@ -76,7 +77,7 @@ public class AttivitaController {
     @FXML
     private StackPane hero;
 
-    private final List<ActivitySectionController> sectionControllers = new ArrayList<>();
+    private final List<Object> sectionControllers = new ArrayList<>();
 
     private List<Button> sectionButtons;
 
@@ -86,50 +87,89 @@ public class AttivitaController {
     private Node recensioniNode;
     private ActivityDTO activity;
     private TripDTO trip;
-    private String id = "1";
+    private String id;
+    private Type myType;
 
     private final static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, ctx) ->
                     LocalDateTime.parse(json.getAsString()))
+            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, ctx) ->
+                    LocalDate.parse(json.getAsString()))
+            .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, ctx) ->
+                    LocalTime.parse(json.getAsString()))
             .create();
+    
+    public enum Type {
+        ACTIVITY, TRIP
+    }
 
     final String path = "/it/unical/ea_project_javafx/fxml/attivita";
 
     @FXML
     void initialize() {
+        
+        loadingOverlay.setVisible(true);
+        
         btnInitialize();
         itinerarioNode = loadSection("Itinerario.fxml");
 
-        loadData();
+        loadData(Type.TRIP, "1");
     }
 
-    private void loadData() {
+    public void loadData(Type type, String id) {
+        
+        myType = type;
+        this.id = id;
+        
+        switch (type) {
+            case ACTIVITY -> {
+                ApiService.get(
+                        ApiService.BASE_URL + "/api/activities/" + id,
+                        response ->  {
+                            activity = GSON.fromJson(response.body(), ActivityDTO.class);
 
-        ApiService.get(
-                ApiService.BASE_URL + "/api/activities/" + id,
-                response ->  {
-                    activity = GSON.fromJson(response.body(), ActivityDTO.class);
+                            setActivityData();
+                            handleDescrizione(null);
+                            contentScroll.setManaged(true);
+                            contentScroll.setVisible(true);
+                            loadingOverlay.setVisible(false);
+                        },
+                        () -> {
+                            loadingOverlay.setVisible(true);
+                            loadingCardController.setError("Errore nel caricamento");
+                        },
+                        loading -> {
+                            loadingOverlay.setVisible(true);
+                            loadingCardController.setMessage("Caricamento...");
+                        }
+                );
+            }
+            case TRIP -> {
+                ApiService.get(
+                        ApiService.BASE_URL + "/api/trips/" + id,
+                        response ->  {
+                            trip = GSON.fromJson(response.body(), TripDTO.class);
 
-                    setData();
-                    handleDescrizione(null);
-                    contentScroll.setManaged(true);
-                    contentScroll.setVisible(true);
-                    loadingOverlay.setVisible(false);
-                },
-                () -> {
-                    loadingOverlay.setVisible(true);
-                    loadingCardController.setError("Errore nel caricamento");
-                },
-                loading -> {
-                    loadingOverlay.setVisible(true);
-                    loadingCardController.setMessage("Caricamento...");
-                }
-        );
-
+                            setTripData();
+                            handleDescrizione(null);
+                            loadingOverlay.setVisible(false);
+                            contentScroll.setManaged(true);
+                            contentScroll.setVisible(true);
+                        },
+                        () -> {
+                            loadingOverlay.setVisible(true);
+                            loadingCardController.setError("Errore nel caricamento");
+                        },
+                        loading -> {
+                            loadingOverlay.setVisible(true);
+                            loadingCardController.setMessage("Caricamento...");
+                        }
+                );
+            }
+        }
     }
 
-    private void setData() {
-
+    private void setActivityData() {
         if (activity.getImages().isEmpty()) {
             heroImage.setImage(null);
         } else {
@@ -145,11 +185,47 @@ public class AttivitaController {
 
         lblLocalita.setText(activity.getCity());
         lblTitolo.setText(activity.getTitle());
-        lblRating.setText( "★ " + activity.getAverageRating());
-        lblPrezzo.setText(setMoneyCurrency(activity.getPrice()));
-        lblTotale.setText(setMoneyCurrency(activity.getPrice()));
+        if (activity.getAverageRating() != null) {
+            lblRating.setText( "★ " + BigDecimal.valueOf(activity.getAverageRating()));
+        }
+        else {
+            lblRating.setText("★ " + BigDecimal.ZERO);
+        }
 
 
+        BigDecimal prezzo = activity.getPrice() != null ? BigDecimal.valueOf(activity.getPrice()) : null;
+        lblPrezzo.setText(setMoneyCurrency(prezzo));
+        lblTotale.setText(setMoneyCurrency(prezzo));
+
+    }
+
+    private void setTripData() {
+        if (trip.getCoverPhotoUrl() == null) {
+            heroImage.setImage(null);
+        } else {
+
+            heroImage.setImage(new Image(ApiService.BASE_URL + trip.getCoverPhotoUrl()));
+        }
+
+        if (trip.getStartDate() != null) {
+            datePicker.setValue(trip.getStartDate());
+        }
+        else {
+            datePicker.setValue(LocalDate.now());
+        }
+
+        lblLocalita.setText(trip.getDestinationCity());
+        lblTitolo.setText(trip.getTitle());
+
+        if(trip.getAverageRating() != null) {
+            lblRating.setText( "★ " + trip.getAverageRating());
+        }
+        else {
+            lblRating.setText( "★ " + BigDecimal.ZERO);
+        }
+
+        lblPrezzo.setText(setMoneyCurrency(trip.getTotalPrice()));
+        lblTotale.setText(setMoneyCurrency(trip.getTotalPrice()));
     }
 
     private Node loadSection(String fxmlName) {
@@ -158,12 +234,13 @@ public class AttivitaController {
             Node node = loader.load();
             Object controller = loader.getController();
 
-            if(controller instanceof ActivitySectionController asc){
+            if (myType == Type.ACTIVITY && activity != null
+                    && controller instanceof ActivitySectionController asc) {
                 sectionControllers.add(asc);
-
-                if (activity != null) {
-                    asc.setData(activity);
-                }
+                asc.setData(activity);
+            } else if (myType == Type.TRIP && trip != null
+                    && controller instanceof TripSectionController tsc) {
+                tsc.setData(trip);
             }
 
             return node;
@@ -218,13 +295,16 @@ public class AttivitaController {
 
     private void aggiornaPrezzoTotale(Integer newValue) {
         Integer partecipanti = spinnerPartecipanti.getValue();
-        Double prezzo = activity.getPrice();
-        Double totale = (prezzo != null) ? (prezzo * partecipanti) : 0.0;
+        BigDecimal prezzo = (myType == Type.ACTIVITY)
+                ? (activity.getPrice() != null ? BigDecimal.valueOf(activity.getPrice()) : BigDecimal.ZERO)
+                : trip.getTotalPrice();
+
+        BigDecimal totale = (prezzo != null) ? (prezzo.multiply(BigDecimal.valueOf(partecipanti))) : BigDecimal.ZERO;
 
         lblTotale.setText(setMoneyCurrency(totale));
     }
 
-    private String setMoneyCurrency(Double amount) {
+    private String setMoneyCurrency(BigDecimal amount) {
         return amount + "€";
     }
 
