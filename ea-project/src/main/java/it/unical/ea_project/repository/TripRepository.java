@@ -5,6 +5,7 @@ import it.unical.ea_project.domain.Trip.TripStatus;
 import it.unical.ea_project.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     List<Trip> findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus status, Integer minSeats);
 
     // Serve per recuperare un viaggio specifico solo se attivo (usiamo questo metodo quando usiamo il soft delete "deletedAt")
+    @Query("SELECT t FROM Trip t LEFT JOIN FETCH t.stages WHERE t.tripId = :tripId AND t.deletedAt IS NULL")
     Optional<Trip> findByTripIdAndDeletedAtIsNull(Long tripId);
 
 

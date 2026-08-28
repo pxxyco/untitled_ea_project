@@ -1,5 +1,6 @@
 package it.unical.ea_project.dto;
 
+import it.unical.ea_project.domain.Stage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,4 +51,28 @@ public class StageDTO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+
+    public static StageDTO toDto(Stage stage) {
+        return StageDTO.builder()
+                .stageId(stage.getStageId())
+                .tripId(stage.getTrip() != null ? stage.getTrip().getTripId() : null)
+                .title(stage.getTitle())
+                .description(stage.getDescription())
+                .category(stage.getCategory() != null ? stage.getCategory().name() : null)
+                .locationName(stage.getLocationName())
+                .city(stage.getCity())
+                .country(stage.getCountry())
+                .latitude(stage.getLatitude())
+                .longitude(stage.getLongitude())
+                .day(stage.getDay())
+                .orderInDay(stage.getOrderInDay())
+                .startTime(stage.getStartTime())
+                .endTime(stage.getEndTime())
+                .photoUrl(stage.getPhotoUrl())
+                .notes(stage.getNotes())
+                .createdAt(stage.getCreatedAt())
+                .updatedAt(stage.getUpdatedAt())
+                .build();
+    }
 }

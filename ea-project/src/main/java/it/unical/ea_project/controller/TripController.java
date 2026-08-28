@@ -1,6 +1,8 @@
 package it.unical.ea_project.controller;
 
+import it.unical.ea_project.domain.Stage;
 import it.unical.ea_project.domain.Trip;
+import it.unical.ea_project.dto.StageDTO;
 import it.unical.ea_project.dto.TripDTO;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class TripController {
     @GetMapping("/{id}")
     public ResponseEntity<TripDTO> getTripById(@PathVariable Long id) {
         return tripService.getTripById(id)
-                .map(trip -> ResponseEntity.ok(toDto(trip)))
+                .map(trip -> ResponseEntity.ok(toDtoDetail(trip)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -136,5 +138,18 @@ public class TripController {
                 .deletedAt(trip.getDeletedAt())
                 .stages(Collections.emptyList())
                 .build();
+    }
+
+    private TripDTO toDtoDetail(Trip trip) {
+        TripDTO dto = toDto(trip);
+        dto.setStages(toStageDtoList(trip.getStages()));
+
+        return dto;
+    }
+
+    private List<StageDTO> toStageDtoList(List<Stage> stages) {
+        return stages.stream()
+                .map(StageDTO::toDto)
+                .collect(Collectors.toList());
     }
 }
