@@ -111,7 +111,6 @@ public class AttivitaController {
         loadingOverlay.setVisible(true);
         
         btnInitialize();
-        itinerarioNode = loadSection("Itinerario.fxml");
 
         // USE FOR DEBUG AND TEST
         //loadData(Type.TRIP, "1");
@@ -265,6 +264,7 @@ public class AttivitaController {
     @FXML
     private void handleItinerario(ActionEvent event) {
         setActiveButton(btnItinerario);
+        itinerarioNode = loadSection("Itinerario.fxml");
         showSection(itinerarioNode);
     }
 
