@@ -21,10 +21,10 @@ public class TripImageServiceImpl implements TripImageService {
     @Override
     @Transactional(readOnly = true)
     public List<TripImage> getImagesByTripId(Long tripId) {
-
-        Trip trip = tripRepository.findByTripIdAndDeletedAtIsNull(tripId)
-                .orElseThrow(() -> new RuntimeException("Viaggio non trovato con ID: " + tripId));
-        return tripImageRepository.findByTripOrderByOrderIndexAsc(trip);
+        if (!tripRepository.existsByTripIdAndDeletedAtIsNull(tripId)) {
+            throw new RuntimeException("Viaggio non trovato con ID: " + tripId);
+        }
+        return tripImageRepository.findByTrip_TripIdAndTrip_DeletedAtIsNullOrderByOrderIndexAsc(tripId);
     }
 
     @Override

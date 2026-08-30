@@ -1,18 +1,22 @@
 package it.unical.ea_project_javafx.controller.attivita.fotoContainer;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+import lombok.Setter;
 
-import java.io.IOException;
 
 public class FotoPlaceholderController {
 
-    final private String path = "/it/unical/ea_project_javafx/fxml/attivita";
+    @Setter
+    private Runnable onPlaceholderClickedCallBack;
 
+    @FXML
+    void handleClick(MouseEvent event) {
+        if (onPlaceholderClickedCallBack != null)
+            onPlaceholderClickedCallBack.run();
+    }
+
+    /*
     @FXML
     void navigateToGallery(MouseEvent event) {
         FXMLLoader loader = new FXMLLoader(
@@ -33,4 +37,6 @@ public class FotoPlaceholderController {
             e.printStackTrace();
         }
     }
+
+     */
 }

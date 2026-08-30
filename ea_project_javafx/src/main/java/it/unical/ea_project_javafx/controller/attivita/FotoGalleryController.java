@@ -2,12 +2,14 @@ package it.unical.ea_project_javafx.controller.attivita;
 
 import it.unical.ea_project_javafx.controller.attivita.fotoContainer.FotoItemController;
 import it.unical.ea_project_javafx.controller.attivita.fotoContainer.FullScreenFotoViewController;
+import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.FullscreenPhotoViewer;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import lombok.Setter;
 
 import java.io.IOException;
 
@@ -17,6 +19,9 @@ public class FotoGalleryController {
     public StackPane rootStack;
     @FXML
     private FlowPane imgsContainer;
+
+    @Setter
+    private Runnable onBackLink;
 
     final private String path = "/it/unical/ea_project_javafx/fxml/";
 
@@ -46,4 +51,17 @@ public class FotoGalleryController {
         // USE util/FullscreenPhotoViewer.java
     }
 
+    @FXML
+    private void backButtonAction(ActionEvent event) throws IOException {
+        if(onBackLink != null)
+            onBackLink.run();
+    }
+
+
+    public void setData(ActivityDTO activity) {
+    }
+
+    public void setData(TripDTO trip) {
+
+    }
 }

@@ -16,4 +16,6 @@ public interface TripImageRepository extends JpaRepository<TripImage, Long> {
 
     // Rimuove tutte le immagini di un determinato viaggio
     void deleteByTrip(Trip trip);
+
+    List<TripImage> findByTrip_TripIdAndTrip_DeletedAtIsNullOrderByOrderIndexAsc(Long tripId);
 }

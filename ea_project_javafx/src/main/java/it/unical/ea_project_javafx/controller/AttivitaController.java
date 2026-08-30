@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import it.unical.ea_project_javafx.controller.attivita.ActivitySectionController;
+import it.unical.ea_project_javafx.controller.attivita.FotoContainerController;
+import it.unical.ea_project_javafx.controller.attivita.FotoGalleryController;
 import it.unical.ea_project_javafx.controller.attivita.TripSectionController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
 import it.unical.ea_project_javafx.dto.TripDTO;
@@ -12,10 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -28,54 +33,36 @@ import java.util.List;
 
 public class AttivitaController {
 
-    @FXML
-    private StackPane bodyContainer;
+    @FXML private StackPane root;
+    @FXML private StackPane bodyContainer;
+
+    @FXML private Button btnDescrizione;
+    @FXML private Button btnFoto;
+    @FXML private Button btnItinerario;
+    @FXML private Button btnRecensioni;
     
-    @FXML
-    private Button btnDescrizione;
-    @FXML
-    private Button btnFoto;
-    @FXML
-    private Button btnItinerario;
-    @FXML
-    private Button btnRecensioni;
+    @FXML private Spinner<Integer> spinnerPartecipanti;
+    @FXML private DatePicker datePicker;
     
-    @FXML
-    private Spinner<Integer> spinnerPartecipanti;
+    @FXML private ImageView heroImage;
 
-    @FXML
-    private DatePicker datePicker;
-    
-    @FXML
-    private ImageView heroImage;
+    @FXML private Label lblCategoria;
 
-    @FXML
-    private Label lblCategoria;
+    @FXML private Label lblLocalita;
 
-    @FXML
-    private Label lblLocalita;
+    @FXML private Label lblPrezzo;
 
-    @FXML
-    private Label lblPrezzo;
+    @FXML private Label lblRating;
 
-    @FXML
-    private Label lblRating;
+    @FXML private Label lblTitolo;
 
-    @FXML
-    private Label lblTitolo;
+    @FXML private Label lblTotale;
 
-    @FXML
-    private Label lblTotale;
+    @FXML private LoadingOverlayController loadingCardController;
+    @FXML private StackPane loadingOverlay;
 
-    @FXML
-    private LoadingOverlayController loadingCardController;
-
-    @FXML
-    private ScrollPane contentScroll;
-    @FXML
-    private StackPane loadingOverlay;
-    @FXML
-    private StackPane hero;
+    @FXML private ScrollPane contentScroll;
+    @FXML private StackPane hero;
 
     private final List<Object> sectionControllers = new ArrayList<>();
 
@@ -234,6 +221,10 @@ public class AttivitaController {
             Node node = loader.load();
             Object controller = loader.getController();
 
+            if (controller instanceof FotoContainerController fcc) {
+                fcc.setOnGalleryRequested(this::openGallery);
+            }
+
             if (myType == Type.ACTIVITY && activity != null
                     && controller instanceof ActivitySectionController asc) {
                 sectionControllers.add(asc);
@@ -246,6 +237,33 @@ public class AttivitaController {
             return node;
         } catch (IOException e) {
             throw new UncheckedIOException("Impossibile caricare la sezione: " + fxmlName, e);
+        }
+    }
+
+    private void openGallery() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path + "/FotoGallery.fxml"));
+            Node galleryNode = loader.load();
+            FotoGalleryController controller = loader.getController();
+
+            if (myType == Type.ACTIVITY && activity != null) controller.setData(activity);
+            else if (myType == Type.TRIP && trip != null) controller.setData(trip);
+
+            Stage stage = (Stage) root.getScene().getWindow();
+            double width = stage.getScene() != null ? stage.getScene().getWidth() : 1280;
+            double height = stage.getScene() != null ? stage.getScene().getHeight() : 720;
+
+            Scene previousScene = root.getScene();
+            controller.setOnBackLink( () -> {
+                stage.setScene(previousScene);
+            });
+
+            Scene newScene = new Scene((Parent) galleryNode, width, height);
+            stage.setScene(newScene);
+            stage.show();
+
+        } catch (IOException e) {
+            throw new UncheckedIOException("Impossibile caricare la galleria", e);
         }
     }
 

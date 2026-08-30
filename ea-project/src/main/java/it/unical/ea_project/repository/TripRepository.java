@@ -35,6 +35,8 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     @Query("SELECT t FROM Trip t LEFT JOIN FETCH t.stages WHERE t.tripId = :tripId AND t.deletedAt IS NULL")
     Optional<Trip> findByTripIdAndDeletedAtIsNull(Long tripId);
 
+    Boolean existsByTripIdAndDeletedAtIsNull(Long tripId);
+
 
     List<Trip> findByStatusAndDeletedAtIsNullOrderByAverageRatingDesc(TripStatus tripStatus, Pageable pageable);
 }
