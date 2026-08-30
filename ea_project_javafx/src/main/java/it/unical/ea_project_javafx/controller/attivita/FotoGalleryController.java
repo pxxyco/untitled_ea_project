@@ -1,54 +1,83 @@
 package it.unical.ea_project_javafx.controller.attivita;
 
 import it.unical.ea_project_javafx.controller.attivita.fotoContainer.FotoItemController;
-import it.unical.ea_project_javafx.controller.attivita.fotoContainer.FullScreenFotoViewController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
+import it.unical.ea_project_javafx.dto.ActivityImageDTO;
 import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.FullscreenPhotoViewer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.List;
 
 public class FotoGalleryController {
 
-    @FXML
-    public StackPane rootStack;
-    @FXML
-    private FlowPane imgsContainer;
+    @FXML public StackPane rootStack;
+    @FXML private FlowPane imgsContainer;
+
+    @FXML private Button moreButton;
+
+    private int paging = 0;
+    private static final int PAGE_SIZE = 20;
+    private List<String> imageUrls;
 
     @Setter
     private Runnable onBackLink;
 
-    final private String path = "/it/unical/ea_project_javafx/fxml/";
+    final private String path = "/it/unical/ea_project_javafx/fxml/attivita/fotoContainer";
 
     @FXML
     void initialize() throws IOException {
-        loadImages();
+        paging = 0;
     }
 
-    private void loadImages() throws IOException {
-        /* TO DO ---  ESEMPIO DI CREAZIONE DI UN IMMAGINE ---
-        FXMLLoader fotoLoader = new FXMLLoader();
-        fotoLoader.setLocation(getClass().getResource(path + "attivita/fotoContainer/FotoItem.fxml"));
-        Node foto = fotoLoader.load();
+    public void setImages(List<String> urls) {
 
-        FotoItemController controller = fotoLoader.getController();
-        controller.setFoto("https://picsum.photos/150/150");
+        this.imageUrls = urls;
 
-        controller.setOnFotoClickedCallBack(url -> mostraFotoFullscreen(url));
+        if (this.imageUrls.size() > PAGE_SIZE) {
+            moreButton.setManaged(true);
+            moreButton.setVisible(true);
+        }
+        else {
+            moreButton.setManaged(false);
+            moreButton.setVisible(false);
+        }
 
-        imgsContainer.getChildren().add(foto);
-
-        */
+        loadNextPage();
     }
 
-    private void mostraFotoFullscreen(String url) {
-        // TO DO
-        // USE util/FullscreenPhotoViewer.java
+    private void loadNextPage() {
+        int start = paging * PAGE_SIZE;
+        int end = Math.min(start + PAGE_SIZE, imageUrls.size());
+
+        for (int i = start; i < end; i++) {
+            loadImage(imageUrls.get(i));
+        }
+        paging++;
+    }
+
+    private void loadImage(String url){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path + "/FotoItem.fxml"));
+            Node foto = loader.load();
+
+            FotoItemController controller = loader.getController();
+            controller.setFoto(url);
+            controller.setOnFotoClickedCallBack( s -> mostraFotoFullscreen(url));
+
+            imgsContainer.getChildren().add(foto);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -57,11 +86,12 @@ public class FotoGalleryController {
             onBackLink.run();
     }
 
-
-    public void setData(ActivityDTO activity) {
+    @FXML
+    public void handleAddMore(ActionEvent actionEvent) {
+        loadNextPage();
     }
 
-    public void setData(TripDTO trip) {
-
+    private void mostraFotoFullscreen(String url) {
+        FullscreenPhotoViewer.mostra(rootStack, url);
     }
 }

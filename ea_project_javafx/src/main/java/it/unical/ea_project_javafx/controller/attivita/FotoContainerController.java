@@ -18,6 +18,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class FotoContainerController implements ActivitySectionController, TripSectionController {
 
@@ -26,7 +27,9 @@ public class FotoContainerController implements ActivitySectionController, TripS
     final private String path = "/it/unical/ea_project_javafx/fxml/attivita/fotoContainer";
 
     @Setter
-    private Runnable onGalleryRequested;
+    private Consumer<List<String>> onGalleryRequested;
+
+    private List<String> imageUrls;
 
     @FXML
     private FlowPane imgsContainer;
@@ -56,30 +59,22 @@ public class FotoContainerController implements ActivitySectionController, TripS
     }
 
     private void loadActivityImages(List<ActivityImageDTO> activities){
-
-        int max = Math.min(activities.size(), 5);
-        for(int i = 0; i < max; i++){
-            String url = ApiService.BASE_URL + activities.get(i).getImageUrl();
-            loadImage(url);
-        }
-
-        if(activities.size() > 5) {
-            addPlaceholder();
-        }
+        imageUrls = activities.stream()
+                .map(a -> ApiService.BASE_URL + a.getImageUrl())
+                .toList();
+        int max = Math.min(imageUrls.size(), 5);
+        for (int i = 0; i < max; i++) loadImage(imageUrls.get(i));
+        if (imageUrls.size() > 5) addPlaceholder();
     }
 
 
     private void loadTripImages(List<TripImageDTO> images) {
-
-        int max = Math.min(images.size(), 5);
-        for(int i = 0; i < max; i++){
-            String url = ApiService.BASE_URL + images.get(i).getImageUrl();
-            loadImage(url);
-        }
-
-        if(images.size() > 5) {
-            addPlaceholder();
-        }
+        imageUrls = images.stream()
+                .map(i -> ApiService.BASE_URL + i.getImageUrl())
+                .toList();
+        int max = Math.min(imageUrls.size(), 5);
+        for (int i = 0; i < max; i++) loadImage(imageUrls.get(i));
+        if (imageUrls.size() > 5) addPlaceholder();
     }
 
     private void loadImage(String url){
@@ -106,7 +101,7 @@ public class FotoContainerController implements ActivitySectionController, TripS
 
             FotoPlaceholderController controller = placeholderLoader.getController();
             controller.setOnPlaceholderClickedCallBack(() -> {
-                if (onGalleryRequested != null) onGalleryRequested.run();
+                if (onGalleryRequested != null) onGalleryRequested.accept(imageUrls);
             });
 
             imgsContainer.getChildren().add(placeholder);

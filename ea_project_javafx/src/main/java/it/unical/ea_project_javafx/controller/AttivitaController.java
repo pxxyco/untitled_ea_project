@@ -100,7 +100,7 @@ public class AttivitaController {
         btnInitialize();
 
         // USE FOR DEBUG AND TEST
-        //loadData(Type.TRIP, "1");
+        // loadData(Type.ACTIVITY, "1");
     }
 
     public void loadData(Type type, String id) {
@@ -240,14 +240,13 @@ public class AttivitaController {
         }
     }
 
-    private void openGallery() {
+    private void openGallery(List<String> urls) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path + "/FotoGallery.fxml"));
             Node galleryNode = loader.load();
             FotoGalleryController controller = loader.getController();
 
-            if (myType == Type.ACTIVITY && activity != null) controller.setData(activity);
-            else if (myType == Type.TRIP && trip != null) controller.setData(trip);
+            controller.setImages(urls);
 
             Stage stage = (Stage) root.getScene().getWindow();
             double width = stage.getScene() != null ? stage.getScene().getWidth() : 1280;

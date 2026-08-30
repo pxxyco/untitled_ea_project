@@ -30,8 +30,15 @@ public class ActivityImageController {
     }
 
     @PostMapping("/activity/{activityId}")
-    public ResponseEntity<ActivityImage> addImage(@PathVariable Long activityId, @RequestBody ActivityImage image) {
-        return ResponseEntity.ok(activityImageService.addImageToActivity(activityId, image));
+    public ResponseEntity<ActivityImageDTO> addImage(@PathVariable Long activityId, @RequestBody ActivityImage image) {
+        ActivityImage saved = activityImageService.addImageToActivity(activityId, image);
+        ActivityImageDTO dto = ActivityImageDTO.builder()
+                .imageId(saved.getImageId())
+                .imageUrl(saved.getImageUrl())
+                .activityId(activityId)
+                .orderIndex(saved.getOrderIndex())
+                .build();
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
