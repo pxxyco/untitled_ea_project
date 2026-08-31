@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane maxWidth="400" minWidth="400" minHeight="300" maxHeight="300" managed="false" visible="false" disable="false" styleClass="popup-overlay-root" stylesheets="@../../css/attivita/recensione/newRecensione.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.attivita.recensioni.NewRecensioneController">
+    <children>
+        <VBox maxWidth="380.0" minWidth="380.0" spacing="16.0" styleClass="popup-recensione">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Label fx:id="lblTitolo" styleClass="popup-titolo" text="Aggiungi Recensione" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChiudi" mnemonicParsing="false" styleClass="btn-elimina" text="✕" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="containerStelle" alignment="CENTER" spacing="6.0" styleClass="rating-stelle">
+                    <children>
+                        <Button fx:id="stella1" mnemonicParsing="false" styleClass="stella" text="☆" />
+                        <Button fx:id="stella2" mnemonicParsing="false" styleClass="stella" text="☆" />
+                        <Button fx:id="stella3" mnemonicParsing="false" styleClass="stella" text="☆" />
+                        <Button fx:id="stella4" mnemonicParsing="false" styleClass="stella" text="☆" />
+                        <Button fx:id="stella5" mnemonicParsing="false" styleClass="stella" text="☆" />
+                    </children>
+                </HBox>
+
+                <TextArea fx:id="txtCommento" prefRowCount="5" promptText="Scrivi qui la tua recensione..." styleClass="textarea-recensione" wrapText="true" />
+
+                <HBox alignment="CENTER_RIGHT">
+                    <children>
+                        <Button fx:id="btnInvia" mnemonicParsing="false" styleClass="btn-invia" text="Invia" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

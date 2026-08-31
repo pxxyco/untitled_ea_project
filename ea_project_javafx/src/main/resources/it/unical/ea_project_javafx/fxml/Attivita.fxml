@@ -46,11 +46,10 @@
                 <StackPane fx:id="loadingOverlay" alignment="CENTER" styleClass="loading-overlay">
                     <children>
                         <Button fx:id="btnIndietro1" styleClass="back-link" text="←  Torna alle esperienze" StackPane.alignment="TOP_LEFT" />
-                        <fx:include fx:id="loadingCard" source="loading-overlay.fxml">
-                        </fx:include>
+                        <fx:include fx:id="loadingCard" source="loading-overlay.fxml"/>
                     </children>
                 </StackPane>
-                  <ScrollPane fx:id="contentScroll" fitToWidth="true" managed="false" styleClass="content-scroll" visible="false">
+                <ScrollPane fx:id="contentScroll" fitToWidth="true" managed="false" styleClass="content-scroll" visible="false">
                   <content>
                      <BorderPane>
                         <center>
@@ -147,7 +146,8 @@
                         </right>
                      </BorderPane>
                   </content>
-                  </ScrollPane>
+                </ScrollPane>
+                <fx:include fx:id="newRecCard" source="attivita/NewRecensione.fxml"/>
             </children>
          </StackPane>
       </center>
