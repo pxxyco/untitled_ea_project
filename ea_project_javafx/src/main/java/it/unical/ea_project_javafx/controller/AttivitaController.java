@@ -3,10 +3,8 @@ package it.unical.ea_project_javafx.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import it.unical.ea_project_javafx.controller.attivita.ActivitySectionController;
-import it.unical.ea_project_javafx.controller.attivita.FotoContainerController;
-import it.unical.ea_project_javafx.controller.attivita.FotoGalleryController;
-import it.unical.ea_project_javafx.controller.attivita.TripSectionController;
+import it.unical.ea_project_javafx.controller.attivita.*;
+import it.unical.ea_project_javafx.controller.attivita.recensioni.NewRecensioneController;
 import it.unical.ea_project_javafx.dto.ActivityDTO;
 import it.unical.ea_project_javafx.dto.TripDTO;
 import it.unical.ea_project_javafx.util.ApiService;
@@ -60,6 +58,9 @@ public class AttivitaController {
 
     @FXML private LoadingOverlayController loadingCardController;
     @FXML private StackPane loadingOverlay;
+
+    @FXML private StackPane newRecCard;
+    @FXML private NewRecensioneController newRecCardController;
 
     @FXML private ScrollPane contentScroll;
     @FXML private StackPane hero;
@@ -225,6 +226,10 @@ public class AttivitaController {
                 fcc.setOnGalleryRequested(this::openGallery);
             }
 
+            if(controller instanceof RecensioniContainerController rcc){
+                rcc.setOnNewReviewRequested(this::openNewReview);
+            }
+
             if (myType == Type.ACTIVITY && activity != null
                     && controller instanceof ActivitySectionController asc) {
                 sectionControllers.add(asc);
@@ -264,6 +269,19 @@ public class AttivitaController {
         } catch (IOException e) {
             throw new UncheckedIOException("Impossibile caricare la galleria", e);
         }
+    }
+
+    private void openNewReview(){
+        newRecCard.setDisable(false);
+        newRecCard.setManaged(true);
+        newRecCard.setVisible(true);
+
+        newRecCardController.setOnClose( () -> {
+            newRecCard.setManaged(false);
+            newRecCard.setVisible(false);
+            newRecCard.setDisable(true);
+            newRecCardController.reset();
+        });
     }
 
     private void showSection(Node node) {

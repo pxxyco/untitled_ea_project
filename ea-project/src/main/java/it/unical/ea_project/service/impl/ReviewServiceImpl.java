@@ -18,7 +18,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional
-    public Review crea(Review review) {
+    public Review create(Review review) {
         return reviewRepository.save(review);
     }
 
@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional
-    public void elimina(Long id) {
+    public void delete(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new RuntimeException("Review non trovata");
         }

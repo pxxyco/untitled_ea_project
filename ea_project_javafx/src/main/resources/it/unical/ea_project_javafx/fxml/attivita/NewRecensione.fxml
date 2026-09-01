@@ -20,17 +20,17 @@
                     <children>
                         <Label fx:id="lblTitolo" styleClass="popup-titolo" text="Aggiungi Recensione" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnChiudi" mnemonicParsing="false" styleClass="btn-elimina" text="✕" />
+                        <Button fx:id="btnChiudi" mnemonicParsing="false" onAction="#handleCloseButton" styleClass="btn-elimina" text="✕" />
                     </children>
                 </HBox>
 
                 <HBox fx:id="containerStelle" alignment="CENTER" spacing="6.0" styleClass="rating-stelle">
                     <children>
-                        <Button fx:id="stella1" mnemonicParsing="false" styleClass="stella" text="☆" />
-                        <Button fx:id="stella2" mnemonicParsing="false" styleClass="stella" text="☆" />
-                        <Button fx:id="stella3" mnemonicParsing="false" styleClass="stella" text="☆" />
-                        <Button fx:id="stella4" mnemonicParsing="false" styleClass="stella" text="☆" />
-                        <Button fx:id="stella5" mnemonicParsing="false" styleClass="stella" text="☆" />
+                        <Button fx:id="star1" mnemonicParsing="false" onAction="#star1Button" styleClass="stella" text="☆" />
+                        <Button fx:id="star2" mnemonicParsing="false" onAction="#starButton2" styleClass="stella" text="☆" />
+                        <Button fx:id="star3" mnemonicParsing="false" onAction="#starButton3" styleClass="stella" text="☆" />
+                        <Button fx:id="star4" mnemonicParsing="false" onAction="#starButton4" styleClass="stella" text="☆" />
+                        <Button fx:id="star5" mnemonicParsing="false" onAction="#starButton5" styleClass="stella" text="☆" />
                     </children>
                 </HBox>
 
@@ -38,7 +38,7 @@
 
                 <HBox alignment="CENTER_RIGHT">
                     <children>
-                        <Button fx:id="btnInvia" mnemonicParsing="false" styleClass="btn-invia" text="Invia" />
+                        <Button fx:id="btnInvia" mnemonicParsing="false" onAction="#handleSendButton" styleClass="btn-invia" text="Invia" />
                     </children>
                 </HBox>
             </children>

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    Review crea(Review review);
+    Review create(Review review);
 
     Review findById(Long id);
 
@@ -16,6 +16,6 @@ public interface ReviewService {
 
     List<Review> findByTrip(Long tripId);
 
-    void elimina(Long id);
+    void delete(Long id);
 
 }
