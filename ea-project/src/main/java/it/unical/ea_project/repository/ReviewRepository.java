@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@SQLRestriction("deleted_at IS NULL")
+@SQLRestriction("deleted_at = false")
 @Repository
 public interface ReviewRepository extends JpaRepository<Review,Long> {
 
