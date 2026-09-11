@@ -101,7 +101,7 @@ public class AttivitaController {
         btnInitialize();
 
         // USE FOR DEBUG AND TEST
-        // loadData(Type.ACTIVITY, "1");
+        loadData(Type.ACTIVITY, "1");
     }
 
     public void loadData(Type type, String id) {
@@ -272,16 +272,21 @@ public class AttivitaController {
     }
 
     private void openNewReview(){
-        newRecCard.setDisable(false);
-        newRecCard.setManaged(true);
-        newRecCard.setVisible(true);
-
         newRecCardController.setOnClose( () -> {
             newRecCard.setManaged(false);
             newRecCard.setVisible(false);
             newRecCard.setDisable(true);
             newRecCardController.reset();
         });
+
+
+        Long tripId = (myType == Type.TRIP) ? trip.getTripId() : null;
+        Long activityId = (myType == Type.ACTIVITY) ? activity.getActivityId() : null;
+        newRecCardController.setType(tripId, activityId);
+
+        newRecCard.setDisable(false);
+        newRecCard.setManaged(true);
+        newRecCard.setVisible(true);
     }
 
     private void showSection(Node node) {

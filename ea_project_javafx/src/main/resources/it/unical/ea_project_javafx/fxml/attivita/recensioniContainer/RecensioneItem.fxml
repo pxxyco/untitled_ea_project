@@ -15,12 +15,23 @@
 
     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="recensione-header">
         <Label fx:id="lblNomeUtente" styleClass="recensione-nome" text="Nome utente" />
-        <HBox fx:id="containerStelle" styleClass="rating-stelle" />
+      <HBox fx:id="containerStelle" alignment="CENTER" spacing="6.0" styleClass="rating-stelle">
+         <children>
+            <Button fx:id="star1" mnemonicParsing="false" styleClass="stella" text="☆" />
+            <Button fx:id="star2" mnemonicParsing="false" styleClass="stella" text="☆" />
+            <Button fx:id="star3" mnemonicParsing="false" styleClass="stella" text="☆" />
+            <Button fx:id="star4" mnemonicParsing="false" styleClass="stella" text="☆" />
+            <Button fx:id="star5" mnemonicParsing="false" styleClass="stella" text="☆" />
+         </children>
+      </HBox>
         <Region HBox.hgrow="ALWAYS" />
         <Button fx:id="btnAzioni" mnemonicParsing="false" styleClass="btn-elimina" text="x" textFill="RED" />
     </HBox>
 
-    <Label fx:id="lblTesto" styleClass="recensione-testo" text="testo" wrapText="true" />
+    <Label fx:id="lblTesto" styleClass="recensione-testo" text="testo" wrapText="true">
+      <padding>
+         <Insets bottom="5.0" top="5.0" />
+      </padding></Label>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Button fx:id="btnRispondi" mnemonicParsing="false" styleClass="btn-rispondi" text="Rispondi" />
@@ -28,6 +39,9 @@
         <Label fx:id="lblData" styleClass="recensione-data" text="data" />
     </HBox>
 
-    <VBox fx:id="containerRisposta" styleClass="risposta-container" />
+    <VBox fx:id="containerRisposta" styleClass="risposta-container">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin></VBox>
 
 </VBox>

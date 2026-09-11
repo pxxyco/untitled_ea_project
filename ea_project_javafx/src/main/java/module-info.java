@@ -8,6 +8,7 @@ module it.unical.ea_project_javafx {
     requires javafx.web;
     requires com.gluonhq.maps;
     requires javafx.graphics;
+    requires javafx.base;
 
     opens it.unical.ea_project_javafx to javafx.fxml;
     opens it.unical.ea_project_javafx.controller to javafx.fxml, com.google.gson;

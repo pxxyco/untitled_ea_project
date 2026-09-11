@@ -62,3 +62,18 @@
     -fx-border-color: rgba(47,155,240,0.15);
     -fx-border-width: 1 0 0 0;
 }
+
+.rating-stelle {
+    -fx-padding: 1 0 1 0;
+}
+
+.stella {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6f7885;
+    -fx-font-size: 13px;
+    -fx-padding: 0 1 0 1;
+}
+
+.stella-piena {
+    -fx-text-fill: #f5b301;
+}

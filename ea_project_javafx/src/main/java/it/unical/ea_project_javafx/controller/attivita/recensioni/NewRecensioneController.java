@@ -1,14 +1,19 @@
 package it.unical.ea_project_javafx.controller.attivita.recensioni;
 
+import it.unical.ea_project_javafx.dto.ReviewDTO;
+import it.unical.ea_project_javafx.service.ReviewService;
 import it.unical.ea_project_javafx.util.ApiService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class NewRecensioneController {
 
@@ -26,6 +31,12 @@ public class NewRecensioneController {
 
     @FXML private TextArea txtCommento;
 
+    @FXML private StackPane root;
+
+    private int value;
+    private Long tripId;
+    private Long activityId;
+
     @Setter
     private Runnable onClose;
 
@@ -39,6 +50,13 @@ public class NewRecensioneController {
         stars = List.of(star1, star2, star3, star4, star5);
     }
 
+    public void setType(Long tripId, Long activityId) {
+        this.tripId = tripId;
+        this.activityId = activityId;
+
+        reset();
+    }
+
 
     @FXML
     void handleCloseButton(ActionEvent event) {
@@ -49,7 +67,27 @@ public class NewRecensioneController {
 
     @FXML
     void handleSendButton(ActionEvent event) {
-        // TO DO
+
+        // DEBUG TEST,  TODO: replace with logged-in user
+        // Long userId = Long.valueOf("1");
+
+        ReviewDTO review = ReviewDTO.builder()
+                .rating(value)
+                .comment(txtCommento.getText())
+                .activityId(activityId)
+                .tripId(tripId)
+                //.userId(userId)
+                .build();
+
+        ReviewService.create(
+                review,
+                () -> {
+                    if(onClose != null) onClose.run();
+                },
+                () -> {
+                    // TODO: set error message
+                },
+                null);
     }
 
     public void reset(){
@@ -70,7 +108,6 @@ public class NewRecensioneController {
     @FXML
     void starButton3(ActionEvent event) {
         handleStar(3);
-
     }
 
     @FXML
@@ -84,6 +121,7 @@ public class NewRecensioneController {
     }
 
     private void handleStar(int value) {
+        this.value = value;
 
         for(int i = 0; i < stars.size(); i++) {
             if(i+1 <= value){
@@ -97,6 +135,10 @@ public class NewRecensioneController {
                 stars.get(i).setText(EMPTY_STAR);
             }
         }
+    }
 
+    @FXML
+    public void handleMainFocus(MouseEvent mouseEvent) {
+        root.requestFocus();
     }
 }

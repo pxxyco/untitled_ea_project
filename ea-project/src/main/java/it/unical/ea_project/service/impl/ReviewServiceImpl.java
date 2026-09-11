@@ -66,7 +66,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDTO> findByTrip(Long tripId) {
 
-        List<Review> reviews = reviewRepository.findAllByTripTripId(tripId);
+        List<Review> reviews = reviewRepository.findAllByTripTripIdOrderByCreatedAtDesc(tripId);
 
         return reviews.stream()
                 .map(ReviewMapper::toReviewDTO)
@@ -77,7 +77,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDTO> findByActivity(Long activityId) {
 
-        List<Review> reviews = reviewRepository.findAllByActivityActivityId(activityId);
+        List<Review> reviews = reviewRepository.findAllByActivityActivityIdOrderByCreatedAtDesc(activityId);
 
         return reviews.stream()
                 .map(ReviewMapper::toReviewDTO)

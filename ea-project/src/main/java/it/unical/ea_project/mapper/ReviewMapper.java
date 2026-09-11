@@ -9,6 +9,7 @@ public class ReviewMapper {
         return ReviewDTO.builder()
                 .reviewId(review.getReviewId())
                 .userId(review.getUser().getId())
+                .username(review.getUser().getUsername())
                 .tripId(review.getTrip() != null ? review.getTrip().getTripId() : null)
                 .activityId(review.getActivity() != null ? review.getActivity().getActivityId() : null)
                 .rating(review.getRating())
