@@ -12,6 +12,9 @@ public interface ResponseRepository extends JpaRepository<Response, Long> {
     //trova tutte le risposte che non sono state eliminate
     List<Response> findByDeletedFalse();
 
+    // find all responses associated with a review ID in the list and not deleted
+    List<Response> findByReview_ReviewIdInAndDeletedFalse(List<Long> reviewIds);
+
     //trova le risposte associate a una specifica recensione e non eliminate
     List<Response> findByReviewReviewIdAndDeletedFalse(Long reviewId);
 }

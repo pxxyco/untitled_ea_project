@@ -1,18 +1,17 @@
 package it.unical.ea_project.service.impl;
 
+import it.unical.ea_project.domain.Response;
 import it.unical.ea_project.domain.Review;
 import it.unical.ea_project.dto.ReviewDTO;
 import it.unical.ea_project.mapper.ReviewMapper;
-import it.unical.ea_project.repository.ActivityRepository;
-import it.unical.ea_project.repository.ReviewRepository;
-import it.unical.ea_project.repository.TripRepository;
-import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.repository.*;
 import it.unical.ea_project.service.ReviewService;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +21,18 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
     private final TripRepository tripRepository;
     private final ActivityRepository activityRepository;
+    private final ResponseRepository responseRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, UserRepository userRepository, TripRepository tripRepository, ActivityRepository activityRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository,
+                             UserRepository userRepository,
+                             TripRepository tripRepository,
+                             ActivityRepository activityRepository,
+                             ResponseRepository responseRepository) {
         this.reviewRepository = reviewRepository;
         this.userRepository = userRepository;
         this.tripRepository = tripRepository;
         this.activityRepository = activityRepository;
+        this.responseRepository = responseRepository;
     }
 
     @Transactional
@@ -49,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review saved = reviewRepository.save(reviewEntity);
 
-        return ReviewMapper.toReviewDTO(saved);
+        return ReviewMapper.toReviewDTO(saved, null);
     }
 
     @Transactional(readOnly = true)
@@ -70,8 +75,17 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<Review> reviews = reviewRepository.findAllByTripTripIdOrderByCreatedAtDesc(tripId);
 
+        List<Long> ids = reviews.stream().map(Review::getReviewId).toList();
+
+        List<Response> responses = responseRepository.findByReview_ReviewIdInAndDeletedFalse(ids);
+
+        Map<Long, Response> responseIdMap = responses.stream().
+                collect(Collectors.toMap(r-> r.getReview().getReviewId(),
+                        response -> response));
+
         return reviews.stream()
-                .map(ReviewMapper::toReviewDTO)
+                .map(review ->  ReviewMapper.toReviewDTO(review,
+                        responseIdMap.get(review.getReviewId())))
                 .collect(Collectors.toList());
     }
 
@@ -81,8 +95,17 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<Review> reviews = reviewRepository.findAllByActivityActivityIdOrderByCreatedAtDesc(activityId);
 
+        List<Long> ids = reviews.stream().map(Review::getReviewId).toList();
+
+        List<Response> responses = responseRepository.findByReview_ReviewIdInAndDeletedFalse(ids);
+
+        Map<Long, Response> responseIdMap = responses.stream()
+                .collect(Collectors.toMap(r-> r.getReview().getReviewId(),
+                        response -> response));
+
         return reviews.stream()
-                .map(ReviewMapper::toReviewDTO)
+                .map(review -> ReviewMapper.toReviewDTO(review,
+                        responseIdMap.get(review.getReviewId())))
                 .collect(Collectors.toList());
     }
 
