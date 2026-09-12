@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class NewRecensioneController {
@@ -39,6 +40,8 @@ public class NewRecensioneController {
 
     @Setter
     private Runnable onClose;
+    @Setter
+    private Consumer<ReviewDTO> onReviewCreated;
 
 
     List<Button> stars ;
@@ -81,7 +84,8 @@ public class NewRecensioneController {
 
         ReviewService.create(
                 review,
-                () -> {
+                created -> {
+                    if(onReviewCreated != null) onReviewCreated.accept(created);
                     if(onClose != null) onClose.run();
                 },
                 () -> {

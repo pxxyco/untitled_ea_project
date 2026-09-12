@@ -19,16 +19,16 @@ public class ReviewController {
     }
 
     @PostMapping
-    public void createReview(@RequestBody ReviewDTO review){
-        // TO ADD VALIDATION
+    public ResponseEntity<ReviewDTO> createReview(@RequestBody ReviewDTO review){
+        // TODO: add data validation
 
-        // USE AUTHENTICATION FOR USER_ID
+        // TODO: use authentication for user id
         // review.setUserId(userId);
 
         // TEST
         // review.setUserId("1");
 
-        reviewService.create(review);
+        return ResponseEntity.ok(reviewService.create(review));
     }
 
     @GetMapping("/trip/{tripId}")

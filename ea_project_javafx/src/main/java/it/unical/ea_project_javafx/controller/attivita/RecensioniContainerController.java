@@ -125,4 +125,10 @@ public class RecensioniContainerController implements ActivitySectionController,
         page++;
         setReviews();
     }
+
+    public void addReview(ReviewDTO review) {
+        reviews.addFirst(review);
+        page = 0;
+        setReviews();
+    }
 }

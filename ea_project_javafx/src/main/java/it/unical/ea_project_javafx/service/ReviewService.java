@@ -23,13 +23,14 @@ public class ReviewService {
                     LocalDateTime.parse(json.getAsString()))
             .create();
 
-    public static void create(ReviewDTO review, Runnable onSuccess, Runnable onFailure, Consumer<Boolean> loading) {
+    public static void create(ReviewDTO review, Consumer<ReviewDTO> onSuccess, Runnable onFailure, Consumer<Boolean> loading) {
         ApiService.post(
                 BASE_URL,
                 GSON.toJson(review),
                 response -> {
                     if(response.statusCode() >= 200 && response.statusCode() <= 300) {
-                        if(onSuccess != null ) onSuccess.run();
+                        ReviewDTO created = GSON.fromJson(response.body(), ReviewDTO.class);
+                        if(onSuccess != null) onSuccess.accept(created);
                     }
                     else  if(onFailure != null) onFailure.run();
                 },

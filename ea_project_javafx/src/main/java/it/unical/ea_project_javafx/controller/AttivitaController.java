@@ -61,11 +61,10 @@ public class AttivitaController {
 
     @FXML private StackPane newRecCard;
     @FXML private NewRecensioneController newRecCardController;
+    private RecensioniContainerController recensioniController;
 
     @FXML private ScrollPane contentScroll;
     @FXML private StackPane hero;
-
-    private final List<Object> sectionControllers = new ArrayList<>();
 
     private List<Button> sectionButtons;
 
@@ -101,7 +100,7 @@ public class AttivitaController {
         btnInitialize();
 
         // USE FOR DEBUG AND TEST
-        loadData(Type.ACTIVITY, "1");
+        // loadData(Type.ACTIVITY, "1");
     }
 
     public void loadData(Type type, String id) {
@@ -228,11 +227,12 @@ public class AttivitaController {
 
             if(controller instanceof RecensioniContainerController rcc){
                 rcc.setOnNewReviewRequested(this::openNewReview);
+                recensioniController = rcc;
+
             }
 
             if (myType == Type.ACTIVITY && activity != null
                     && controller instanceof ActivitySectionController asc) {
-                sectionControllers.add(asc);
                 asc.setData(activity);
             } else if (myType == Type.TRIP && trip != null
                     && controller instanceof TripSectionController tsc) {
@@ -279,6 +279,9 @@ public class AttivitaController {
             newRecCardController.reset();
         });
 
+        newRecCardController.setOnReviewCreated(review -> {
+            if (recensioniController != null) recensioniController.addReview(review);
+        });
 
         Long tripId = (myType == Type.TRIP) ? trip.getTripId() : null;
         Long activityId = (myType == Type.ACTIVITY) ? activity.getActivityId() : null;
@@ -318,7 +321,7 @@ public class AttivitaController {
     @FXML
     protected void handleRecensioni(ActionEvent event) {
         setActiveButton(btnRecensioni);
-        recensioniNode = loadSection("RecensioniContainer.fxml");   // bug corretto
+        recensioniNode = loadSection("RecensioniContainer.fxml");
         showSection(recensioniNode);
     }
 

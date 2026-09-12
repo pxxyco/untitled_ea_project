@@ -31,8 +31,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional
-    public void create(ReviewDTO review) {
-        // TO ADD VALIDATION
+    public ReviewDTO create(ReviewDTO review) {
+        // TODO: add data validation
 
         Review reviewEntity = new Review();
         reviewEntity.setUser(userRepository.getReferenceById(review.getUserId()));
@@ -47,7 +47,9 @@ public class ReviewServiceImpl implements ReviewService {
         reviewEntity.setRating(review.getRating());
         reviewEntity.setComment(review.getComment());
 
-        reviewRepository.save(reviewEntity);
+        Review saved = reviewRepository.save(reviewEntity);
+
+        return ReviewMapper.toReviewDTO(saved);
     }
 
     @Transactional(readOnly = true)

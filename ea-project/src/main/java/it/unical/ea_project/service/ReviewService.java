@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    void create(ReviewDTO review);
+    ReviewDTO create(ReviewDTO review);
 
     Review findById(Long id);
 
