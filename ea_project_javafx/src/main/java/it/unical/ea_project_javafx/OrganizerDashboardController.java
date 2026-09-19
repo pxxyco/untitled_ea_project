@@ -7,7 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -15,8 +19,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 
 public class OrganizerDashboardController {
 
@@ -34,6 +44,33 @@ public class OrganizerDashboardController {
     @FXML private TableColumn<SubscriberRow, String> emailColumn;
     @FXML private TableColumn<SubscriberRow, String> activityColumn;
     @FXML private TableColumn<SubscriberRow, String> dateColumn;
+
+    @FXML
+    private void handleOpenCreateOffer(ActionEvent event) {
+        try {
+            Parent root = App.loadFXML("create_offer");
+
+            Stage modalStage = new Stage();
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+
+            Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modalStage.initOwner(parentStage);
+            modalStage.initStyle(StageStyle.TRANSPARENT);
+
+            Scene modalScene = new Scene(root);
+            modalScene.setFill(Color.TRANSPARENT);
+
+            var cssResource = App.class.getResource("/it/unical/ea_project_javafx/css/create_offer.css");
+            if (cssResource != null) {
+                modalScene.getStylesheets().add(cssResource.toExternalForm());
+            }
+
+            modalStage.setScene(modalScene);
+            modalStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static class SubscriberRow {
         private final SimpleStringProperty participant;

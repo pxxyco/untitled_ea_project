@@ -9,9 +9,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * JavaFX App Main Entry Point
- */
 public class App extends Application {
 
     private static Scene scene;
@@ -19,9 +16,9 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = loadFXML("mainview");
+            Parent root = loadFXML("organizer_dashboard");
             scene = new Scene(root, 1280, 720);
-            stage.setTitle("EA Project");
+            stage.setTitle("EA Explorer");
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
@@ -35,12 +32,23 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        String resourcePath = "fxml/" + fxml + ".fxml";
-        URL fxmlUrl = App.class.getResource(resourcePath);
+    public static Parent loadFXML(String fxml) throws IOException {
+        String cleanName = fxml.endsWith(".fxml") ? fxml.substring(0, fxml.length() - 5) : fxml;
+        String absolutePath = "/it/unical/ea_project_javafx/fxml/" + cleanName + ".fxml";
+        String relativePath = "it/unical/ea_project_javafx/fxml/" + cleanName + ".fxml";
+
+        URL fxmlUrl = App.class.getResource(absolutePath);
 
         if (fxmlUrl == null) {
-            throw new IOException("Error (2-main): FXML file not found: " + resourcePath);
+            fxmlUrl = App.class.getClassLoader().getResource(relativePath);
+        }
+
+        if (fxmlUrl == null) {
+            fxmlUrl = Thread.currentThread().getContextClassLoader().getResource(relativePath);
+        }
+
+        if (fxmlUrl == null) {
+            throw new IOException("FXML non trovato nel percorso: " + absolutePath);
         }
 
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
