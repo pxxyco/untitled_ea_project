@@ -2,12 +2,15 @@ package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.Trip.TripStatus;
-import it.unical.ea_project.repository.TripRepository;
-import it.unical.ea_project.service.TripService;
 import it.unical.ea_project.domain.User;
-
+import it.unical.ea_project.repository.TripRepository;
+import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.service.TripService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,14 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TripServiceImpl implements TripService {
 
     private final TripRepository tripRepository;
-
-    public TripServiceImpl(TripRepository tripRepository) {
-        this.tripRepository = tripRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public List<Trip> getTripsByUser(User user) {
@@ -61,6 +62,15 @@ public class TripServiceImpl implements TripService {
 
     @Override
     @Transactional
+    public Trip createTrip(Trip trip, Long creatorId) {
+        User creator = userRepository.findById(creatorId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + creatorId));
+        trip.setCreatedBy(creator);
+        return tripRepository.save(trip);
+    }
+
+    @Override
+    @Transactional
     public Trip saveTrip(Trip trip) {
         return tripRepository.save(trip);
     }
@@ -71,4 +81,12 @@ public class TripServiceImpl implements TripService {
         trip.setDeletedAt(LocalDateTime.now());
         tripRepository.save(trip);
     }
+
+    @Override
+    public List<Trip> getTopTrips(int page, int size) {
+        return tripRepository.findByStatusAndDeletedAtIsNullOrderByAverageRatingDesc(
+                TripStatus.PUBLISHED, PageRequest.of(page, size)
+        );
+    }
+
 }

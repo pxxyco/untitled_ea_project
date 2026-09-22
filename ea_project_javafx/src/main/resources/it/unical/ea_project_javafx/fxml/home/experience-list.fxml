@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.unical.ea_project_javafx.controller.home.ExperienceListController"
+      maxWidth="1000.0" spacing="15.0" VBox.vgrow="ALWAYS">
+
+    <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxWidth="1000.0" styleClass="category-scroll" vbarPolicy="NEVER">
+        <content>
+            <HBox fx:id="categoriesBar" alignment="CENTER_LEFT" spacing="10.0" />
+        </content>
+    </ScrollPane>
+
+    <VBox spacing="4.0">
+        <children>
+            <Label styleClass="section-title" text="Esperienze più apprezzate dai viaggiatori" wrapText="true" />
+            <Label styleClass="section-subtitle" text="Valutate da utenti reali che hanno partecipato alle attività" wrapText="true" />
+        </children>
+    </VBox>
+
+    <VBox fx:id="cardsContainer" spacing="16.0" VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
+        <children>
+            <Label fx:id="loadMoreLabel" text="Carica altro" onMouseClicked="#handleLoadMore" styleClass="load-more-label" style="-fx-cursor: hand; -fx-font-weight: bold;" />
+        </children>
+    </HBox>
+</VBox>

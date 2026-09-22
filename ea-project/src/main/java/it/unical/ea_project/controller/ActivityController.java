@@ -1,6 +1,8 @@
 package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Activity;
+import it.unical.ea_project.dto.ActivityDTO;
+import it.unical.ea_project.dto.home.ActivityHomeDTO;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +17,46 @@ public class ActivityController {
 
     private final ActivityService activityService;
 
-    @GetMapping
-    public ResponseEntity<List<Activity>> getAllActivities() {
-        return ResponseEntity.ok(activityService.getAllActivities());
-    }
 
+    //Recupera una singola attività completa.
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
-        return ResponseEntity.ok(activityService.getActivityById(id));
+    public ResponseEntity<ActivityDTO> getActivityById(
+            @PathVariable Long id
+    ) {
+        return activityService.getActivityDtoById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Activity> createActivity(@RequestBody Activity activity, @RequestParam Long creatorId) {
-        return ResponseEntity.ok(activityService.createActivity(activity, creatorId));
+     //Recupera le attività più apprezzate.
+    @GetMapping("/top")
+    public ResponseEntity<List<ActivityDTO>> getTopActivities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        return ResponseEntity.ok(
+                activityService.getTopActivityDtos(page, size)
+        );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activity) {
-        return ResponseEntity.ok(activityService.updateActivity(id, activity));
+    //Recupera le attività più apprezzate per la Home.
+    @GetMapping("/top/cards")
+    public ResponseEntity<List<ActivityHomeDTO>> getTopActivityCards(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        return ResponseEntity.ok(
+                activityService.getTopActivityHomeDtos(page, size)
+        );
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
-        activityService.deleteActivity(id);
-        return ResponseEntity.noContent().build();
+    //Recupera le attività di una determinata categoria.
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ActivityDTO>> getActivitiesByCategory(
+            @PathVariable Activity.Category category
+    ) {
+        return ResponseEntity.ok(
+                activityService.getActivityDtosByCategory(category)
+        );
     }
 }

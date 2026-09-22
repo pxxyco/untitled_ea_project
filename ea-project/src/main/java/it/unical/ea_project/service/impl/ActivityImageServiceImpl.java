@@ -36,6 +36,16 @@ public class ActivityImageServiceImpl implements ActivityImageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<ActivityImage> getImagesByActivityIds(List<Long> activityIds) {
+
+        if (activityIds == null || activityIds.isEmpty()) {
+            return List.of();
+        }
+        return activityImageRepository.findByActivityIds(activityIds);
+    }
+
+    @Override
     @Transactional
     public void deleteImage(Long imageId) {
         activityImageRepository.deleteById(imageId);

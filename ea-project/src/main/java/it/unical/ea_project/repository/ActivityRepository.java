@@ -1,21 +1,26 @@
 package it.unical.ea_project.repository;
 
-
 import it.unical.ea_project.domain.Activity;
 import it.unical.ea_project.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    // trova tutte le attività create da uno specifico utente
     List<Activity> findByCreatedBy(User createdBy);
 
-    // trova le attività in base allo stato
-    List<Activity> findByStatus(Activity.Status status);
+    List<Activity> findByDeletedAtIsNull();
 
-    // trova le attività filtrate per città e categoria
-    List<Activity> findByCityAndCategory(String city, Activity.Category category);
+    Optional<Activity> findByActivityIdAndDeletedAtIsNull(Long activityId);
+
+
+    List<Activity> findByDeletedAtIsNullOrderByAverageRatingDesc(Pageable pageable);
+
+    List<Activity> findByDeletedAtIsNullAndCategory(Activity.Category category);
+
 }
