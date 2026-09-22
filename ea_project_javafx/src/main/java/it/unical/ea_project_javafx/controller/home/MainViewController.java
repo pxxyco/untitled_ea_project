@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -23,8 +24,13 @@ public class MainViewController implements MainNavigator {
     @FXML private SearchBarController searchBarController;
     @FXML private ExperienceListController experienceListController;
 
+    private static final String BACKGROUND_URL =
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"
+                    + "?auto=format&fit=crop&w=1920&q=80";
+
     @FXML
     public void initialize() {
+        loadBackground();
         String savedToken = it.unical.ea_project_javafx.util.TokenStorage.getAccessToken();
 
         if (savedToken != null && !savedToken.isBlank()) {
@@ -52,6 +58,21 @@ public class MainViewController implements MainNavigator {
         if (searchBarController != null && experienceListController != null) {
             searchBarController.setExperienceListController(experienceListController);
         }
+    }
+
+    private void loadBackground() {
+        if (bgImageView == null) {
+            return;
+        }
+        Image background = new Image(
+                BACKGROUND_URL,
+                1920,
+                1080,
+                true,
+                true,
+                true
+        );
+        bgImageView.setImage(background);
     }
 
     private void loadNavbar() {

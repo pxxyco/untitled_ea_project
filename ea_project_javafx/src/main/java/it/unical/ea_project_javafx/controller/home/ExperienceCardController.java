@@ -11,7 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 //Controller della card di ogni esperienza
@@ -27,6 +28,11 @@ public class ExperienceCardController {
     @FXML private Label priceLabel;
     @FXML private ProgressIndicator imageLoader;
 
+
+    private static final double IMAGE_WIDTH = 315;
+    private static final double IMAGE_HEIGHT = 199;
+    private static final Map<String, Image> IMAGE_CACHE =
+            new ConcurrentHashMap<>();
     @FXML
     public void initialize() {
         Rectangle clip = new Rectangle();
@@ -37,36 +43,6 @@ public class ExperienceCardController {
         imageView.setClip(clip);
     }
 
-    public void setData(String title, String location, String category, String price, String rating, String imageUrl) {
-        titleLabel.setText(title);
-        locationLabel.setText(location);
-        categoryLabel.setText(category);
-        priceLabel.setText("da " + price);
-        ratingLabel.setText("⭐ " + rating);
-
-        if (imageUrl != null && !imageUrl.isBlank()) {
-            try {
-                Image image = new Image(imageUrl, true);
-                imageView.setImage(image);
-
-                image.progressProperty().addListener((obs, old, newVal) -> {
-                    if (newVal.doubleValue() >= 1.0) {
-                        hideImageLoader();
-                    }
-                });
-                if (image.isError()) {
-                    hideImageLoader();
-                }
-            } catch (Exception e) {
-                hideImageLoader();
-            }
-        } else {
-            hideImageLoader();
-        }
-
-        cardRoot.setOnMouseClicked(event -> handleCardClick());
-    }
-
     private void hideImageLoader() {
         if (imageLoader != null) {
             imageLoader.setVisible(false);
@@ -74,15 +50,72 @@ public class ExperienceCardController {
         }
     }
 
-    public void setData(ActivityDTO dto) {
-        setData(
-                dto.getTitle() != null ? dto.getTitle() : "Senza Titolo",
-                dto.getCity() != null ? dto.getCity() : "",
-                dto.getCategory() != null ? dto.getCategory() : "Attività",
-                String.format("€%.0f", dto.getPrice() != null ? dto.getPrice() : 0.0),
-                String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0),
-                firstImageUrl(dto.getImages())
-        );
+    public void setData(
+            String title,
+            String location,
+            String category,
+            String price,
+            String rating,
+            String imageUrl
+    ) {
+
+        titleLabel.setText(title);
+        locationLabel.setText(location);
+        categoryLabel.setText(category);
+        priceLabel.setText("da " + price);
+        ratingLabel.setText("⭐ " + rating);
+
+        loadImage(imageUrl);
+
+        cardRoot.setOnMouseClicked(event -> handleCardClick());
+    }
+
+    private void loadImage(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            imageView.setImage(null);
+            hideImageLoader();
+            return;
+        }
+        imageLoader.setVisible(true);
+        imageLoader.setManaged(true);
+        try {
+            Image image = IMAGE_CACHE.get(imageUrl);
+            if (image == null) {
+                image = new Image(
+                        imageUrl,
+                        IMAGE_WIDTH,
+                        IMAGE_HEIGHT,
+                        false,
+                        true,
+                        true
+                );
+                IMAGE_CACHE.put(imageUrl, image);
+            }
+            imageView.setImage(image);
+            if (image.getProgress() >= 1.0) {
+                hideImageLoader();
+            }
+            image.progressProperty().addListener(
+                    (obs, oldValue, newValue) -> {
+
+                        if (newValue.doubleValue() >= 1.0) {
+                            hideImageLoader();
+                        }
+                    }
+            );
+            image.errorProperty().addListener(
+                    (obs, oldValue, hasError) -> {
+
+                        if (hasError) {
+                            IMAGE_CACHE.remove(imageUrl);
+                            hideImageLoader();
+                        }
+                    }
+            );
+        } catch (Exception e) {
+
+            hideImageLoader();
+        }
     }
 
     private String firstImageUrl(List<ActivityImageDTO> images) {
@@ -97,6 +130,7 @@ public class ExperienceCardController {
                 .orElse(null);
     }
 
+    /*
     public void setData(TripDTO dto) {
         String location = "";
         if (dto.getDestinationCity() != null) location += dto.getDestinationCity();
@@ -111,7 +145,7 @@ public class ExperienceCardController {
                 String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating().doubleValue() : 5.0),
                 dto.getCoverPhotoUrl()
         );
-    }
+    }*/
 
     private void handleCardClick() {
         // TODO Logica di navigazione al click sulla card

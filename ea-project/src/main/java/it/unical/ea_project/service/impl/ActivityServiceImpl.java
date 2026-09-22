@@ -1,25 +1,32 @@
 package it.unical.ea_project.service.impl;
 
 import it.unical.ea_project.domain.Activity;
+import it.unical.ea_project.domain.ActivityImage;
 import it.unical.ea_project.domain.User;
+import it.unical.ea_project.dto.ActivityDTO;
+import it.unical.ea_project.dto.ActivityImageDTO;
+import it.unical.ea_project.dto.home.ActivityHomeDTO;
+import it.unical.ea_project.repository.ActivityImageRepository;
 import it.unical.ea_project.repository.ActivityRepository;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.PageRequest;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final ActivityImageRepository activityImageRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -36,34 +43,39 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public Activity createActivity(Activity activity, Long creatorId) {
+    public Activity createActivity(
+            Activity activity,
+            Long creatorId
+    ) {
+
         User creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new RuntimeException("Utente organizzatore non trovato con ID: " + creatorId));
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Utente organizzatore non trovato con ID: "
+                                        + creatorId
+                        )
+                );
+
         activity.setCreatedBy(creator);
+
         return activityRepository.save(activity);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Activity> getActivitiesByCategory(Activity.Category category) {
-        return activityRepository.findByDeletedAtIsNullAndCategory(category);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Activity> getTopActivities(int page,int size) {
-        return activityRepository.findByDeletedAtIsNullOrderByAverageRatingDesc(PageRequest.of(page, size));
-    }
-
-    @Override
     @Transactional
-    public Activity updateActivity(Long id, Activity details) {
-        Optional<Activity> existingOpt = getActivityById(id);
-        if (existingOpt.isEmpty()) {
-            throw new RuntimeException("Attività non trovata con ID: " + id);
-        }
+    public Activity updateActivity(
+            Long id,
+            Activity details
+    ) {
 
-        Activity existing = existingOpt.get();
+        Activity existing =
+                getActivityById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Attività non trovata con ID: " + id
+                                )
+                        );
+
         existing.setTitle(details.getTitle());
         existing.setDescription(details.getDescription());
         existing.setCategory(details.getCategory());
@@ -86,11 +98,264 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public void deleteActivity(Long id) {
+
         Optional<Activity> existingOpt = getActivityById(id);
         if (existingOpt.isPresent()) {
             Activity existing = existingOpt.get();
             existing.setDeletedAt(LocalDateTime.now());
             activityRepository.save(existing);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Activity> getActivitiesByCategory(
+            Activity.Category category
+    ) {
+        return activityRepository
+                .findByDeletedAtIsNullAndCategory(category);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Activity> getTopActivities(
+            int page,
+            int size
+    ) {
+
+        return activityRepository
+                .findByDeletedAtIsNullOrderByAverageRatingDesc(
+                        PageRequest.of(page, size)
+                );
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ActivityDTO> getActivityDtoById(Long id) {
+        Optional<Activity> activity =
+                activityRepository
+                        .findByActivityIdAndDeletedAtIsNull(id);
+        if (activity.isEmpty()) {
+            return Optional.empty();
+        }
+        Activity entity = activity.get();
+        List<ActivityImage> images =
+                activityImageRepository
+                        .findByActivityOrderByOrderIndexAsc(entity);
+        return Optional.of(
+                toDto(entity, images)
+        );
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityDTO> getTopActivityDtos(
+            int page,
+            int size
+    ) {
+        List<Activity> activities =
+                activityRepository
+                        .findByDeletedAtIsNullOrderByAverageRatingDesc(
+                                PageRequest.of(page, size)
+                        );
+        if (activities.isEmpty()) {
+            return List.of();
+        }
+        List<Long> activityIds =
+                activities.stream()
+                        .map(Activity::getActivityId)
+                        .toList();
+        List<ActivityImage> images =
+                activityImageRepository
+                        .findByActivityIds(activityIds);
+        Map<Long, List<ActivityImage>> imagesByActivity =
+                images.stream()
+                        .collect(Collectors.groupingBy(
+                                image ->
+                                        image.getActivity()
+                                                .getActivityId()
+                        ));
+        return activities.stream()
+                .map(activity ->
+                        toDto(
+                                activity,
+                                imagesByActivity.getOrDefault(
+                                        activity.getActivityId(),
+                                        List.of()
+                                )
+                        )
+                )
+                .toList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityDTO> getActivityDtosByCategory(
+            Activity.Category category
+    ) {
+
+        List<Activity> activities =
+                activityRepository
+                        .findByDeletedAtIsNullAndCategory(category);
+
+        if (activities.isEmpty()) {
+            return List.of();
+        }
+        List<Long> activityIds =
+                activities.stream()
+                        .map(Activity::getActivityId)
+                        .toList();
+
+        List<ActivityImage> images =
+                activityImageRepository
+                        .findByActivityIds(activityIds);
+
+        Map<Long, List<ActivityImage>> imagesByActivity =
+                images.stream()
+                        .collect(Collectors.groupingBy(
+                                image ->
+                                        image.getActivity()
+                                                .getActivityId()
+                        ));
+        return activities.stream()
+                .map(activity ->
+                        toDto(
+                                activity,
+                                imagesByActivity.getOrDefault(
+                                        activity.getActivityId(),
+                                        List.of()
+                                )
+                        )
+                )
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityHomeDTO> getTopActivityHomeDtos(
+            int page,
+            int size
+    ) {
+        List<Activity> activities =
+                activityRepository
+                        .findByDeletedAtIsNullOrderByAverageRatingDesc(
+                                PageRequest.of(page, size)
+                        );
+        if (activities.isEmpty()) {
+            return List.of();
+        }
+        List<Long> activityIds =
+                activities.stream()
+                        .map(Activity::getActivityId)
+                        .toList();
+        List<ActivityImage> images =
+                activityImageRepository
+                        .findByActivityIds(activityIds);
+        Map<Long, List<ActivityImage>> imagesByActivity =
+                images.stream()
+                        .collect(Collectors.groupingBy(
+                                image ->
+                                        image.getActivity()
+                                                .getActivityId()
+                        ));
+        return activities.stream()
+                .map(activity ->
+                        toHomeDto(
+                                activity,
+                                imagesByActivity.getOrDefault(
+                                        activity.getActivityId(),
+                                        List.of()
+                                )
+                        )
+                )
+                .toList();
+    }
+
+    private ActivityDTO toDto(
+            Activity activity,
+            List<ActivityImage> images
+    ) {
+
+        List<ActivityImageDTO> imageDtos =
+                images.stream()
+                        .map(img ->
+                                ActivityImageDTO.builder()
+                                        .imageId(img.getImageId())
+                                        .activityId(
+                                                activity.getActivityId()
+                                        )
+                                        .imageUrl(img.getImageUrl())
+                                        .orderIndex(img.getOrderIndex())
+                                        .build()
+                        )
+                        .toList();
+
+        return ActivityDTO.builder()
+                .activityId(activity.getActivityId())
+                .createdByUserId(
+                        activity.getCreatedBy() != null
+                                ? activity.getCreatedBy().getId()
+                                : null
+                )
+                .title(activity.getTitle())
+                .description(activity.getDescription())
+                .category(
+                        activity.getCategory() != null
+                                ? activity.getCategory().name()
+                                : "OTHER"
+                )
+                .latitude(activity.getLatitude())
+                .longitude(activity.getLongitude())
+                .placeName(activity.getPlaceName())
+                .city(activity.getCity())
+                .startDate(activity.getStartDate())
+                .endDate(activity.getEndDate())
+                .durationMinutes(activity.getDurationMinutes())
+                .price(activity.getPrice())
+                .maxSeats(activity.getMaxSeats())
+                .availableSeats(activity.getAvailableSeats())
+                .status(
+                        activity.getStatus() != null
+                                ? activity.getStatus().name()
+                                : null
+                )
+                .averageRating(activity.getAverageRating())
+                .notes(activity.getNotes())
+                .createdAt(activity.getCreatedAt())
+                .updatedAt(activity.getUpdatedAt())
+                .deletedAt(activity.getDeletedAt())
+                .images(imageDtos)
+                .build();
+    }
+
+
+    private ActivityHomeDTO toHomeDto(
+            Activity activity,
+            List<ActivityImage> images
+    ) {
+
+        String imageUrl =
+                images.stream()
+                        .map(ActivityImage::getImageUrl)
+                        .filter(url ->
+                                url != null && !url.isBlank()
+                        )
+                        .findFirst()
+                        .orElse(null);
+
+        return new ActivityHomeDTO(
+                activity.getActivityId(),
+                activity.getTitle(),
+                activity.getCity(),
+                activity.getCategory() != null
+                        ? activity.getCategory().name()
+                        : "OTHER",
+                activity.getPrice(),
+                activity.getAverageRating(),
+                imageUrl
+        );
     }
 }

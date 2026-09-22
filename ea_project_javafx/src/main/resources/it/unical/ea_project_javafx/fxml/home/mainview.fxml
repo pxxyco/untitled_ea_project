@@ -17,11 +17,10 @@
         <URL value="@../../css/home.css" />
     </stylesheets>
 
-    <ImageView fx:id="bgImageView" pickOnBounds="true" preserveRatio="false">
-        <image>
-            <Image url="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1920&amp;q=80" />
-        </image>
-    </ImageView>
+    <ImageView
+            fx:id="bgImageView"
+            pickOnBounds="true"
+            preserveRatio="false"/>
     <Region styleClass="bg-overlay" />
 
     <BorderPane>
