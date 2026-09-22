@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EaProjectApplication<ea-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "it.unical.ea_project.EaProjectApplication",
+            "projectName": "ea-project",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
