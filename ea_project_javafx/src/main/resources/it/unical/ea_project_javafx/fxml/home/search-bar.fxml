@@ -21,7 +21,7 @@
             <VBox minWidth="140.0" styleClass="search-field" HBox.hgrow="ALWAYS">
                 <children>
                     <Label styleClass="field-label" text="DOVE VUOI ANDARE?" />
-                    <TextField promptText="Cerca città o attività..." styleClass="transparent-input" />
+                    <TextField fx:id="searchField" promptText="Cerca città o attività..." styleClass="transparent-input" />
                 </children>
             </VBox>
             <VBox minWidth="130.0" prefHeight="59.0" prefWidth="286.0" styleClass="search-field" HBox.hgrow="NEVER">

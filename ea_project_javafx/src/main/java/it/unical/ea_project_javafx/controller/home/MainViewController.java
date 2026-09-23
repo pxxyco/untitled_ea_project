@@ -25,8 +25,9 @@ public class MainViewController implements MainNavigator {
     @FXML private ExperienceListController experienceListController;
 
     private static final String BACKGROUND_URL =
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"
-                    + "?auto=format&fit=crop&w=1920&q=80";
+            """
+                    https://images.unsplash.com/photo-1464822759023-fed622ff2c3b\
+                    ?auto=format&fit=crop&w=1920&q=80""";
 
     @FXML
     public void initialize() {

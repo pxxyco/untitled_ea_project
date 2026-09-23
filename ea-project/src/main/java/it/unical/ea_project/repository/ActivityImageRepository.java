@@ -20,10 +20,13 @@ public interface ActivityImageRepository extends JpaRepository<ActivityImage, Lo
         SELECT ai
         FROM ActivityImage ai
         WHERE ai.activity.activityId IN :activityIds
-        ORDER BY ai.activity.activityId ASC, ai.orderIndex ASC
-    """)
+        ORDER BY
+            ai.activity.activityId ASC,
+            ai.orderIndex ASC
+        """)
     List<ActivityImage> findByActivityIds(
-            @Param("activityIds") List<Long> activityIds
+            @Param("activityIds")
+            List<Long> activityIds
     );
 
     // rimuove tutte le immagini legate a un'attività

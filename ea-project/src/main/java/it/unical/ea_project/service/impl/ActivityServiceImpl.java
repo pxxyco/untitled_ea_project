@@ -6,6 +6,7 @@ import it.unical.ea_project.domain.User;
 import it.unical.ea_project.dto.ActivityDTO;
 import it.unical.ea_project.dto.ActivityImageDTO;
 import it.unical.ea_project.dto.home.ActivityHomeDTO;
+import it.unical.ea_project.dto.home.ActivitySuggestionDTO;
 import it.unical.ea_project.repository.ActivityImageRepository;
 import it.unical.ea_project.repository.ActivityRepository;
 import it.unical.ea_project.repository.UserRepository;
@@ -43,38 +44,18 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public Activity createActivity(
-            Activity activity,
-            Long creatorId
-    ) {
-
+    public Activity createActivity(Activity activity, Long creatorId) {
         User creator = userRepository.findById(creatorId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Utente organizzatore non trovato con ID: "
-                                        + creatorId
-                        )
-                );
-
+                .orElseThrow(() -> new RuntimeException("Utente organizzatore non trovato con ID: " + creatorId));
         activity.setCreatedBy(creator);
-
         return activityRepository.save(activity);
     }
 
     @Override
     @Transactional
-    public Activity updateActivity(
-            Long id,
-            Activity details
-    ) {
-
-        Activity existing =
-                getActivityById(id)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Attività non trovata con ID: " + id
-                                )
-                        );
+    public Activity updateActivity(Long id, Activity details) {
+        Activity existing = getActivityById(id)
+                .orElseThrow(() -> new RuntimeException("Attività non trovata con ID: " + id));
 
         existing.setTitle(details.getTitle());
         existing.setDescription(details.getDescription());
@@ -98,215 +79,130 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public void deleteActivity(Long id) {
-
-        Optional<Activity> existingOpt = getActivityById(id);
-        if (existingOpt.isPresent()) {
-            Activity existing = existingOpt.get();
-            existing.setDeletedAt(LocalDateTime.now());
-            activityRepository.save(existing);
-        }
+        getActivityById(id).ifPresent(activity -> {
+            activity.setDeletedAt(LocalDateTime.now());
+            activityRepository.save(activity);
+        });
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Activity> getActivitiesByCategory(
-            Activity.Category category
-    ) {
-        return activityRepository
-                .findByDeletedAtIsNullAndCategory(category);
+    public List<Activity> getActivitiesByCategory(Activity.Category category) {
+        return activityRepository.findByDeletedAtIsNullAndCategory(category);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Activity> getTopActivities(
-            int page,
-            int size
-    ) {
-
-        return activityRepository
-                .findByDeletedAtIsNullOrderByAverageRatingDesc(
-                        PageRequest.of(page, size)
-                );
+    public List<Activity> getTopActivities(int page, int size) {
+        return activityRepository.findByDeletedAtIsNullOrderByAverageRatingDesc(PageRequest.of(page, size));
     }
-
 
     @Override
     @Transactional(readOnly = true)
     public Optional<ActivityDTO> getActivityDtoById(Long id) {
-        Optional<Activity> activity =
-                activityRepository
-                        .findByActivityIdAndDeletedAtIsNull(id);
-        if (activity.isEmpty()) {
-            return Optional.empty();
-        }
-        Activity entity = activity.get();
-        List<ActivityImage> images =
-                activityImageRepository
-                        .findByActivityOrderByOrderIndexAsc(entity);
-        return Optional.of(
-                toDto(entity, images)
-        );
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ActivityDTO> getTopActivityDtos(
-            int page,
-            int size
-    ) {
-        List<Activity> activities =
-                activityRepository
-                        .findByDeletedAtIsNullOrderByAverageRatingDesc(
-                                PageRequest.of(page, size)
-                        );
-        if (activities.isEmpty()) {
-            return List.of();
-        }
-        List<Long> activityIds =
-                activities.stream()
-                        .map(Activity::getActivityId)
-                        .toList();
-        List<ActivityImage> images =
-                activityImageRepository
-                        .findByActivityIds(activityIds);
-        Map<Long, List<ActivityImage>> imagesByActivity =
-                images.stream()
-                        .collect(Collectors.groupingBy(
-                                image ->
-                                        image.getActivity()
-                                                .getActivityId()
-                        ));
-        return activities.stream()
-                .map(activity ->
-                        toDto(
-                                activity,
-                                imagesByActivity.getOrDefault(
-                                        activity.getActivityId(),
-                                        List.of()
-                                )
-                        )
-                )
-                .toList();
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ActivityDTO> getActivityDtosByCategory(
-            Activity.Category category
-    ) {
-
-        List<Activity> activities =
-                activityRepository
-                        .findByDeletedAtIsNullAndCategory(category);
-
-        if (activities.isEmpty()) {
-            return List.of();
-        }
-        List<Long> activityIds =
-                activities.stream()
-                        .map(Activity::getActivityId)
-                        .toList();
-
-        List<ActivityImage> images =
-                activityImageRepository
-                        .findByActivityIds(activityIds);
-
-        Map<Long, List<ActivityImage>> imagesByActivity =
-                images.stream()
-                        .collect(Collectors.groupingBy(
-                                image ->
-                                        image.getActivity()
-                                                .getActivityId()
-                        ));
-        return activities.stream()
-                .map(activity ->
-                        toDto(
-                                activity,
-                                imagesByActivity.getOrDefault(
-                                        activity.getActivityId(),
-                                        List.of()
-                                )
-                        )
-                )
-                .toList();
+        return activityRepository.findByActivityIdAndDeletedAtIsNull(id)
+                .map(activity -> {
+                    List<ActivityImage> images = activityImageRepository.findByActivityOrderByOrderIndexAsc(activity);
+                    return toDto(activity, images);
+                });
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ActivityHomeDTO> getTopActivityHomeDtos(
-            int page,
-            int size
-    ) {
-        List<Activity> activities =
-                activityRepository
-                        .findByDeletedAtIsNullOrderByAverageRatingDesc(
-                                PageRequest.of(page, size)
-                        );
-        if (activities.isEmpty()) {
+    public List<ActivityDTO> getTopActivityDtos(int page, int size) {
+        return toActivityDtos(getTopActivities(page, size));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityDTO> getActivityDtosByCategory(Activity.Category category) {
+        return toActivityDtos(getActivitiesByCategory(category));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityHomeDTO> getTopActivityHomeDtos(int page, int size) {
+        return toHomeDtos(getTopActivities(page, size));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivityHomeDTO> searchActivityHomeDtos(String query, Activity.Category category, int page, int size) {
+        String normalizedQuery = query == null ? "" : query.trim();
+        List<Activity> activities = activityRepository.search(normalizedQuery, category, PageRequest.of(page, size));
+        return toHomeDtos(activities);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActivitySuggestionDTO> getSuggestions(String query, int limit) {
+        if (query == null || query.isBlank()) {
             return List.of();
         }
-        List<Long> activityIds =
-                activities.stream()
-                        .map(Activity::getActivityId)
-                        .toList();
-        List<ActivityImage> images =
-                activityImageRepository
-                        .findByActivityIds(activityIds);
-        Map<Long, List<ActivityImage>> imagesByActivity =
-                images.stream()
-                        .collect(Collectors.groupingBy(
-                                image ->
-                                        image.getActivity()
-                                                .getActivityId()
-                        ));
+        return activityRepository.findSuggestions(query.trim(), PageRequest.of(0, limit));
+    }
+
+    private List<ActivityDTO> toActivityDtos(List<Activity> activities) {
+        if (activities == null || activities.isEmpty()) {
+            return List.of();
+        }
+
+        Map<Long, List<ActivityImage>> imagesByActivity = loadImagesByActivity(activities);
+
         return activities.stream()
-                .map(activity ->
-                        toHomeDto(
-                                activity,
-                                imagesByActivity.getOrDefault(
-                                        activity.getActivityId(),
-                                        List.of()
-                                )
-                        )
-                )
+                .map(activity -> toDto(
+                        activity,
+                        imagesByActivity.getOrDefault(activity.getActivityId(), List.of())
+                ))
                 .toList();
     }
 
-    private ActivityDTO toDto(
-            Activity activity,
-            List<ActivityImage> images
-    ) {
+    private List<ActivityHomeDTO> toHomeDtos(List<Activity> activities) {
+        if (activities == null || activities.isEmpty()) {
+            return List.of();
+        }
 
-        List<ActivityImageDTO> imageDtos =
-                images.stream()
-                        .map(img ->
-                                ActivityImageDTO.builder()
-                                        .imageId(img.getImageId())
-                                        .activityId(
-                                                activity.getActivityId()
-                                        )
-                                        .imageUrl(img.getImageUrl())
-                                        .orderIndex(img.getOrderIndex())
-                                        .build()
-                        )
-                        .toList();
+        Map<Long, List<ActivityImage>> imagesByActivity = loadImagesByActivity(activities);
+
+        return activities.stream()
+                .map(activity -> toHomeDto(
+                        activity,
+                        imagesByActivity.getOrDefault(activity.getActivityId(), List.of())
+                ))
+                .toList();
+    }
+
+    private Map<Long, List<ActivityImage>> loadImagesByActivity(List<Activity> activities) {
+        List<Long> activityIds = activities.stream()
+                .map(Activity::getActivityId)
+                .toList();
+
+        if (activityIds.isEmpty()) {
+            return Map.of();
+        }
+
+        List<ActivityImage> images = activityImageRepository.findByActivityIds(activityIds);
+
+        return images.stream()
+                .collect(Collectors.groupingBy(image -> image.getActivity().getActivityId()));
+    }
+
+    private ActivityDTO toDto(Activity activity, List<ActivityImage> images) {
+        List<ActivityImageDTO> imageDtos = images.stream()
+                .map(img -> ActivityImageDTO.builder()
+                        .imageId(img.getImageId())
+                        .activityId(activity.getActivityId())
+                        .imageUrl(img.getImageUrl())
+                        .orderIndex(img.getOrderIndex())
+                        .build())
+                .toList();
 
         return ActivityDTO.builder()
                 .activityId(activity.getActivityId())
-                .createdByUserId(
-                        activity.getCreatedBy() != null
-                                ? activity.getCreatedBy().getId()
-                                : null
-                )
+                .createdByUserId(activity.getCreatedBy() != null ? activity.getCreatedBy().getId() : null)
                 .title(activity.getTitle())
                 .description(activity.getDescription())
-                .category(
-                        activity.getCategory() != null
-                                ? activity.getCategory().name()
-                                : "OTHER"
-                )
+                .category(activity.getCategory() != null ? activity.getCategory().name() : "OTHER")
                 .latitude(activity.getLatitude())
                 .longitude(activity.getLongitude())
                 .placeName(activity.getPlaceName())
@@ -317,11 +213,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .price(activity.getPrice())
                 .maxSeats(activity.getMaxSeats())
                 .availableSeats(activity.getAvailableSeats())
-                .status(
-                        activity.getStatus() != null
-                                ? activity.getStatus().name()
-                                : null
-                )
+                .status(activity.getStatus() != null ? activity.getStatus().name() : null)
                 .averageRating(activity.getAverageRating())
                 .notes(activity.getNotes())
                 .createdAt(activity.getCreatedAt())
@@ -331,31 +223,22 @@ public class ActivityServiceImpl implements ActivityService {
                 .build();
     }
 
-
-    private ActivityHomeDTO toHomeDto(
-            Activity activity,
-            List<ActivityImage> images
-    ) {
-
-        String imageUrl =
-                images.stream()
-                        .map(ActivityImage::getImageUrl)
-                        .filter(url ->
-                                url != null && !url.isBlank()
-                        )
-                        .findFirst()
-                        .orElse(null);
+    private ActivityHomeDTO toHomeDto(Activity activity, List<ActivityImage> images) {
+        String imageUrl = images.stream()
+                .map(ActivityImage::getImageUrl)
+                .filter(url -> url != null && !url.isBlank())
+                .findFirst()
+                .orElse(null);
 
         return new ActivityHomeDTO(
                 activity.getActivityId(),
                 activity.getTitle(),
                 activity.getCity(),
-                activity.getCategory() != null
-                        ? activity.getCategory().name()
-                        : "OTHER",
+                activity.getCategory() != null ? activity.getCategory().name() : "OTHER",
                 activity.getPrice(),
                 activity.getAverageRating(),
                 imageUrl
         );
     }
 }
+
