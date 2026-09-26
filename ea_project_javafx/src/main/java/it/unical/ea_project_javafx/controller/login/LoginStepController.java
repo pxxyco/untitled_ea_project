@@ -137,4 +137,10 @@ public class LoginStepController {
         clearError();
         navigator.goToRoleStep();
     }
+
+    @FXML
+    void goToForgotPassword(ActionEvent event) {
+        clearError();
+        navigator.goToForgotPasswordStep();
+    }
 }

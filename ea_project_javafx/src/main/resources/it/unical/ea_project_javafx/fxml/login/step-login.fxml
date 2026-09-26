@@ -32,7 +32,7 @@
         <children>
             <CheckBox fx:id="rememberMeCheckBox" styleClass="custom-checkbox" text="Ricordami" />
             <Region HBox.hgrow="ALWAYS" />
-            <Hyperlink styleClass="custom-link" text="Password dimenticata?" />
+            <Hyperlink onAction="#goToForgotPassword" styleClass="custom-link" text="Password dimenticata?" />
         </children>
     </HBox>
 

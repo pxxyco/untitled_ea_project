@@ -18,8 +18,8 @@
 }
 
 .auth-card {
-    -fx-background-color: rgba(15, 23, 42, 0.6);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(28, 28, 27, 0.78);
+    -fx-border-color: rgba(231, 229, 228, 0.24);
     -fx-border-radius: 16px;
     -fx-background-radius: 16px;
     -fx-padding: 36px 32px;
@@ -39,8 +39,8 @@
 }
 
 .custom-input {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-background-color: rgba(231, 229, 228, 0.08);
+    -fx-border-color: rgba(231, 229, 228, 0.28);
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
     -fx-text-fill: white;
@@ -49,8 +49,8 @@
 }
 
 .custom-input:focused {
-    -fx-border-color: #3b82f6;
-    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: #a8a29e;
+    -fx-background-color: rgba(231, 229, 228, 0.14);
 }
 
 .date-picker.custom-input {
@@ -83,6 +83,19 @@
     -fx-text-fill: rgba(255, 255, 255, 0.8);
 }
 
+.message-error, .message-success {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.message-error {
+    -fx-text-fill: #ef4444;
+}
+
+.message-success {
+    -fx-text-fill: #22c55e;
+}
+
 .btn-submit {
     -fx-background-color: white;
     -fx-text-fill: #111827;
@@ -111,8 +124,8 @@
 }
 
 .role-card {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(231, 229, 228, 0.08);
+    -fx-border-color: rgba(231, 229, 228, 0.22);
     -fx-border-width: 2px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
@@ -121,8 +134,8 @@
 }
 
 .role-card:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.25);
-    -fx-border-color: white;
+    -fx-background-color: rgba(231, 229, 228, 0.18);
+    -fx-border-color: #e7e5e4;
 }
 
 .role-icon {
@@ -142,14 +155,14 @@
 
 
 .loading-overlay {
-    -fx-background-color: rgba(15, 23, 42, 0.85);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(28, 28, 27, 0.94);
+    -fx-border-color: rgba(231, 229, 228, 0.26);
     -fx-border-radius: 16px;
     -fx-background-radius: 16px;
 }
 
 .loading-overlay .progress-indicator {
-    -fx-progress-color: #3b82f6;
+    -fx-progress-color: #d6d3d1;
 }
 
 .loading-label {

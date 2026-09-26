@@ -24,7 +24,7 @@
 }
 
 .btn-splash {
-    -fx-background-color: #38bdf8;
+    -fx-background-color: #e7e5e4;
     -fx-text-fill: #0b1628;
     -fx-font-weight: bold;
     -fx-font-size: 15px;
@@ -39,7 +39,7 @@
 }
 
 .progress-indicator {
-    -fx-progress-color: #38bdf8;
+    -fx-progress-color: #d6d3d1;
 }
 
 .splash-progress .percentage {
@@ -51,5 +51,5 @@
 }
 
 .splash-progress .spinner {
-    -fx-progress-color: #3b82f6;
+    -fx-progress-color: #a8a29e;
 }

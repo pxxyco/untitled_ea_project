@@ -18,6 +18,7 @@
                 <Separator orientation="VERTICAL" styleClass="nav-divider" />
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="nav-links">
                     <children>
+                        <Label onMouseClicked="#handleHome" styleClass="nav-item" text="Home" />
                         <Label onMouseClicked="#handleExperiences" styleClass="nav-item" text="Esperienze" />
                         <Label onMouseClicked="#handleItinerari" styleClass="nav-item" text="Itinerari Pubblici" />
                     </children>

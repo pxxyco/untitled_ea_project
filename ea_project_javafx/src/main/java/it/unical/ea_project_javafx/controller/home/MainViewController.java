@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -29,6 +30,8 @@ public class MainViewController implements MainNavigator {
     @FXML
     public void initialize() {
 
+        bgImageView.setEffect(new GaussianBlur(18));
+
         loadBackground();
         
         String savedToken = it.unical.ea_project_javafx.util.TokenStorage.getAccessToken();
@@ -44,6 +47,7 @@ public class MainViewController implements MainNavigator {
                     it.unical.ea_project_javafx.dto.UserDTO restoredUser = it.unical.ea_project_javafx.dto.UserDTO.builder()
                             .email(email)
                             .username(email.split("@")[0])
+                            .role(it.unical.ea_project_javafx.util.JwtUtils.extractRole(savedToken))
                             .build();
                     UserSession.getInstance().setSession(restoredUser);
                 }
@@ -126,6 +130,11 @@ public class MainViewController implements MainNavigator {
 
     }
 
+
+    @Override
+    public void goToHome(Node sourceNode) {
+        SceneNavigator.getInstance().goToHome("/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
+    }
 
     @Override
     public void goToLogin(Node sourceNode) {

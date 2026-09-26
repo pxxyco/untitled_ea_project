@@ -22,6 +22,25 @@ public class JwtUtils {
         return null;
     }
 
+    public static String extractRole(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length > 1) {
+                String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]));
+                String marker = "\"role\":\"";
+                int start = payloadJson.indexOf(marker);
+                if (start >= 0) {
+                    start += marker.length();
+                    int end = payloadJson.indexOf("\"", start);
+                    return end >= 0 ? payloadJson.substring(start, end) : null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static boolean isExpired(String token) {
         try {
             String[] parts = token.split("\\.");

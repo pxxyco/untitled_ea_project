@@ -33,6 +33,7 @@
     <VBox alignment="CENTER" maxWidth="420.0" maxHeight="-Infinity" styleClass="auth-card">
         <StackPane>
             <fx:include fx:id="stepLogin" source="step-login.fxml" />
+            <fx:include fx:id="stepForgotPassword" source="step-forgot-password.fxml" />
             <fx:include fx:id="stepRole" source="step-role.fxml" />
             <fx:include fx:id="stepDetails" source="step-details.fxml" />
             <fx:include fx:id="loadingOverlay" source="loading-overlay.fxml" />

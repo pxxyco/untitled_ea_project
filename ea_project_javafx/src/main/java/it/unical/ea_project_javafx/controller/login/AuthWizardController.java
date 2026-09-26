@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -15,15 +16,17 @@ import javafx.scene.layout.VBox;
 public class AuthWizardController implements StepNavigator {
 
     @FXML private ImageView bgImageView;
-    @FXML private VBox stepLogin, stepRole, stepDetails, loadingOverlay;
+    @FXML private VBox stepLogin, stepForgotPassword, stepRole, stepDetails, loadingOverlay;
 
     @FXML private LoginStepController stepLoginController;
+    @FXML private ForgotPasswordController stepForgotPasswordController;
     @FXML private RoleSelectionStepController stepRoleController;
     @FXML private RegistrationStepController stepDetailsController;
 
 
     @FXML
     public void initialize() {
+        bgImageView.setEffect(new GaussianBlur(18));
         loadBackground();
 
         if (bgImageView != null && bgImageView.getParent() instanceof StackPane parentPane) {
@@ -32,6 +35,7 @@ public class AuthWizardController implements StepNavigator {
         }
 
         stepLoginController.setNavigator(this);
+        stepForgotPasswordController.setNavigator(this);
         stepRoleController.setNavigator(this);
         stepDetailsController.setNavigator(this);
 
@@ -59,6 +63,11 @@ public class AuthWizardController implements StepNavigator {
     @Override public void goToLoginStep() {
         stepLoginController.clearError();
         showStep(stepLogin);
+    }
+
+    @Override public void goToForgotPasswordStep() {
+        stepForgotPasswordController.clearMessage();
+        showStep(stepForgotPassword);
     }
 
     @Override public void goToRoleStep() {
@@ -94,6 +103,8 @@ public class AuthWizardController implements StepNavigator {
     public void showErrorMessage(String message) {
         if (stepLogin.isVisible()) {
             stepLoginController.showError(message);
+        } else if (stepForgotPassword.isVisible()) {
+            stepForgotPasswordController.showError(message);
         } else if (stepDetails.isVisible()) {
             stepDetailsController.showError(message);
         }
@@ -101,6 +112,7 @@ public class AuthWizardController implements StepNavigator {
 
     private void showStep(VBox stepToShow) {
         stepLogin.setVisible(false);   stepLogin.setManaged(false);
+        stepForgotPassword.setVisible(false); stepForgotPassword.setManaged(false);
         stepRole.setVisible(false);    stepRole.setManaged(false);
         stepDetails.setVisible(false); stepDetails.setManaged(false);
         stepToShow.setVisible(true);   stepToShow.setManaged(true);

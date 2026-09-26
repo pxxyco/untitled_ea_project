@@ -26,6 +26,13 @@ public class NavbarController {
     }
 
     @FXML
+    void handleHome(MouseEvent event) {
+        if (navigator != null) {
+            navigator.goToHome((Node) event.getSource());
+        }
+    }
+
+    @FXML
     void handleLogin(MouseEvent event) {
         if (navigator != null) {
             navigator.goToLogin((Node) event.getSource());
