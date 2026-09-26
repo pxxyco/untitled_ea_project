@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializer;
 import it.unical.ea_project_javafx.dto.UserDTO;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
+import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -139,7 +140,8 @@ public class RegistrationStepController {
                     }
                 }),
                 () -> Platform.runLater(() -> {
-                    it.unical.ea_project_javafx.util.ViewNavigator.loadScene(btnRegister, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+                    //it.unical.ea_project_javafx.util.ViewNavigator.loadScene(btnRegister, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+                    SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/pre-main.fxml");
                 }),
                 navigator::setLoading
         );

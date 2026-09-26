@@ -2,12 +2,19 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="navbar" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.NavbarController">
+<BorderPane styleClass="navbar" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.home.NavbarController">
     <left>
         <HBox alignment="CENTER_LEFT" spacing="16.0">
             <children>
+                <ImageView fitHeight="32.0" fitWidth="32.0" preserveRatio="true" styleClass="nav-logo">
+                    <image>
+                        <Image url="@../../images/logo_448x448.png" />
+                    </image>
+                </ImageView>
                 <Separator orientation="VERTICAL" styleClass="nav-divider" />
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="nav-links">
                     <children>

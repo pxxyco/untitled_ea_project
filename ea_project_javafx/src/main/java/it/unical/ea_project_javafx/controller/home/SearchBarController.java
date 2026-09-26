@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-//logica barra di ricerca
+// Logica della Search Bar
 public class SearchBarController {
 
     @FXML private ComboBox<String> categoryComboBox;
@@ -28,8 +28,7 @@ public class SearchBarController {
         }
     }
 
-    void createCombobox()
-    {
+    void createCombobox() {
         boolean isLoggedIn = UserSession.getInstance().isLoggedIn();
 
         if (categoryComboBox != null && isLoggedIn) {
@@ -38,9 +37,7 @@ public class SearchBarController {
                     "Viaggi", "Viaggi Prenotati");
             categoryComboBox.setItems(categories);
             categoryComboBox.getSelectionModel().selectFirst();
-        }
-        else if (categoryComboBox != null)
-        {
+        } else if (categoryComboBox != null) {
             ObservableList<String> categories = FXCollections.observableArrayList(
                     "Tutto", "Attività",
                     "Viaggi");
@@ -53,6 +50,5 @@ public class SearchBarController {
     void handleSearch(ActionEvent event) {
         String selectedCategory = categoryComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
-
     }
 }

@@ -1,9 +1,10 @@
 package it.unical.ea_project_javafx.controller.home;
 
-import it.unical.ea_project_javafx.controller.NavbarController;
 import it.unical.ea_project_javafx.model.MainNavigator;
 import it.unical.ea_project_javafx.model.UserSession;
-import it.unical.ea_project_javafx.util.ViewNavigator;
+import it.unical.ea_project_javafx.util.WallpaperService;
+import it.unical.ea_project_javafx.util.SceneNavigator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,7 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-//schermata home (navbar, search bar, cards)
+
+// Schermata home (Navbar, Search bar, Cards)
 public class MainViewController implements MainNavigator {
 
     @FXML private ImageView bgImageView;
@@ -24,13 +26,11 @@ public class MainViewController implements MainNavigator {
     @FXML private SearchBarController searchBarController;
     @FXML private ExperienceListController experienceListController;
 
-    private static final String BACKGROUND_URL =
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"
-                    + "?auto=format&fit=crop&w=1920&q=80";
-
     @FXML
     public void initialize() {
+
         loadBackground();
+        
         String savedToken = it.unical.ea_project_javafx.util.TokenStorage.getAccessToken();
 
         if (savedToken != null && !savedToken.isBlank()) {
@@ -58,33 +58,45 @@ public class MainViewController implements MainNavigator {
         if (searchBarController != null && experienceListController != null) {
             searchBarController.setExperienceListController(experienceListController);
         }
+
     }
 
     private void loadBackground() {
+
         if (bgImageView == null) {
             return;
         }
-        Image background = new Image(
-                BACKGROUND_URL,
-                1920,
-                1080,
-                true,
-                true,
-                true
-        );
-        bgImageView.setImage(background);
+
+        new Thread(() -> {
+            String imageUrl = WallpaperService.getDailyWallpaperUrl();
+
+            // L'aggiornamento dei componenti FXML deve avvenire sempre sul thread JavaFX
+            Platform.runLater(() -> {
+                Image background = new Image(
+                        imageUrl,
+                        1920,
+                        1080,
+                        true,
+                        true,
+                        true
+                );
+                bgImageView.setImage(background);
+            });
+        }).start();
+
     }
 
     private void loadNavbar() {
+
         if (navbarContainer == null) return;
         try {
             boolean isLoggedIn = UserSession.getInstance().isLoggedIn();
 
             String fxmlFile;
             if (isLoggedIn) {
-                fxmlFile = "/it/unical/ea_project_javafx/fxml/navbar-logged-in.fxml";
+                fxmlFile = "/it/unical/ea_project_javafx/fxml/home/navbar-logged-in.fxml";
             } else {
-                fxmlFile = "/it/unical/ea_project_javafx/fxml/navbar-logged-out.fxml";
+                fxmlFile = "/it/unical/ea_project_javafx/fxml/home/navbar-logged-out.fxml";
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -99,9 +111,11 @@ public class MainViewController implements MainNavigator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void setupBackgroundResize() {
+
         if (bgImageView == null) return;
         bgImageView.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null && bgImageView.getParent() instanceof StackPane parentPane) {
@@ -109,26 +123,27 @@ public class MainViewController implements MainNavigator {
                 bgImageView.fitHeightProperty().bind(parentPane.heightProperty());
             }
         });
+
     }
 
 
     @Override
     public void goToLogin(Node sourceNode) {
-        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/login/login.fxml");
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/login/login.fxml");
     }
 
     @Override
     public void goToExperiences(Node sourceNode) {
-        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/experiences.fxml");
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/experiences.fxml");
     }
 
     @Override
     public void goToItinerari(Node sourceNode) {
-        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/itinerari.fxml");
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/itinerari.fxml");
     }
 
     @Override
     public void goToProfile(Node sourceNode) {
-        ViewNavigator.switchScene(sourceNode, "/it/unical/ea_project_javafx/fxml/profile.fxml");
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/profile/profile.fxml");
     }
 }

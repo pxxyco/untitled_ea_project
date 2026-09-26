@@ -36,14 +36,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<User> login(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
+    public Optional<User> login(String identifier, String password) {
+        String normalizedIdentifier = identifier == null ? "" : identifier.trim();
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(normalizedIdentifier);
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByUsernameIgnoreCase(normalizedIdentifier);
+        }
 
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getHashedPassword())) {
-            loginAttemptService.loginSucceeded(email);
+            loginAttemptService.loginSucceeded(normalizedIdentifier);
             return userOpt;
         } else {
-            loginAttemptService.loginFailed(email);
+            loginAttemptService.loginFailed(normalizedIdentifier);
             return Optional.empty();
         }
     }

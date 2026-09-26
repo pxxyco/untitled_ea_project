@@ -1,33 +1,29 @@
 package it.unical.ea_project_javafx;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
+
+import it.unical.ea_project_javafx.util.AppConfig;
+import it.unical.ea_project_javafx.util.SceneNavigator;
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("EA Project");
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/pre-main.fxml")));
-        Scene splashScene = new Scene(root, 1280, 720);
-        splashScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
+        stage.getIcons().add(AppConfig.APP_ICON);
+        stage.setTitle(AppConfig.APP_TITLE);
+        stage.setMinWidth(AppConfig.MIN_WINDOW_WIDTH);
+        stage.setMinHeight(AppConfig.MIN_WINDOW_HEIGHT);
 
-        stage.setScene(splashScene);
-        stage.setMinWidth(1280);
-        stage.setMinHeight(720);
+        SceneNavigator.getInstance().init(stage);
+
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/SplashScreen.fxml");
+
         stage.show();
-    }
 
-    public static void setRoot(String fxml) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("fxml/" + fxml + ".fxml")));
-        scene.setRoot(root);
     }
 
     public static void main(String[] args) {

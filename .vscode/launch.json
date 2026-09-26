@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "it.unical.ea_project_javafx/it.unical.ea_project_javafx.App",
+            "projectName": "ea_project_javafx"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-EaProjectApplication<ea-project>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

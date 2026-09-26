@@ -69,7 +69,7 @@ public class LoginStepController {
     void handleLoginSubmit(ActionEvent event) {
         clearError();
         String identifier = loginUsernameField.getText().trim();
-        String password = loginPasswordField.getText().trim();
+        String password = loginPasswordField.getText();
 
         if (identifier.isEmpty() || password.isEmpty()) {
             showError("Inserisci email o username e password.");

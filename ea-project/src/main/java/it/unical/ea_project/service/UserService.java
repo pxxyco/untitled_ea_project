@@ -9,6 +9,6 @@ public interface UserService {
     List<User> getAllUsers();
     Optional<User> getUserById(Long id);
 
-    Optional<User> login(String email, String password);
+    Optional<User> login(String identifier, String password);
     User registerUser(User user);
 }

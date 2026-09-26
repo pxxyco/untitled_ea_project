@@ -4,7 +4,7 @@ import java.util.Base64;
 
 public class JwtUtils {
 
-    // Estrae  email dal JWT
+    // Estrae email dal JWT
     public static String extractEmail(String token) {
         try {
             String[] parts = token.split("\\.");

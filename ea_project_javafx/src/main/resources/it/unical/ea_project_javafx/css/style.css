@@ -29,9 +29,10 @@
     -fx-border-width: 0 0 1 0;
 }
 
-.brand-logo {
-    -fx-font-size: 22px;
-    -fx-cursor: hand;
+.nav-logo {
+    -fx-fit-width: 32px;
+    -fx-fit-height: 32px;
+    -fx-preserve-ratio: true;
 }
 
 .nav-divider {

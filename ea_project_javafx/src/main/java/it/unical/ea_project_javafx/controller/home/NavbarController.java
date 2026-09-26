@@ -1,8 +1,8 @@
-package it.unical.ea_project_javafx.controller;
+package it.unical.ea_project_javafx.controller.home;
 
 import it.unical.ea_project_javafx.model.MainNavigator;
 import it.unical.ea_project_javafx.model.UserSession;
-import it.unical.ea_project_javafx.util.ViewNavigator;
+import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -60,7 +60,7 @@ public class NavbarController {
         it.unical.ea_project_javafx.util.TokenStorage.clear();
 
         if (userMenuButton != null) {
-            ViewNavigator.loadScene(userMenuButton, "/it/unical/ea_project_javafx/fxml/pre-main.fxml", false);
+            SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
         }
     }
 }

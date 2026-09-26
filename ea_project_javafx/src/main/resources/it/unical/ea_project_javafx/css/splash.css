@@ -1,0 +1,55 @@
+.splash-pane {
+    -fx-background-color: #0b1628;
+}
+
+.splash-content {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+}
+
+.splash-logo {
+    -fx-font-size: 40px;
+}
+
+.splash-title-label {
+    -fx-text-fill: #ffffffe6;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.splash-label {
+    -fx-text-fill: #ffffffe6;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.btn-splash {
+    -fx-background-color: #38bdf8;
+    -fx-text-fill: #0b1628;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 24px;
+    -fx-cursor: hand;
+}
+
+.btn-splash:hover {
+    -fx-background-color: #0284c7;
+    -fx-text-fill: #ffffff;
+}
+
+.progress-indicator {
+    -fx-progress-color: #38bdf8;
+}
+
+.splash-progress .percentage {
+    -fx-fill: transparent;
+}
+
+.splash-progress > .indicator {
+    -fx-background-color: transparent;
+}
+
+.splash-progress .spinner {
+    -fx-progress-color: #3b82f6;
+}

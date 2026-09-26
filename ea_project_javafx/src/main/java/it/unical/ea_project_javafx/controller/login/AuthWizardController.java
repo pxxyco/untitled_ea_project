@@ -1,10 +1,12 @@
 package it.unical.ea_project_javafx.controller.login;
 
 import it.unical.ea_project_javafx.model.StepNavigator;
-import it.unical.ea_project_javafx.util.ViewNavigator;
+import it.unical.ea_project_javafx.util.SceneNavigator;
+import it.unical.ea_project_javafx.util.WallpaperService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +24,8 @@ public class AuthWizardController implements StepNavigator {
 
     @FXML
     public void initialize() {
+        loadBackground();
+
         if (bgImageView != null && bgImageView.getParent() instanceof StackPane parentPane) {
             bgImageView.fitWidthProperty().bind(parentPane.widthProperty());
             bgImageView.fitHeightProperty().bind(parentPane.heightProperty());
@@ -32,6 +36,24 @@ public class AuthWizardController implements StepNavigator {
         stepDetailsController.setNavigator(this);
 
         goToLoginStep();
+    }
+
+    private void loadBackground() {
+        if (bgImageView == null) {
+            return;
+        }
+
+        new Thread(() -> {
+            String imageUrl = WallpaperService.getDailyWallpaperUrl();
+            Platform.runLater(() -> bgImageView.setImage(new Image(
+                    imageUrl,
+                    1920,
+                    1080,
+                    true,
+                    true,
+                    true
+            )));
+        }).start();
     }
 
     @Override public void goToLoginStep() {
@@ -52,7 +74,8 @@ public class AuthWizardController implements StepNavigator {
 
     @Override
     public void goToHome(ActionEvent event) {
-        ViewNavigator.switchScene((Node) event.getSource(), "/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
+        //ViewNavigator.switchScene((Node) event.getSource(), "/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/home/mainview.fxml");
     }
 
     @FXML
