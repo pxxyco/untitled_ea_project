@@ -16,12 +16,14 @@ import javafx.scene.layout.VBox;
 public class AuthWizardController implements StepNavigator {
 
     @FXML private ImageView bgImageView;
-    @FXML private VBox stepLogin, stepForgotPassword, stepRole, stepDetails, loadingOverlay;
+    @FXML private VBox authCard;
+    @FXML private VBox stepLogin, stepForgotPassword, stepRole, stepDetails, loadingOverlay, feedbackOverlay;
 
     @FXML private LoginStepController stepLoginController;
     @FXML private ForgotPasswordController stepForgotPasswordController;
     @FXML private RoleSelectionStepController stepRoleController;
     @FXML private RegistrationStepController stepDetailsController;
+    @FXML private FeedbackOverlayController feedbackOverlayController;
 
 
     @FXML
@@ -38,6 +40,7 @@ public class AuthWizardController implements StepNavigator {
         stepForgotPasswordController.setNavigator(this);
         stepRoleController.setNavigator(this);
         stepDetailsController.setNavigator(this);
+        feedbackOverlayController.setNavigator(this);
 
         goToLoginStep();
     }
@@ -97,6 +100,21 @@ public class AuthWizardController implements StepNavigator {
     public void setLoading(boolean loading) {
         loadingOverlay.setVisible(loading);
         loadingOverlay.setManaged(loading);
+        if (loading) {
+            feedbackOverlay.setVisible(false);
+            feedbackOverlay.setManaged(false);
+        }
+    }
+
+    @Override
+    public void showSuccessMessage(String message) {
+        authCard.setVisible(false);
+        authCard.setManaged(false);
+        loadingOverlay.setVisible(false);
+        loadingOverlay.setManaged(false);
+        feedbackOverlayController.showSuccess(message);
+        feedbackOverlay.setVisible(true);
+        feedbackOverlay.setManaged(true);
     }
 
     @Override
@@ -111,10 +129,14 @@ public class AuthWizardController implements StepNavigator {
     }
 
     private void showStep(VBox stepToShow) {
+        authCard.setVisible(true);
+        authCard.setManaged(true);
         stepLogin.setVisible(false);   stepLogin.setManaged(false);
         stepForgotPassword.setVisible(false); stepForgotPassword.setManaged(false);
         stepRole.setVisible(false);    stepRole.setManaged(false);
         stepDetails.setVisible(false); stepDetails.setManaged(false);
+        loadingOverlay.setVisible(false); loadingOverlay.setManaged(false);
+        feedbackOverlay.setVisible(false); feedbackOverlay.setManaged(false);
         stepToShow.setVisible(true);   stepToShow.setManaged(true);
     }
 

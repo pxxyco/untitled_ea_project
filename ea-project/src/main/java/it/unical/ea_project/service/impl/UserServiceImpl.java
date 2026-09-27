@@ -4,6 +4,7 @@ import it.unical.ea_project.domain.User;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.LoginAttemptService;
 import it.unical.ea_project.service.UserService;
+import it.unical.ea_project.security.PasswordPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,6 +62,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User registerUser(User user) {
+        PasswordPolicy.validate(user.getHashedPassword())
+                .ifPresent(message -> {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+                });
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username già in uso.");
         }

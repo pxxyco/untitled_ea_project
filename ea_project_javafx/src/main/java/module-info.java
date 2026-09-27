@@ -1,4 +1,5 @@
 module it.unical.ea_project_javafx {
+
     requires transitive javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
@@ -21,4 +22,5 @@ module it.unical.ea_project_javafx {
     
     opens it.unical.ea_project_javafx.dto to com.google.gson;
     opens it.unical.ea_project_javafx.dto.home to com.google.gson;
+
 }

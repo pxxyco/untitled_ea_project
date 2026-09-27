@@ -9,6 +9,7 @@ public interface StepNavigator {
     void goToDetailsStep(String selectedRole);
     void goToHome(ActionEvent event);
     void setLoading(boolean loading);
+    void showSuccessMessage(String message);
 
     void showErrorMessage(String message);
 }

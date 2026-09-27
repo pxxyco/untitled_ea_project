@@ -170,3 +170,62 @@
     -fx-font-size: 14px;
     -fx-text-fill: white;
 }
+
+.feedback-overlay {
+    -fx-background-color: rgba(24, 24, 24, 0.9);
+    -fx-border-color: rgba(231, 229, 228, 0.2);
+    -fx-border-width: 1px;
+    -fx-border-radius: 18px;
+    -fx-background-radius: 18px;
+    -fx-padding: 22px 20px;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.42), 22, 0.2, 0, 10);
+    -fx-max-width: 360px;
+    -fx-pref-width: 360px;
+    -fx-pref-height: 200px;
+    -fx-min-height: 180px;
+    -fx-max-height: 220px;
+}
+
+.feedback-icon {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e7e5e4;
+    -fx-padding: 0 0 4 0;
+}
+
+.feedback-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.feedback-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-max-width: 280px;
+}
+
+.feedback-button {
+    -fx-background-color: rgba(231, 229, 228, 0.96);
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 22px;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-cursor: hand;
+}
+
+.feedback-button:hover {
+    -fx-background-color: white;
+}
+
+.password-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(231, 229, 228, 0.65);
+    -fx-wrap-text: true;
+}

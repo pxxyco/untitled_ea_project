@@ -42,6 +42,7 @@
         <VBox spacing="4.0">
             <Label styleClass="input-label" text="Password" />
             <PasswordField fx:id="regPasswordField" promptText="Enter your password" styleClass="custom-input" />
+                <Label styleClass="password-hint" text="Minimo 8 caratteri, una lettera, un numero e un carattere speciale." wrapText="true" />
         </VBox>
 
         <VBox spacing="4.0">

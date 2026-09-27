@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializer;
 import it.unical.ea_project_javafx.dto.UserDTO;
 import it.unical.ea_project_javafx.model.StepNavigator;
 import it.unical.ea_project_javafx.util.ApiService;
+import it.unical.ea_project_javafx.util.PasswordPolicy;
 import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -87,16 +88,16 @@ public class RegistrationStepController {
         String lastName = regLastNameField.getText().trim();
         String username = regUsernameField.getText().trim();
         String email = regEmailField.getText().trim();
-        String password = regPasswordField.getText().trim();
-        String confirmPassword = regConfirmPasswordField.getText().trim();
+        String password = regPasswordField.getText();
+        String confirmPassword = regConfirmPasswordField.getText();
 
         if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || email.isEmpty() || password.isEmpty() || !password.equals(confirmPassword)) {
             showError("Verifica che tutti i campi siano compilati e che le password coincidano.");
             return;
         }
-        if (password.length() < 8) {
-            showError("La password deve contenere almeno 8 caratteri.");
+        if (!PasswordPolicy.isValid(password)) {
+            showError("La password deve contenere almeno 8 caratteri, una lettera, un numero e un carattere speciale.");
             return;
         }
         if (!email.contains("@")) {
@@ -132,9 +133,11 @@ public class RegistrationStepController {
                 res -> Platform.runLater(() -> {
                     if (res.statusCode() == 200 || res.statusCode() == 201) {
                         clearFields();
-                        navigator.goToLoginStep();
+                        navigator.showSuccessMessage("Profilo creato con successo. Puoi accedere al tuo account.");
                     } else if (res.statusCode() == 409) {
                         showError("Username o Email già registrati.");
+                    } else if (res.statusCode() == 400) {
+                        showError("La password non rispetta i requisiti minimi.");
                     } else {
                         showError("Impossibile completare la registrazione.");
                     }
