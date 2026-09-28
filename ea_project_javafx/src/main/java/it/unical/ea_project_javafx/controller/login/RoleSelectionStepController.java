@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import lombok.Setter;
 
-//selezione ruolo nel login
+// Selezione ruolo
 @Setter
 public class RoleSelectionStepController {
 
@@ -25,4 +25,5 @@ public class RoleSelectionStepController {
     void selectBusinessRole(MouseEvent event) {
         navigator.goToDetailsStep("ORGANIZER");
     }
+
 }

@@ -27,6 +27,7 @@ public class ActivityDTO {
     private String category;
 
     private Double latitude;
+
     private Double longitude;
 
     private String placeName;

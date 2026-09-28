@@ -7,7 +7,7 @@
 }
 
 .nav-item:hover {
-    -fx-text-fill: #38bdf8;
+    -fx-text-fill: #e7e5e4;
 }
 
 .btn-nav-login {
@@ -23,9 +23,9 @@
 }
 
 .btn-nav-login:hover {
-    -fx-background-color: #38bdf8;
-    -fx-text-fill: #0f172a;
-    -fx-border-color: #38bdf8;
+    -fx-background-color: #e7e5e4;
+    -fx-text-fill: #1c1917;
+    -fx-border-color: #e7e5e4;
 }
 
 .hero-title {
@@ -66,8 +66,8 @@
 }
 
 .btn-search {
-    -fx-background-color: #38bdf8;
-    -fx-text-fill: #0f172a;
+    -fx-background-color: #e7e5e4;
+    -fx-text-fill: #1c1917;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 20px;
@@ -77,7 +77,7 @@
 }
 
 .btn-search:hover {
-    -fx-background-color: #7dd3fc;
+    -fx-background-color: #fafaf9;
 }
 
 .category-scroll {
@@ -101,8 +101,8 @@
 }
 
 .category-chip:hover, .chip-active {
-    -fx-background-color: rgba(56, 189, 248, 0.3);
-    -fx-border-color: #38bdf8;
+    -fx-background-color: rgba(231, 229, 228, 0.22);
+    -fx-border-color: #d6d3d1;
 }
 
 .section-title {
@@ -150,11 +150,11 @@
 
 .experience-card:hover {
     -fx-background-color: rgba(255, 255, 255, 0.12);
-    -fx-border-color: rgba(56, 189, 248, 0.4);
+    -fx-border-color: rgba(231, 229, 228, 0.45);
 }
 
 .card-category {
-    -fx-text-fill: #38bdf8;
+    -fx-text-fill: #d6d3d1;
     -fx-font-weight: bold;
     -fx-font-size: 11px;
 }
@@ -193,8 +193,8 @@
 }
 
 .menu-button:hover {
-    -fx-background-color: #38bdf8;
-    -fx-border-color: #38bdf8;
+    -fx-background-color: #e7e5e4;
+    -fx-border-color: #e7e5e4;
 }
 
 /* Colore e stile del testo dentro il bottone principale */
@@ -205,7 +205,7 @@
 }
 
 .menu-button:hover > .label {
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #1c1917;
 }
 
 /* Nasconde o adatta la freccetta del MenuButton (opzionale, per un look più pulito) */
@@ -219,8 +219,8 @@
 
 /* Stile del menu a tendina (popup) che si apre al click */
 .context-menu {
-    -fx-background-color: #1e293b;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(28, 28, 27, 0.98);
+    -fx-border-color: rgba(231, 229, 228, 0.24);
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-padding: 6px;
@@ -244,7 +244,7 @@
 /* Effetto hover sulle voci del menu */
 .context-menu .menu-item:hover,
 .context-menu .menu-item:focused {
-    -fx-background-color: #3b82f6;
+    -fx-background-color: rgba(231, 229, 228, 0.18);
 }
 
 .context-menu .menu-item:hover > .label,

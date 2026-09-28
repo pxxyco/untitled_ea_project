@@ -4,6 +4,7 @@ import it.unical.ea_project.domain.User;
 import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.LoginAttemptService;
 import it.unical.ea_project.service.UserService;
+import it.unical.ea_project.security.PasswordPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,16 +35,26 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
 
     @Override
-    public Optional<User> login(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
+    public Optional<User> login(String identifier, String password) {
+        String normalizedIdentifier = identifier == null ? "" : identifier.trim();
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(normalizedIdentifier);
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByUsernameIgnoreCase(normalizedIdentifier);
+        }
 
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getHashedPassword())) {
-            loginAttemptService.loginSucceeded(email);
+            loginAttemptService.loginSucceeded(normalizedIdentifier);
             return userOpt;
         } else {
-            loginAttemptService.loginFailed(email);
+            loginAttemptService.loginFailed(normalizedIdentifier);
             return Optional.empty();
         }
     }
@@ -51,6 +62,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User registerUser(User user) {
+        PasswordPolicy.validate(user.getHashedPassword())
+                .ifPresent(message -> {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+                });
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username già in uso.");
         }
