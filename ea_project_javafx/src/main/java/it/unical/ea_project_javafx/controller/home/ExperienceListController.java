@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -20,10 +21,14 @@ import java.util.List;
 
 public class ExperienceListController {
 
+    public Label label1;
+    public Label label2;
     @FXML private VBox cardsContainer;
     @FXML Label loadMoreLabel;
     @FXML private VBox loadingIndicatorBox;
     @FXML private javafx.scene.control.Button resetButton;
+
+    @Setter private SearchBarController searchBarController;
 
     @Getter private final List<ExperienceData> items = new ArrayList<>();
 
@@ -34,8 +39,7 @@ public class ExperienceListController {
             String price,
             String rating,
             String imageUrl,
-            String dateInfo
-    ) {
+            String dateInfo) {
     }
 
     private static final int PAGE_SIZE = 9;
@@ -45,70 +49,66 @@ public class ExperienceListController {
     private String currentCategoryFilter = null;
     private static final Gson GSON = new Gson();
 
-    @FXML public void initialize() {
-        loadActivities();
-    }
-
-    private boolean resetButtonExists() {
-        return resetButton != null;
-    }
+    @FXML public void initialize() {loadActivities();}
+    private boolean resetButtonExists() {return resetButton != null;}
 
     private void showLoading(boolean show) {
-
-        if (loadingIndicatorBox != null) {
+        if (loadingIndicatorBox != null)
+        {
             loadingIndicatorBox.setVisible(show);
             loadingIndicatorBox.setManaged(show);
         }
-
-        if (loadMoreLabel != null && show) {
+        if (loadMoreLabel != null && show)
+        {
             loadMoreLabel.setDisable(true);
         }
     }
 
     private void loadActivities() {
-
-        if (loading) {
-            return;
-        }
-
+        if (loading) {return;}
         loading = true;
         showLoading(true);
-
         int pageToLoad = currentPage;
-
         String url = String.format(
                 "%s/api/activities/top/cards?page=%d&size=%d",
                 ApiService.BASE_URL,
                 pageToLoad,
                 PAGE_SIZE
         );
-        ApiService.get(
-                url,
-                response -> {
-                    if (response.statusCode() == 200) {
+        ApiService.get(url, response ->
+                {
+                    if (response.statusCode() == 200)
+                    {
                         List<ExperienceData> newActivities = parseActivities(response.body());
-                        Platform.runLater(() -> {
+                        Platform.runLater(() ->
+                        {
                             items.addAll(newActivities);
                             currentPage++;
-                            if (newActivities.isEmpty()
-                                    || newActivities.size() < PAGE_SIZE) {
+                            if (newActivities.isEmpty() || newActivities.size() < PAGE_SIZE)
+                            {
                                 disableLoadMore();
-                            } else {
+                            }
+                            else
+                            {
                                 resetLoadMoreLabel();
                             }
                             appendCards(newActivities);
                             loading = false;
                             showLoading(false);
                         });
-                    } else {
-                        Platform.runLater(() -> {
+                    }
+                    else
+                    {
+                        Platform.runLater(() ->
+                        {
                             loading = false;
                             showLoading(false);
                             resetLoadMoreLabel();
                         });
                     }
                 },
-                () -> Platform.runLater(() -> {
+                () -> Platform.runLater(() ->
+                {
                     loading = false;
                     showLoading(false);
                     disableLoadMore();
@@ -119,35 +119,33 @@ public class ExperienceListController {
 
     @FXML
     public void handleLoadMore(MouseEvent mouseEvent) {
-
-        if (loading) {
+        if (loading)
+        {
             return;
         }
-
-        if (loadMoreLabel != null
-                && loadMoreLabel.isDisabled()) {
+        if (loadMoreLabel != null && loadMoreLabel.isDisabled())
+        {
             return;
         }
-        if (currentQuery.isEmpty()
-                && currentCategoryFilter == null) {
-
+        if (currentQuery.isEmpty() && currentCategoryFilter == null)
+        {
             loadActivities();
-
-        } else {
-
+        }
+        else
+        {
             loadSearchResults();
         }
     }
 
     private void disableLoadMore() {
-        if (loadMoreLabel == null) {
+        if (loadMoreLabel == null)
+        {
             return;
         }
-        loadMoreLabel.setText(
-                "Nessun'altra attività da mostrare"
-        );
+        loadMoreLabel.setText("Nessun'altra attività da mostrare");
         loadMoreLabel.setDisable(true);
-        if (!loadMoreLabel.getStyleClass().contains("label-loading")) {
+        if (!loadMoreLabel.getStyleClass().contains("label-loading"))
+        {
             loadMoreLabel.getStyleClass().add("label-loading");
         }
     }
@@ -207,19 +205,14 @@ public class ExperienceListController {
 
     private void appendCards(List<ExperienceData> newCards)
     {
-        if (cardsContainer == null || newCards == null || newCards.isEmpty()) {
-            return;
-        }
+        if (cardsContainer == null || newCards == null || newCards.isEmpty()) {return;}
         final int CARDS_PER_ROW = 3;
         HBox currentRow = null;
-
-        if (!cardsContainer.getChildren().isEmpty()) {
-            javafx.scene.Node lastNode =
-                    cardsContainer.getChildren().get(cardsContainer.getChildren().size() - 1);
-
-            if (lastNode instanceof HBox row
-                    && row.getChildren().size() < CARDS_PER_ROW) {
-
+        if (!cardsContainer.getChildren().isEmpty())
+        {
+            javafx.scene.Node lastNode = cardsContainer.getChildren().get(cardsContainer.getChildren().size() - 1);
+            if (lastNode instanceof HBox row && row.getChildren().size() < CARDS_PER_ROW)
+            {
                 currentRow = row;
             }
         }
@@ -252,25 +245,38 @@ public class ExperienceListController {
         currentPage = 0;
         items.clear();
 
-        if (cardsContainer != null) {
+        if(category != null)
+        {
+            label1.setText("Ricerca su categoria " + category);
+            label2.setText(query == null ? "" : query.trim());
+        }
+        else
+        {
+            label1.setText("Ricerca su categoria Tutto");
+            label2.setText(query == null ? "" : query.trim());
+        }
+        if (cardsContainer != null)
+        {
             cardsContainer.getChildren().clear();
         }
-
         loading = false;
         resetLoadMoreLabel();
-        if (resetButtonExists()) {
+        if (resetButtonExists())
+        {
             showResetButton(true);
         }
         loadSearchResults();
     }
 
-    @FXML
-    public void handleReset(javafx.event.ActionEvent event) {
+    @FXML public void handleReset(javafx.event.ActionEvent event) {
         resetSearch();
     }
 
 
-    public void resetSearch() {
+    public void resetSearch()
+    {
+        label1.setText("Esperienze più apprezzate dai viaggiatori");
+        label2.setText("Valutate da utenti reali che hanno partecipato alle attività");
         currentQuery = "";
         currentCategoryFilter = null;
         currentPage = 0;
@@ -283,6 +289,9 @@ public class ExperienceListController {
         if (resetButtonExists()) {
             showResetButton(false);
         }
+        if (searchBarController != null) {
+            searchBarController.reset();
+        }
         loadActivities();
     }
 
@@ -291,7 +300,6 @@ public class ExperienceListController {
         if (resetButton == null) {
             return;
         }
-
         resetButton.setVisible(show);
         resetButton.setManaged(show);
     }
@@ -313,35 +321,41 @@ public class ExperienceListController {
 
         ApiService.get(url.toString(),
 
-                response -> {
-                    if (response.statusCode() == 200) {
-                        List<ExperienceData> newActivities =
-                                parseActivities(response.body());
-                        Platform.runLater(() -> {
+                response ->
+                {
+                    if (response.statusCode() == 200)
+                    {
+                        List<ExperienceData> newActivities = parseActivities(response.body());
+                        Platform.runLater(() ->
+                        {
                             items.addAll(newActivities);
                             currentPage++;
-                            if (newActivities.isEmpty()
-                                    || newActivities.size() < PAGE_SIZE) {
+                            if (newActivities.isEmpty() || newActivities.size() < PAGE_SIZE)
+                            {
                                 disableLoadMore();
-                            } else {
+                            }
+                            else
+                            {
                                 resetLoadMoreLabel();
                             }
                             appendCards(newActivities);
                             loading = false;
                             showLoading(false);
                         });
-                    } else {
+                    }
+                    else
+                    {
 
-                        Platform.runLater(() -> {
-
+                        Platform.runLater(() ->
+                        {
                             loading = false;
                             showLoading(false);
                             resetLoadMoreLabel();
                         });
                     }
                 },
-                () -> Platform.runLater(() -> {
-
+                () -> Platform.runLater(() ->
+                {
                     loading = false;
                     showLoading(false);
                     disableLoadMore();

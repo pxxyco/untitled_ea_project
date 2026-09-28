@@ -18,9 +18,6 @@ public class ActivityController {
 
     private final ActivityService activityService;
 
-    /**
-     * Recupera una singola attività completa.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<ActivityDTO> getActivityById(
             @PathVariable Long id
@@ -30,11 +27,6 @@ public class ActivityController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Recupera le attività più apprezzate.
-     *
-     * Restituisce il DTO completo.
-     */
     @GetMapping("/top")
     public ResponseEntity<List<ActivityDTO>> getTopActivities(
             @RequestParam(defaultValue = "0") int page,
@@ -48,11 +40,6 @@ public class ActivityController {
         );
     }
 
-    /**
-     * Ricerca attività per Home.
-     *
-     * Restituisce DTO leggeri.
-     */
     @GetMapping("/search")
     public ResponseEntity<List<ActivityHomeDTO>> searchActivities(
             @RequestParam(required = false) String query,
@@ -70,9 +57,6 @@ public class ActivityController {
         );
     }
 
-    /**
-     * Suggerimenti per la barra di ricerca.
-     */
     @GetMapping("/suggest")
     public ResponseEntity<List<ActivitySuggestionDTO>> suggestActivities(
             @RequestParam String query,
@@ -86,11 +70,6 @@ public class ActivityController {
         );
     }
 
-    /**
-     * Attività più apprezzate per la Home.
-     *
-     * Restituisce DTO leggeri.
-     */
     @GetMapping("/top/cards")
     public ResponseEntity<List<ActivityHomeDTO>> getTopActivityCards(
             @RequestParam(defaultValue = "0") int page,
@@ -104,9 +83,6 @@ public class ActivityController {
         );
     }
 
-    /**
-     * Attività complete appartenenti a una categoria.
-     */
     @GetMapping("/category/{category}")
     public ResponseEntity<List<ActivityDTO>> getActivitiesByCategory(
             @PathVariable Activity.Category category
