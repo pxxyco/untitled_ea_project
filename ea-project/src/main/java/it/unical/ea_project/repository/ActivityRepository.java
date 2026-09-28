@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +34,6 @@ public interface ActivityRepository
             Activity.Category category
     );
 
-    /**
-     * Suggerimenti per la barra di ricerca.
-     *
-     * Cerca solo dall'inizio del titolo/città.
-     * Questo evita il '%query%' utilizzato nella ricerca completa.
-     */
     @Query("""
         SELECT new it.unical.ea_project.dto.home.ActivitySuggestionDTO(
             a.activityId,
@@ -62,7 +57,34 @@ public interface ActivityRepository
     FROM Activity a
     WHERE a.deletedAt IS NULL
     AND (
-        :category IS NULL
+        cast(:category as String) IS NULL
+        OR a.category = :category
+    )
+    AND (
+        :query = ''
+        OR LOWER(a.title) LIKE CONCAT('%', LOWER(:query), '%')
+        OR LOWER(a.city) LIKE CONCAT('%', LOWER(:query), '%')
+    )
+    AND (
+        cast(:dayStart as LocalDateTime) IS NULL
+        OR (a.startDate < :nextDayStart AND a.endDate >= :dayStart)
+    )
+    ORDER BY a.averageRating DESC
+    """)
+    List<Activity> search(
+            @Param("query") String query,
+            @Param("category") Activity.Category category,
+            @Param("dayStart") LocalDateTime dayStart,
+            @Param("nextDayStart") LocalDateTime nextDayStart,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT a
+    FROM Activity a
+    WHERE a.deletedAt IS NULL
+    AND (
+        cast(:category as String) IS NULL
         OR a.category = :category
     )
     AND (
@@ -72,7 +94,7 @@ public interface ActivityRepository
     )
     ORDER BY a.averageRating DESC
     """)
-    List<Activity> search(
+    List<Activity> searchWithoutDate(
             @Param("query") String query,
             @Param("category") Activity.Category category,
             Pageable pageable

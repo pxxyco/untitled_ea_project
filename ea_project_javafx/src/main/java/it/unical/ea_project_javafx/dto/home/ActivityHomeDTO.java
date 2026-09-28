@@ -22,4 +22,8 @@ public class ActivityHomeDTO {
     private Double averageRating;
 
     private String imageUrl;
+
+    private String startDate;
+
+    private String endDate;
 }

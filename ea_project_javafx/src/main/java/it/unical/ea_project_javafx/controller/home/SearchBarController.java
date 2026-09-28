@@ -11,11 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 import lombok.Setter;
 
@@ -28,6 +24,7 @@ import java.util.Map;
 
 public class SearchBarController {
 
+    public CheckBox SetData;
     @FXML private TextField searchField;
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private DatePicker datePicker;
@@ -38,6 +35,7 @@ public class SearchBarController {
     private final PauseTransition debounce = new PauseTransition(Duration.millis(300));
     private static final Gson GSON = new Gson();
     private long suggestionRequestId = 0;
+    private boolean suppressSuggestions = false;
 
     private static final Map<String, String> CATEGORY_MAP =
             Map.of(
@@ -52,14 +50,17 @@ public class SearchBarController {
     @FXML
     public void initialize() {
         createCombobox();
+        SetData.setSelected(false);
         if (datePicker != null) {
             datePicker.setValue(LocalDate.now());
+            datePicker.disableProperty().bind(SetData.selectedProperty().not());
         }
         if (searchField != null) {
             suggestionsPopup = new ContextMenu();
             debounce.setOnFinished(event -> fetchSuggestions(searchField.getText()));
             searchField.textProperty().addListener((observable, oldValue, newValue) ->
                     {
+                        if (suppressSuggestions) return;
                         debounce.stop();
                         if (newValue == null || newValue.isBlank())
                         {
@@ -95,6 +96,11 @@ public class SearchBarController {
         ApiService.get(url, response ->
                 {
                     if (response.statusCode() != 200) {
+                        Platform.runLater(() -> {
+                            if (requestId == suggestionRequestId) {
+                                suggestionsPopup.hide();
+                            }
+                        });
                         return;
                     }
                     List<ActivitySuggestionDTO> suggestions = parseSuggestions(response.body());
@@ -124,7 +130,9 @@ public class SearchBarController {
             String city = suggestion.getCity() != null ? suggestion.getCity() : "";
             MenuItem menuItem = new MenuItem(suggestion.getTitle() + " - " + city);
             menuItem.setOnAction(event -> {
+                suppressSuggestions = true;
                 searchField.setText(suggestion.getTitle());
+                suppressSuggestions = false;
                 suggestionsPopup.hide();
             });
 
@@ -132,6 +140,7 @@ public class SearchBarController {
         }
         if (!suggestionsPopup.isShowing()) {
             Point2D point = searchField.localToScreen(0, searchField.getHeight());
+            if (point == null) return;
             suggestionsPopup.show(searchField, point.getX(), point.getY());
         }
     }
@@ -156,8 +165,10 @@ public class SearchBarController {
         String query = searchField != null ? searchField.getText() : "";
         String selectedLabel = categoryComboBox != null ? categoryComboBox.getValue() : null;
         String backendCategory = CATEGORY_MAP.get(selectedLabel);
-        experienceListController.search(query, backendCategory
-        );
+        LocalDate selectedDate = (SetData.isSelected() && datePicker != null)
+                ? datePicker.getValue()
+                : null;
+        experienceListController.search(query, backendCategory, selectedDate);
     }
 
     public void reset() {
@@ -175,6 +186,9 @@ public class SearchBarController {
         }
         if (datePicker != null) {
             datePicker.setValue(LocalDate.now());
+        }
+        if (SetData != null) {
+            SetData.setSelected(false);
         }
     }
 }

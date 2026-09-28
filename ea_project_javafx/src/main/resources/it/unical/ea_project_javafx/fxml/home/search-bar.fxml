@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -9,9 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unical.ea_project_javafx.controller.home.SearchBarController"
-      alignment="CENTER" maxWidth="1000.0" spacing="16.0" >
+<VBox alignment="CENTER" maxWidth="1000.0" spacing="16.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.ea_project_javafx.controller.home.SearchBarController">
 
     <Label styleClass="hero-title" text="Trova la tua prossima esperienza in Calabria" textAlignment="CENTER" wrapText="true" />
     <Label styleClass="hero-subtitle" text="Esplora escursioni guidate, tour enogastronomici, visite culturali e itinerari condivisi." textAlignment="CENTER" wrapText="true" />
@@ -32,7 +31,12 @@
             </VBox>
             <VBox minWidth="130.0" styleClass="search-field" HBox.hgrow="ALWAYS">
                 <children>
-                    <Label styleClass="field-label" text="DATA" />
+               <HBox prefHeight="0.0" prefWidth="200.0" spacing="10.0">
+                  <children>
+                          <Label styleClass="field-label" text="IMPORTA DATA" />
+                      <CheckBox fx:id="SetData" styleClass="checkbox" mnemonicParsing="false" textAlignment="CENTER" />
+                  </children>
+               </HBox>
                     <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" styleClass="transparent-datepicker" />
                 </children>
             </VBox>

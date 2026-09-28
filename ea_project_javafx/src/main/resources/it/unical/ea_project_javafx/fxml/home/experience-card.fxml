@@ -33,6 +33,7 @@
 
             <Label fx:id="titleLabel" styleClass="card-title" wrapText="true" />
             <Label fx:id="locationLabel" styleClass="card-location" />
+            <Label fx:id="dateLabel" styleClass="card-location" />
 
             <VBox VBox.vgrow="ALWAYS" />
 

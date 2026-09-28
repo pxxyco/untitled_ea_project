@@ -75,7 +75,6 @@ public class MainViewController implements MainNavigator {
         new Thread(() -> {
             String imageUrl = WallpaperService.getDailyWallpaperUrl();
 
-            // L'aggiornamento dei componenti FXML deve avvenire sempre sul thread JavaFX
             Platform.runLater(() -> {
                 Image background = new Image(
                         imageUrl,

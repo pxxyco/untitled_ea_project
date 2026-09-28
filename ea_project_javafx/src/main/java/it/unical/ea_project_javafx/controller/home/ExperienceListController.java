@@ -16,6 +16,9 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,9 @@ public class ExperienceListController {
     private boolean loading = false;
     private String currentQuery = "";
     private String currentCategoryFilter = null;
+    private LocalDate currentDateFilter = null;
     private static final Gson GSON = new Gson();
+    private static final DateTimeFormatter CARD_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML public void initialize() {loadActivities();}
     private boolean resetButtonExists() {return resetButton != null;}
@@ -127,7 +132,7 @@ public class ExperienceListController {
         {
             return;
         }
-        if (currentQuery.isEmpty() && currentCategoryFilter == null)
+        if (currentQuery.isEmpty() && currentCategoryFilter == null && currentDateFilter == null)
         {
             loadActivities();
         }
@@ -192,7 +197,7 @@ public class ExperienceListController {
                                     dto.getImageUrl() != null
                                             ? dto.getImageUrl()
                                             : "",
-                                    ""
+                                    formatDateRange(dto.getStartDate(), dto.getEndDate())
                             )
                     );
                 }
@@ -201,6 +206,20 @@ public class ExperienceListController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private String formatDateRange(String startDate, String endDate) {
+        if (startDate == null || endDate == null) {
+            return "";
+        }
+        try {
+            LocalDate start = LocalDate.parse(startDate.substring(0, 10));
+            LocalDate end = LocalDate.parse(endDate.substring(0, 10));
+            String formattedStart = start.format(CARD_DATE_FORMAT);
+            return start.equals(end) ? formattedStart : formattedStart + " - " + end.format(CARD_DATE_FORMAT);
+        } catch (DateTimeParseException | IndexOutOfBoundsException e) {
+            return "";
+        }
     }
 
     private void appendCards(List<ExperienceData> newCards)
@@ -229,7 +248,7 @@ public class ExperienceListController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unical/ea_project_javafx/fxml/home/experience-card.fxml"));
                 VBox cardNode = loader.load();
                 ExperienceCardController controller = loader.getController();
-                controller.setData(data.title(), data.location(), data.category(), data.price(), data.rating(), data.imageUrl());
+                controller.setData(data.title(), data.location(), data.category(), data.price(), data.rating(), data.imageUrl(), data.dateInfo());
                 currentRow.getChildren().add(cardNode);
 
             } catch (IOException e) {
@@ -238,10 +257,11 @@ public class ExperienceListController {
         }
     }
 
-    public void search(String query, String category)
+    public void search(String query, String category, LocalDate date)
     {
         currentQuery = query == null ? "" : query.trim();
         currentCategoryFilter = category;
+        currentDateFilter = date;
         currentPage = 0;
         items.clear();
 
@@ -279,6 +299,7 @@ public class ExperienceListController {
         label2.setText("Valutate da utenti reali che hanno partecipato alle attività");
         currentQuery = "";
         currentCategoryFilter = null;
+        currentDateFilter = null;
         currentPage = 0;
         items.clear();
         loading = false;
@@ -317,6 +338,9 @@ public class ExperienceListController {
         if (currentCategoryFilter != null && !currentCategoryFilter.isEmpty())
         {
             url.append("&category=").append(java.net.URLEncoder.encode(currentCategoryFilter, java.nio.charset.StandardCharsets.UTF_8));
+        }
+        if (currentDateFilter != null) {
+            url.append("&date=").append(currentDateFilter);
         }
 
         ApiService.get(url.toString(),

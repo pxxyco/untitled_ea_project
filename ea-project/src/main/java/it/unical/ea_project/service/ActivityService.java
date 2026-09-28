@@ -5,6 +5,7 @@ import it.unical.ea_project.dto.ActivityDTO;
 import it.unical.ea_project.dto.home.ActivityHomeDTO;
 import it.unical.ea_project.dto.home.ActivitySuggestionDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public interface ActivityService {
     List<ActivityHomeDTO> searchActivityHomeDtos(
             String query,
             Activity.Category category,
+            LocalDate date,
             int page,
             int size
     );

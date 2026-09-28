@@ -13,9 +13,11 @@ import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -127,9 +129,18 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ActivityHomeDTO> searchActivityHomeDtos(String query, Activity.Category category, int page, int size) {
+    public List<ActivityHomeDTO> searchActivityHomeDtos(String query, Activity.Category category, LocalDate date, int page, int size) {
         String normalizedQuery = query == null ? "" : query.trim();
-        List<Activity> activities = activityRepository.search(normalizedQuery, category, PageRequest.of(page, size));
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<Activity> activities;
+        if (date == null) {
+            activities = activityRepository.searchWithoutDate(normalizedQuery, category, pageable);
+        } else {
+            LocalDateTime dayStart = date.atStartOfDay();
+            LocalDateTime nextDayStart = dayStart.plusDays(1);
+            activities = activityRepository.search(normalizedQuery, category, dayStart, nextDayStart, pageable);
+        }
         return toHomeDtos(activities);
     }
 
@@ -237,7 +248,9 @@ public class ActivityServiceImpl implements ActivityService {
                 activity.getCategory() != null ? activity.getCategory().name() : "OTHER",
                 activity.getPrice(),
                 activity.getAverageRating(),
-                imageUrl
+                imageUrl,
+                activity.getStartDate(),
+                activity.getEndDate()
         );
     }
 }

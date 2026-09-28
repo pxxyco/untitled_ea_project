@@ -21,6 +21,7 @@ public class ExperienceCardController {
     @FXML private Label ratingLabel;
     @FXML private Label titleLabel;
     @FXML private Label locationLabel;
+    @FXML private Label dateLabel;
     @FXML private Label priceLabel;
     @FXML private ProgressIndicator imageLoader;
 
@@ -54,13 +55,17 @@ public class ExperienceCardController {
             String category,
             String price,
             String rating,
-            String imageUrl)
+            String imageUrl,
+            String dateInfo)
     {
         titleLabel.setText(title);
         locationLabel.setText(location);
         categoryLabel.setText(category);
         priceLabel.setText("da " + price);
         ratingLabel.setText("⭐ " + rating);
+        dateLabel.setText(dateInfo);
+        dateLabel.setVisible(dateInfo != null && !dateInfo.isBlank());
+        dateLabel.setManaged(dateLabel.isVisible());
 
         loadImage(imageUrl);
         cardRoot.setOnMouseClicked(event -> handleCardClick());

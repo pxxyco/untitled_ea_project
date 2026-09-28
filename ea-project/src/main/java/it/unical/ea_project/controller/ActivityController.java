@@ -6,9 +6,11 @@ import it.unical.ea_project.dto.home.ActivityHomeDTO;
 import it.unical.ea_project.dto.home.ActivitySuggestionDTO;
 import it.unical.ea_project.service.ActivityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -44,6 +46,7 @@ public class ActivityController {
     public ResponseEntity<List<ActivityHomeDTO>> searchActivities(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) Activity.Category category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size
     ) {
@@ -51,6 +54,7 @@ public class ActivityController {
                 activityService.searchActivityHomeDtos(
                         query,
                         category,
+                        date,
                         page,
                         size
                 )
