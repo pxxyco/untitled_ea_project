@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -12,14 +13,11 @@ import java.math.BigDecimal;
 public class TripHomeDTO {
 
     private Long tripId;
-
     private String title;
-
     private String location;
-
     private BigDecimal totalPrice;
-
     private BigDecimal averageRating;
-
     private String coverPhotoUrl;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

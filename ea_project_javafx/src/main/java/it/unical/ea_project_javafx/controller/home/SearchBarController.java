@@ -36,6 +36,7 @@ public class SearchBarController {
     private static final Gson GSON = new Gson();
     private long suggestionRequestId = 0;
     private boolean suppressSuggestions = false;
+    private static final String TRIP_LABEL = "Viaggi";
 
     private static final Map<String, String> CATEGORY_MAP =
             Map.of(
@@ -50,7 +51,15 @@ public class SearchBarController {
     @FXML
     public void initialize() {
         createCombobox();
+        if (categoryComboBox != null) {
+            categoryComboBox.valueProperty().addListener((obs, oldV, newV) -> {
+                debounce.stop();
+                suggestionRequestId++;
+                if (suggestionsPopup != null) suggestionsPopup.hide();
+            });
+        }
         SetData.setSelected(false);
+
         if (datePicker != null) {
             datePicker.setValue(LocalDate.now());
             datePicker.disableProperty().bind(SetData.selectedProperty().not());
@@ -58,28 +67,32 @@ public class SearchBarController {
         if (searchField != null) {
             suggestionsPopup = new ContextMenu();
             debounce.setOnFinished(event -> fetchSuggestions(searchField.getText()));
-            searchField.textProperty().addListener((observable, oldValue, newValue) ->
-                    {
-                        if (suppressSuggestions) return;
-                        debounce.stop();
-                        if (newValue == null || newValue.isBlank())
-                        {
-                            suggestionsPopup.hide();
-                            return;
-                        }
-                        debounce.playFromStart();
-                    }
-            );
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                suggestionRequestId++;
+                debounce.stop();
+                if (suppressSuggestions || isTripSelected()) {
+                    suggestionsPopup.hide();
+                    return;
+                }
+                if (newValue == null || newValue.isBlank()) {
+                    suggestionsPopup.hide();
+                    return;
+                }
+                debounce.playFromStart();
+            });
         }
     }
 
     private void createCombobox() {
         ObservableList<String> categories = FXCollections.observableArrayList
-                ("Tutto", "Escursione", "Visita", "Trasporto", "Hotel", "Ristorazione", "Altro");
+                ("Attività", TRIP_LABEL,"Escursione", "Visita", "Trasporto", "Hotel", "Ristorazione", "Altro");
         if (categoryComboBox != null) {
             categoryComboBox.setItems(categories);
             categoryComboBox.getSelectionModel().selectFirst();
         }
+    }
+    private boolean isTripSelected() {
+        return categoryComboBox != null && TRIP_LABEL.equals(categoryComboBox.getValue());
     }
 
 
@@ -130,6 +143,7 @@ public class SearchBarController {
             String city = suggestion.getCity() != null ? suggestion.getCity() : "";
             MenuItem menuItem = new MenuItem(suggestion.getTitle() + " - " + city);
             menuItem.setOnAction(event -> {
+                suggestionRequestId++;
                 suppressSuggestions = true;
                 searchField.setText(suggestion.getTitle());
                 suppressSuggestions = false;
@@ -159,16 +173,22 @@ public class SearchBarController {
 
     @FXML
     void handleSearch(ActionEvent event) {
-        if (experienceListController == null) {
-            return;
-        }
+        if (experienceListController == null) return;
+
         String query = searchField != null ? searchField.getText() : "";
+        boolean tripSearch = isTripSelected();
+
         String selectedLabel = categoryComboBox != null ? categoryComboBox.getValue() : null;
-        String backendCategory = CATEGORY_MAP.get(selectedLabel);
+        String backendCategory = tripSearch ? null : CATEGORY_MAP.get(selectedLabel);
+
         LocalDate selectedDate = (SetData.isSelected() && datePicker != null)
                 ? datePicker.getValue()
                 : null;
-        experienceListController.search(query, backendCategory, selectedDate);
+
+        experienceListController.search(
+                tripSearch ? ExperienceListController.SearchMode.TRIP
+                        : ExperienceListController.SearchMode.ACTIVITY,
+                query, backendCategory, selectedDate);
     }
 
     public void reset() {

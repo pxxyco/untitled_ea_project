@@ -2,6 +2,7 @@ package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.dto.TripDTO;
+import it.unical.ea_project.dto.home.TripHomeDTO;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -103,6 +104,15 @@ public class TripController {
                         .map(this::toDto)
                         .collect(Collectors.toList())
         );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TripHomeDTO>> searchTrips(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        return ResponseEntity.ok(tripService.searchTripHomeDtos(query, date, page, size));
     }
 
     private List<TripDTO> toDtoList(List<Trip> trips) {
