@@ -3,6 +3,7 @@ package it.unical.ea_project.repository;
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.Trip.TripStatus;
 import it.unical.ea_project.domain.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +32,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     // Serve per recuperare un viaggio specifico solo se attivo (usiamo questo metodo quando usiamo il soft delete "deletedAt")
     Optional<Trip> findByTripIdAndDeletedAtIsNull(Long tripId);
+
+
+    List<Trip> findByStatusAndDeletedAtIsNullOrderByAverageRatingDesc(TripStatus tripStatus, Pageable pageable);
 }

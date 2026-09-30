@@ -2,15 +2,11 @@ package it.unical.ea_project.service;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.domain.User;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@Transactional(readOnly = true)
 public interface TripService {
 
     List<Trip> getTripsByUser(User user);
@@ -27,10 +23,14 @@ public interface TripService {
 
     Optional<Trip> getTripById(Long id);
 
+    Trip createTrip(Trip trip, Long creatorId);
+
     Trip saveTrip(Trip trip);
 
     void deleteTripLogically(Trip trip);
 
     String exportTripToIcs(Long tripId);
 
+
+    List<Trip> getTopTrips(int page, int size);
 }

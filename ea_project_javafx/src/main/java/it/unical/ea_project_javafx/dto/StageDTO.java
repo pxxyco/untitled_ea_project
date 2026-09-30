@@ -22,7 +22,7 @@ public class StageDTO {
 
     private String description;
 
-
+    // Stage.StageCategory: EXCURSION, VISIT, HOTEL, MEAL, TRANSPORT, OTHER
     private String category;
 
     private String locationName;

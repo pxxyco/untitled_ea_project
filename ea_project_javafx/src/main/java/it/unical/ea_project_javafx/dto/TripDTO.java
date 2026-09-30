@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -15,40 +18,41 @@ import java.time.LocalDate;
 public class TripDTO {
 
     private Long tripId;
+
+    private Long createdByUserId;
+
     private String title;
+
     private String description;
+
     private String destinationCountry;
+
     private String destinationCity;
+
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private BigDecimal totalPrice;
+
     private Integer maxSeats;
+
     private Integer availableSeats;
+
+    // Trip.TripStatus: DRAFT, PUBLISHED, CANCELLED, COMPLETED
     private String status;
+
+    private String icsUid;
+
     private BigDecimal averageRating;
+
     private String coverPhotoUrl;
 
+    private LocalDateTime createdAt;
 
-    public TripDTO(Long tripId, String title, String description, String destinationCity,
-                   BigDecimal totalPrice, Integer maxSeats, Integer availableSeats, String status) {
-        this.tripId = tripId;
-        this.title = title;
-        this.description = description;
-        this.destinationCity = destinationCity;
-        this.totalPrice = totalPrice;
-        this.maxSeats = maxSeats;
-        this.availableSeats = availableSeats;
-        this.status = status;
-    }
+    private LocalDateTime updatedAt;
 
-    public int getSoldSeats() {
-        if (maxSeats == null || availableSeats == null) {
-            return 0;
-        }
-        return maxSeats - availableSeats;
-    }
+    private LocalDateTime deletedAt;
 
-    public double getPriceAsDouble() {
-        return totalPrice != null ? totalPrice.doubleValue() : 0.0;
-    }
+    private List<StageDTO> stages;
 }

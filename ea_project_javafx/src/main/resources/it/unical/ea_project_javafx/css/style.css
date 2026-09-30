@@ -4,7 +4,7 @@
 }
 
 .bg-overlay {
-    -fx-background-color: rgba(15, 23, 42, 0.75);
+    -fx-background-color: rgba(12, 12, 12, 0.82);
 }
 
 .main-scroll {
@@ -24,14 +24,15 @@
 
 
 .navbar {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-border-color: rgba(255, 255, 255, 0.15);
-    -fx-border-width: 0 0 1 0;
+    -fx-background-color: linear-gradient(to bottom, rgba(10, 10, 10, 0.42), rgba(10, 10, 10, 0.0));
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
-.brand-logo {
-    -fx-font-size: 22px;
-    -fx-cursor: hand;
+.nav-logo {
+    -fx-fit-width: 32px;
+    -fx-fit-height: 32px;
+    -fx-preserve-ratio: true;
 }
 
 .nav-divider {
@@ -46,11 +47,11 @@
 }
 
 .nav-links .hyperlink:hover {
-    -fx-text-fill: #38bdf8;
+    -fx-text-fill: #e7e5e4;
 }
 
 .btn-primary {
-    -fx-background-color: rgba(56, 189, 248, 0.85);
+    -fx-background-color: rgba(231, 229, 228, 0.92);
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
     -fx-font-size: 13px;
@@ -60,7 +61,7 @@
 }
 
 .btn-primary:hover {
-    -fx-background-color: #38bdf8;
+    -fx-background-color: #fafaf9;
 }
 
 
@@ -104,7 +105,7 @@
 
 .combo-box-popup .list-view .list-cell:hover,
 .combo-box-popup .list-view .list-cell:filled:selected {
-    -fx-background-color: #3b82f6;
+    -fx-background-color: #57534e;
     -fx-text-fill: #ffffff;
 }
 
@@ -148,7 +149,6 @@
     -fx-padding: 8px 0 0 0;
 }
 
-/* HEADER FIX (Rimozione grigio chiaro Modena) */
 .date-picker-popup .month-year-pane {
     -fx-background-color: transparent !important;
     -fx-background: transparent !important;
@@ -230,7 +230,7 @@
 }
 
 .date-picker-popup .today {
-    -fx-border-color: #3b82f6 !important;
+    -fx-border-color: #a8a29e !important;
     -fx-border-width: 1px;
     -fx-border-radius: 8px;
 }
@@ -238,4 +238,94 @@
 .date-picker-popup .previous-month,
 .date-picker-popup .next-month {
     -fx-text-fill: #4b5563 !important;
+}
+
+.splash-pane {
+    -fx-background-color: #0b1628;
+}
+
+.splash-content {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+}
+
+.splash-logo {
+    -fx-font-size: 40px;
+}
+
+.splash-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.btn-splash {
+    -fx-background-color: #8d9caf;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.btn-splash:hover {
+    -fx-background-color: #717d8c;
+}
+
+.splash-progress .percentage {
+    -fx-fill: transparent;
+}
+
+.splash-progress > .indicator {
+    -fx-background-color: transparent;
+}
+
+.splash-progress .spinner {
+    -fx-progress-color: #d6d3d1;
+}
+
+
+.checkbox {
+    -fx-cursor: hand;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-label-padding: 0 0 0 6px;
+}
+
+.checkbox > .box {
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 4px;
+}
+
+.checkbox:hover > .box {
+    -fx-background-color: rgba(231, 229, 228, 0.18);
+    -fx-border-color: #d6d3d1;
+}
+
+.checkbox > .box > .mark {
+    -fx-background-color: transparent;
+    -fx-padding: 0.4em;
+}
+
+.checkbox:selected > .box {
+    -fx-background-color: #e7e5e4;
+    -fx-border-color: #e7e5e4;
+}
+
+.checkbox:selected > .box > .mark {
+    -fx-background-color: #1c1917;
+}
+
+.checkbox:focused > .box {
+    -fx-effect: dropshadow(gaussian, rgba(231, 229, 228, 0.45), 6, 0, 0, 0);
+}
+
+.checkbox:disabled {
+    -fx-opacity: 0.5;
 }
