@@ -252,7 +252,7 @@
     -fx-text-fill: #ffffff;
 }
 
-/* Carica Altro Label*/
+/* Carica Altro Label */
 .label-loading
 {
     -fx-opacity: 0.6;
@@ -263,5 +263,5 @@
 .load-more-label
 {
     -fx-cursor: hand;
-    -fx-font-weight: bold;"
+    -fx-font-weight: bold;
 }

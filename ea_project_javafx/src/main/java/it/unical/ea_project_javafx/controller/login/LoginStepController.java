@@ -107,7 +107,6 @@ public class LoginStepController {
                                 } else {
                                     it.unical.ea_project_javafx.util.TokenStorage.clear();
                                 }
-                                //System.out.println("Access Token salvato: " + UserSession.getInstance().getAccessToken());
 
                                 if (event != null) {
                                     navigator.goToHome(event);

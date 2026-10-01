@@ -1,5 +1,5 @@
 .splash-pane {
-    -fx-background-color: #0b1628;
+    -fx-background-color: #1c1c1b;
 }
 
 .splash-content {
@@ -25,7 +25,7 @@
 
 .btn-splash {
     -fx-background-color: #e7e5e4;
-    -fx-text-fill: #0b1628;
+    -fx-text-fill: #1c1917;
     -fx-font-weight: bold;
     -fx-font-size: 15px;
     -fx-background-radius: 8px;
@@ -34,8 +34,8 @@
 }
 
 .btn-splash:hover {
-    -fx-background-color: #0284c7;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #fafaf9;
+    -fx-text-fill: #1c1917;
 }
 
 .progress-indicator {

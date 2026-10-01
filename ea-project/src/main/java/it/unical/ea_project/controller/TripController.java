@@ -2,6 +2,7 @@ package it.unical.ea_project.controller;
 
 import it.unical.ea_project.domain.Trip;
 import it.unical.ea_project.dto.TripDTO;
+import it.unical.ea_project.repository.UserRepository;
 import it.unical.ea_project.service.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +21,18 @@ import java.util.stream.Collectors;
 public class TripController {
 
     private final TripService tripService;
+    private final UserRepository userRepository;
 
     @GetMapping("/published")
     public ResponseEntity<List<TripDTO>> getPublishedTrips() {
         return ResponseEntity.ok(toDtoList(tripService.getPublishedTrips()));
+    }
+
+    @GetMapping("/organizer/{creatorId}")
+    public ResponseEntity<List<TripDTO>> getTripsByOrganizer(@PathVariable Long creatorId) {
+        return userRepository.findById(creatorId)
+                .map(user -> ResponseEntity.ok(toDtoList(tripService.getTripsByUser(user))))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/available")

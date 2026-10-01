@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.SVGPath?>
 
-<StackPane fx:id="rootPane"
+<StackPane fx:id="rootPane" alignment="CENTER"
            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="it.unical.ea_project_javafx.CreateOfferController">
+           fx:controller="it.unical.ea_project_javafx.controller.profile.CreateOfferController">
+    <stylesheets>
+        <URL value="@../../css/style.css" />
+        <URL value="@../../css/profile.css" />
+        <URL value="@../../css/create_offer.css" />
+    </stylesheets>
 
+    <ImageView fx:id="bgImageView" preserveRatio="false" pickOnBounds="true" />
     <Region styleClass="glass-overlay" />
 
-    <VBox maxWidth="920.0" maxHeight="720.0" styleClass="main-modal-card" StackPane.alignment="CENTER">
+    <VBox fx:id="modalCard" prefWidth="920.0" prefHeight="720.0" maxWidth="920.0" maxHeight="720.0" styleClass="main-modal-card" StackPane.alignment="CENTER">
 
         <HBox alignment="CENTER_LEFT" styleClass="modal-header">
             <padding>
@@ -19,7 +27,7 @@
             </padding>
             <Label fx:id="headerTitleLabel" text="Crea Nuova Offerta" styleClass="modal-title" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="✕" onAction="#handleClose" styleClass="btn-icon-close" />
+            <Button text="X" onAction="#handleClose" styleClass="btn-icon-close" />
         </HBox>
 
         <StackPane VBox.vgrow="ALWAYS">

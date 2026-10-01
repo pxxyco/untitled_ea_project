@@ -56,8 +56,8 @@ public class ProfileController implements MainNavigator {
     private void loadRoleDashboard() {
         String role = userSession.getRole();
         String dashboardFile = "ORGANIZER".equalsIgnoreCase(role)
-                ? "organizer-dashboard.fxml"
-                : "traveler-dashboard.fxml";
+                ? "organizer_dashboard.fxml"
+                : "traveler_dashboard.fxml";
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(

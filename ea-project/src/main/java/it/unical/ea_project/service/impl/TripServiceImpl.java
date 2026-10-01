@@ -89,4 +89,10 @@ public class TripServiceImpl implements TripService {
         );
     }
 
+    @Override
+    public String exportTripToIcs(Long tripId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exportTripToIcs'");
+    }
+
 }
