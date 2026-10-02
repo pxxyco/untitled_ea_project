@@ -16,29 +16,59 @@ import java.util.Optional;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
-    // Trova tutti i viaggi creati da un determinato utente che non sono stati eliminati logicamente
     List<Trip> findByCreatedByAndDeletedAtIsNull(User createdBy);
-    // Trova i viaggi per stato (es. tutti quelli PUBLISHED)
     List<Trip> findByStatusAndDeletedAtIsNull(TripStatus status);
-    // Cerca viaggi per destinazione (paese o città) escludendo quelli eliminati
     List<Trip> findByDestinationCountryContainingIgnoreCaseAndDeletedAtIsNull(String country);
     List<Trip> findByDestinationCityContainingIgnoreCaseAndDeletedAtIsNull(String city);
-    // Trova i viaggi disponibili in un determinato intervallo di date
-    List<Trip> findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndDeletedAtIsNull(LocalDate startDate, LocalDate endDate);
-    // Trova i viaggi che hanno ancora posti disponibili e sono pubblicati
-    List<Trip> findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus status, Integer minSeats);
-    // Serve per recuperare un viaggio specifico solo se attivo (usiamo questo metodo quando usiamo il soft delete "deletedAt")
     Optional<Trip> findByTripIdAndDeletedAtIsNull(Long tripId);
 
+    List<Trip> findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndDeletedAtIsNull(LocalDate startDate, LocalDate endDate);
+    List<Trip> findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus status, Integer minSeats);
+
+
+
     @Query("""
-        SELECT t FROM Trip t
+        SELECT t
+        FROM Trip t
         WHERE t.deletedAt IS NULL
         AND t.status = :status
         ORDER BY COALESCE(t.averageRating, 0) DESC, t.tripId DESC
         """)
-    List<Trip> findTopTrips(@Param("status") TripStatus status, Pageable pageable);
+    List<Trip> findTopTrips(
+            @Param("status") TripStatus status,
+            Pageable pageable
+    );
+
     @Query("""
-        SELECT t FROM Trip t
+        SELECT new it.unical.ea_project.dto.home.TripSuggestionDTO(
+            t.tripId,
+            t.title,
+            CONCAT(
+                COALESCE(t.destinationCity, ''),
+                CASE
+                    WHEN t.destinationCity IS NOT NULL
+                         AND t.destinationCountry IS NOT NULL
+                    THEN ', '
+                    ELSE ''
+                END,
+                COALESCE(t.destinationCountry, '')
+            )
+        )
+        FROM Trip t
+        WHERE t.deletedAt IS NULL
+        AND t.status = :status
+        AND (
+            LOWER(t.title) LIKE LOWER(CONCAT(:query, '%'))
+            OR LOWER(t.destinationCity) LIKE LOWER(CONCAT(:query, '%'))
+            OR LOWER(t.destinationCountry) LIKE LOWER(CONCAT(:query, '%'))
+        )
+        ORDER BY COALESCE(t.averageRating, 0) DESC, t.tripId DESC
+        """)
+    List<it.unical.ea_project.dto.home.TripSuggestionDTO> findSuggestions(@Param("query") String query, @Param("status") TripStatus status, Pageable pageable);
+
+    @Query("""
+        SELECT t
+        FROM Trip t
         WHERE t.deletedAt IS NULL
         AND t.status = :status
         AND (
@@ -49,14 +79,11 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
         )
         ORDER BY COALESCE(t.averageRating, 0) DESC, t.tripId DESC
         """)
-    List<Trip> searchPublished(
-            @Param("query") String query,
-            @Param("status") TripStatus status,
-            Pageable pageable
-    );
-    // Ricerca con filtro data: viaggi che partono dal giorno scelto in poi
+    List<Trip> searchPublished(@Param("query") String query, @Param("status") TripStatus status, Pageable pageable);
+
     @Query("""
-        SELECT t FROM Trip t
+        SELECT t
+        FROM Trip t
         WHERE t.deletedAt IS NULL
         AND t.status = :status
         AND (
@@ -65,13 +92,9 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
             OR LOWER(t.destinationCity) LIKE CONCAT('%', LOWER(:query), '%')
             OR LOWER(t.destinationCountry) LIKE CONCAT('%', LOWER(:query), '%')
         )
-        AND t.startDate >= :date
+        AND t.startDate <= :date
+        AND t.endDate >= :date
         ORDER BY COALESCE(t.averageRating, 0) DESC, t.tripId DESC
         """)
-    List<Trip> searchPublishedFromDate(
-            @Param("query") String query,
-            @Param("status") TripStatus status,
-            @Param("date") LocalDate date,
-            Pageable pageable
-    );
+    List<Trip> searchPublishedFromDate(@Param("query") String query, @Param("status") TripStatus status, @Param("date") LocalDate date, Pageable pageable);
 }

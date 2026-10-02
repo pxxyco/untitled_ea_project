@@ -13,20 +13,12 @@ import java.time.LocalDateTime;
 public class ActivityHomeDTO {
 
     private Long activityId;
-
     private String title;
-
     private String city;
-
     private String category;
-
     private Double price;
-
     private Double averageRating;
-
     private String imageUrl;
-
     private LocalDateTime startDate;
-
     private LocalDateTime endDate;
 }

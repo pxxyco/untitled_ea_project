@@ -1,13 +1,15 @@
 package it.unical.ea_project.service.impl;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import it.unical.ea_project.domain.User;
 import it.unical.ea_project.service.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,29 +19,11 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-    // Durata Access Token 15 minuti
-    private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000;
-    // Durata Refresh Token 7 giorni
-    private static final long REFRESH_TOKEN_VALIDITY = 7L * 24 * 60 * 60 * 1000;
-
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    @Override
-    public String generateAccessToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole() != null ? user.getRole().name() : "TRAVELER");
-        claims.put("id", user.getId());
-        return buildToken(claims, user.getEmail(), ACCESS_TOKEN_VALIDITY);
-    }
-
-    @Override
-    public String generateRefreshToken(User user) {
-        return buildToken(new HashMap<>(), user.getEmail(), REFRESH_TOKEN_VALIDITY);
-    }
+    @Value("${jwt.secret}")
+    private String secret;
+    private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000L;          // 15 minuti
+    private static final long REFRESH_TOKEN_VALIDITY = 7L * 24 * 60 * 60 * 1000; // 7 giorni
+    @PostConstruct private void validateJwtKey() {getSigningKey();}
 
     private String buildToken(Map<String, Object> extraClaims, String subject, long expirationMillis) {
         return Jwts.builder()
@@ -49,6 +33,39 @@ public class JwtServiceImpl implements JwtService {
                 .expiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
+    }
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+    }
+
+    @Override
+    public String generateAccessToken(User user) {
+        if (user.getRole() == null) {throw new IllegalStateException("Impossibile generare il token: ruolo utente mancante.");}
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", TYPE_ACCESS);
+        claims.put("role", user.getRole().name());
+        claims.put("id", user.getId());
+        return buildToken(claims, user.getEmail(), ACCESS_TOKEN_VALIDITY);
+    }
+
+
+
+    @Override
+    public String generateRefreshToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", TYPE_REFRESH);
+        claims.put("id", user.getId());
+        return buildToken(claims, user.getEmail(), REFRESH_TOKEN_VALIDITY);
+    }
+
+    @Override
+    public Claims parseToken(String token, String expectedType) {
+        Claims claims = extractAllClaims(token);
+        if (!expectedType.equals(claims.get("type", String.class))) {
+            throw new JwtException("Tipo di token non valido");
+        }
+        return claims;
     }
 
     @Override
