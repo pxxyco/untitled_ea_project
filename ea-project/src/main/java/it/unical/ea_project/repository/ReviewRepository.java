@@ -11,15 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@SQLRestriction("deleted_at IS NULL")
+@SQLRestriction("deleted_at = false")
 @Repository
 public interface ReviewRepository extends JpaRepository<Review,Long> {
 
     List<Review> findAllByUserId(Long userId);
 
-    List<Review> findAllByTripTripId(Long tripId);
+    List<Review> findAllByTripTripIdOrderByCreatedAtDesc(Long tripId);
 
-    List<Review> findAllByActivityActivityId(Long activityId);
+    List<Review> findAllByActivityActivityIdOrderByCreatedAtDesc(Long activityId);
 
     @Modifying
     @Transactional

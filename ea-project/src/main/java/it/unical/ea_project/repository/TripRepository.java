@@ -20,10 +20,19 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     List<Trip> findByStatusAndDeletedAtIsNull(TripStatus status);
     List<Trip> findByDestinationCountryContainingIgnoreCaseAndDeletedAtIsNull(String country);
     List<Trip> findByDestinationCityContainingIgnoreCaseAndDeletedAtIsNull(String city);
+
+    // Trova i viaggi disponibili in un determinato intervallo di date
+    List<Trip> findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndDeletedAtIsNull(LocalDate startDate, LocalDate endDate);
+
+    // Trova i viaggi che hanno ancora posti disponibili e sono pubblicati
+    List<Trip> findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus status, Integer minSeats);
+
+    // Serve per recuperare un viaggio specifico solo se attivo (usiamo questo metodo quando usiamo il soft delete "deletedAt")
+    @Query("SELECT t FROM Trip t LEFT JOIN FETCH t.stages WHERE t.tripId = :tripId AND t.deletedAt IS NULL")
     Optional<Trip> findByTripIdAndDeletedAtIsNull(Long tripId);
 
-    List<Trip> findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndDeletedAtIsNull(LocalDate startDate, LocalDate endDate);
-    List<Trip> findByStatusAndAvailableSeatsGreaterThanAndDeletedAtIsNull(TripStatus status, Integer minSeats);
+    Boolean existsByTripIdAndDeletedAtIsNull(Long tripId);
+
 
 
 

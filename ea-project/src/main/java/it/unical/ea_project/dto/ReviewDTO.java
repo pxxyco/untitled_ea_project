@@ -18,6 +18,10 @@ public class ReviewDTO {
 
     private Long userId;
 
+    private String username;
+
+    private ResponseDTO response;
+
     private Long tripId;
 
     private Long activityId;

@@ -8,6 +8,9 @@ import java.io.IOException;
 import it.unical.ea_project_javafx.util.AppConfig;
 import it.unical.ea_project_javafx.util.SceneNavigator;
 
+/**
+ * JavaFX App Main Entry Point
+ */
 public class App extends Application {
 
     @Override

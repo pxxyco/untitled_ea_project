@@ -1,21 +1,23 @@
 package it.unical.ea_project.service;
 
 import it.unical.ea_project.domain.Review;
+import it.unical.ea_project.dto.ReviewDTO;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public interface ReviewService {
 
-    Review crea(Review review);
+    ReviewDTO create(ReviewDTO review);
 
     Review findById(Long id);
 
     List<Review> findByUser(Long userId);
 
-    List<Review> findByActivity(Long activityId);
+    @Nullable List<ReviewDTO> findByActivity(Long activityId);
 
-    List<Review> findByTrip(Long tripId);
+    @Nullable List<ReviewDTO> findByTrip(Long tripId);
 
-    void elimina(Long id);
+    void delete(Long id);
 
 }
