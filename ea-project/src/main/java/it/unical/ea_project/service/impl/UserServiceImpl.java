@@ -63,15 +63,28 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User registerUser(User user) {
         PasswordPolicy.validate(user.getHashedPassword())
-                .ifPresent(message -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
-                });
-        if (userRepository.existsByUsername(user.getUsername())) {
+                .ifPresent(message -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message); });
+
+        String username = user.getUsername() == null ? "" : user.getUsername().trim();
+        String email = user.getEmail() == null ? "" : user.getEmail().trim();
+
+        if (username.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username obbligatorio.");
+        }
+        if (email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email obbligatoria.");
+        }
+
+        user.setUsername(username);
+        user.setEmail(email);
+
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username già in uso.");
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(email)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email già registrata.");
         }
+
         user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
         return userRepository.save(user);
     }

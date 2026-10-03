@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class ActivitySuggestionDTO {
     private Long activityId;
     private String title;
+    private String category;
     private String city;
 }

@@ -4,19 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripHomeDTO {
-
+public class TripSuggestionDTO
+{
     private Long tripId;
     private String title;
     private String location;
-    private BigDecimal totalPrice;
-    private BigDecimal averageRating;
-    private String coverPhotoUrl;
-    private String startDate;
-    private String endDate;
 }
