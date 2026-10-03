@@ -10,8 +10,8 @@ module it.unical.ea_project_javafx {
     requires java.net.http;
     
     requires com.google.gson;
-    requires static lombok;
     requires com.gluonhq.maps;
+    requires static lombok;
 
     exports it.unical.ea_project_javafx;
     

@@ -24,10 +24,10 @@ public class ActivityDTO {
 
     private String description;
 
-
     private String category;
 
     private Double latitude;
+
     private Double longitude;
 
     private String placeName;
@@ -40,12 +40,11 @@ public class ActivityDTO {
 
     private Integer durationMinutes;
 
-    private BigDecimal price;
+    private Long price;
 
     private Integer maxSeats;
 
     private Integer availableSeats;
-
 
     private String status;
 
@@ -60,4 +59,5 @@ public class ActivityDTO {
     private LocalDateTime deletedAt;
 
     private List<ActivityImageDTO> images;
+
 }
