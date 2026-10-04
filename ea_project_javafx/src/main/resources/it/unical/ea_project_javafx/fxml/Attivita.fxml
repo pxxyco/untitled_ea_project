@@ -136,7 +136,7 @@
                                        <Label fx:id="lblTotale" styleClass="price-total" text="45€" />
                                     </children>
                                  </HBox>
-                                 <Button fx:id="btnPrenota" maxWidth="Infinity" styleClass="btn-primary" text="Prenota Ora" />
+                                 <Button fx:id="btnPrenota" maxWidth="Infinity" onAction="#handlePrenota" styleClass="btn-primary" text="Prenota Ora" />
                                  <Label styleClass="hint" text="Cancellazione gratuita fino a 24h prima" wrapText="true" />
                               </children>
                               <BorderPane.margin>

@@ -1,7 +1,9 @@
 package it.unical.ea_project_javafx.controller.home;
 
+import it.unical.ea_project_javafx.controller.AttivitaController;
 import it.unical.ea_project_javafx.dto.home.ActivityHomeDTO;
 import it.unical.ea_project_javafx.dto.home.TripHomeDTO;
+import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -42,6 +44,8 @@ public class ExperienceCardController {
     };
 
     private static final DateTimeFormatter CARD_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private AttivitaController.Type detailType;
+    private Long detailId;
 
     @FXML
     public void initialize() {
@@ -105,6 +109,9 @@ public class ExperienceCardController {
     public void setData(TripHomeDTO dto) {
         if (dto == null) return;
 
+        detailType = AttivitaController.Type.TRIP;
+        detailId = dto.getTripId();
+
         String title = dto.getTitle() != null ? dto.getTitle() : "Senza Titolo";
         String location = dto.getLocation() != null ? dto.getLocation() : "";
         String category = "Viaggio";
@@ -118,6 +125,9 @@ public class ExperienceCardController {
 
     public void setData(ActivityHomeDTO dto) {
         if (dto == null) return;
+
+        detailType = AttivitaController.Type.ACTIVITY;
+        detailId = dto.getActivityId();
 
         String title = dto.getTitle() != null ? dto.getTitle() : "Senza Titolo";
         String location = dto.getCity() != null ? dto.getCity() : "";
@@ -176,6 +186,11 @@ public class ExperienceCardController {
     }
 
     private void handleCardClick() {
-        // TODO Logica di navigazione al click sulla card
+        if (detailType == null || detailId == null) return;
+
+        SceneNavigator.getInstance().loadScene(
+                "/it/unical/ea_project_javafx/fxml/Attivita.fxml",
+                controller -> ((AttivitaController) controller).loadData(detailType, detailId.toString())
+        );
     }
 }

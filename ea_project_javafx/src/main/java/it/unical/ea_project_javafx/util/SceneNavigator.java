@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.function.Consumer;
 
 public class SceneNavigator {
 
@@ -42,6 +43,10 @@ public class SceneNavigator {
      * @param fxmlPath Il percorso del file FXML (es. "/views/HomeView.fxml")
      */
     public void loadScene(String fxmlPath) {
+        loadScene(fxmlPath, null);
+    }
+
+    public void loadScene(String fxmlPath, Consumer<Object> controllerInitializer) {
         if (mainStage == null) {
             throw new IllegalStateException("SceneNavigator non inizializzato. Chiamare il metodo init(Stage) prima");
         }
@@ -55,6 +60,9 @@ public class SceneNavigator {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+            if (controllerInitializer != null) {
+                controllerInitializer.accept(loader.getController());
+            }
 
             Scene scene;
             if (mainStage.getScene() != null) {
