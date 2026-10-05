@@ -5,6 +5,8 @@ import it.unical.ea_project_javafx.dto.home.ActivityHomeDTO;
 import it.unical.ea_project_javafx.dto.home.TripHomeDTO;
 import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -13,11 +15,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static it.unical.ea_project_javafx.controller.AttivitaController.Type.ACTIVITY;
 
 public class ExperienceCardController {
 
@@ -42,10 +47,9 @@ public class ExperienceCardController {
             return size() > MAX_CACHE_SIZE;
         }
     };
-
     private static final DateTimeFormatter CARD_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private AttivitaController.Type detailType;
-    private Long detailId;
+    private String detailId;
 
     @FXML
     public void initialize() {
@@ -91,7 +95,8 @@ public class ExperienceCardController {
         }
     }
 
-    public void setData(String title, String location, String category, String price, String rating, String imageUrl, String dateInfo) {
+    public void setData(String title, String location, String category, String price, String rating, String imageUrl, String dateInfo)
+    {
         titleLabel.setText(title);
         locationLabel.setText(location);
         categoryLabel.setText(category);
@@ -103,14 +108,13 @@ public class ExperienceCardController {
         dateLabel.setManaged(dateLabel.isVisible());
 
         loadImage(imageUrl);
-        cardRoot.setOnMouseClicked(event -> handleCardClick());
     }
 
     public void setData(TripHomeDTO dto) {
         if (dto == null) return;
 
         detailType = AttivitaController.Type.TRIP;
-        detailId = dto.getTripId();
+        detailId = dto.getTripId().toString();
 
         String title = dto.getTitle() != null ? dto.getTitle() : "Senza Titolo";
         String location = dto.getLocation() != null ? dto.getLocation() : "";
@@ -120,14 +124,19 @@ public class ExperienceCardController {
         String imageUrl = dto.getCoverPhotoUrl() != null ? dto.getCoverPhotoUrl() : "";
         String dateInfo = formatDateRange(dto.getStartDate(), dto.getEndDate());
 
+        cardRoot.setOnMouseClicked(event -> handleCardClick(AttivitaController.Type.TRIP, String.valueOf(dto.getTripId())));
+
         setData(title, location, category, price, rating, imageUrl, dateInfo);
+
     }
+
+
 
     public void setData(ActivityHomeDTO dto) {
         if (dto == null) return;
 
-        detailType = AttivitaController.Type.ACTIVITY;
-        detailId = dto.getActivityId();
+        detailType = ACTIVITY;
+        detailId = dto.getActivityId().toString();
 
         String title = dto.getTitle() != null ? dto.getTitle() : "Senza Titolo";
         String location = dto.getCity() != null ? dto.getCity() : "";
@@ -136,6 +145,8 @@ public class ExperienceCardController {
         String rating = String.format("%.1f", dto.getAverageRating() != null ? dto.getAverageRating() : 5.0);
         String imageUrl = dto.getImageUrl() != null ? dto.getImageUrl() : "";
         String dateInfo = formatDateRange(dto.getStartDate(), dto.getEndDate());
+
+        cardRoot.setOnMouseClicked(event -> handleCardClick(AttivitaController.Type.ACTIVITY, String.valueOf(dto.getActivityId())));
 
         setData(title, location, category, price, rating, imageUrl, dateInfo);
     }
@@ -185,12 +196,13 @@ public class ExperienceCardController {
         listener.attach();
     }
 
-    private void handleCardClick() {
-        if (detailType == null || detailId == null) return;
-
-        SceneNavigator.getInstance().loadScene(
-                "/it/unical/ea_project_javafx/fxml/Attivita.fxml",
-                controller -> ((AttivitaController) controller).loadData(detailType, detailId.toString())
+    private void handleCardClick(AttivitaController.Type type, String s) {
+        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/Attivita.fxml",
+                controller -> {
+                    if (controller instanceof AttivitaController attivitaCtrl) {
+                        attivitaCtrl.loadData(detailType, detailId);
+                    }
+                }
         );
     }
 }
