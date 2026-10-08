@@ -1,0 +1,91 @@
+package it.unical.ea_project.service.impl;
+
+import it.unical.ea_project.domain.User;
+import it.unical.ea_project.repository.UserRepository;
+import it.unical.ea_project.service.LoginAttemptService;
+import it.unical.ea_project.service.UserService;
+import it.unical.ea_project.security.PasswordPolicy;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final LoginAttemptService loginAttemptService;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
+
+    @Override
+    public Optional<User> login(String identifier, String password) {
+        String normalizedIdentifier = identifier == null ? "" : identifier.trim();
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(normalizedIdentifier);
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByUsernameIgnoreCase(normalizedIdentifier);
+        }
+
+        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getHashedPassword())) {
+            loginAttemptService.loginSucceeded(normalizedIdentifier);
+            return userOpt;
+        } else {
+            loginAttemptService.loginFailed(normalizedIdentifier);
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    @Transactional
+    public User registerUser(User user) {
+        PasswordPolicy.validate(user.getHashedPassword())
+                .ifPresent(message -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message); });
+
+        String username = user.getUsername() == null ? "" : user.getUsername().trim();
+        String email = user.getEmail() == null ? "" : user.getEmail().trim();
+
+        if (username.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username obbligatorio.");
+        }
+        if (email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email obbligatoria.");
+        }
+
+        user.setUsername(username);
+        user.setEmail(email);
+
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username già in uso.");
+        }
+        if (userRepository.existsByEmailIgnoreCase(email)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email già registrata.");
+        }
+
+        user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
+        return userRepository.save(user);
+    }
+}
