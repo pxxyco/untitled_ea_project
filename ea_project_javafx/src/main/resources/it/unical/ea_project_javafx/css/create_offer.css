@@ -339,6 +339,23 @@
     -fx-text-fill: #ffffff;
 }
 
+.btn-remove-stage {
+    -fx-background-color: rgba(127, 29, 29, 0.35);
+    -fx-border-color: rgba(252, 165, 165, 0.55);
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #fecaca;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 10px;
+    -fx-cursor: hand;
+}
+
+.btn-remove-stage:hover {
+    -fx-background-color: rgba(185, 28, 28, 0.75);
+    -fx-border-color: #fca5a5;
+    -fx-text-fill: #ffffff;
+}
+
 .btn-link {
     -fx-background-color: transparent;
     -fx-text-fill: rgba(255, 255, 255, 0.68);
