@@ -19,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,6 +50,8 @@ public class ApiService {
                     deserializeLocalDateTime(json))
             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, context) ->
                     deserializeLocalDate(json))
+            .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, context) ->
+                    deserializeLocalTime(json))
             .create();
 
     public static <T> T fromJson(String json, java.lang.reflect.Type type) {
@@ -86,6 +89,24 @@ public class ApiService {
                 parts.get(2).getAsInt(),
                 parts.get(3).getAsInt(),
                 parts.get(4).getAsInt(),
+                second,
+                nano
+        );
+    }
+
+    private static LocalTime deserializeLocalTime(JsonElement json) {
+        if (!json.isJsonArray()) {
+            return LocalTime.parse(json.getAsString());
+        }
+        JsonArray parts = json.getAsJsonArray();
+        if (parts.size() < 2 || parts.size() > 4) {
+            throw new JsonParseException("Expected a LocalTime as an ISO string or a 2-to-4-part array.");
+        }
+        int second = parts.size() > 2 ? parts.get(2).getAsInt() : 0;
+        int nano = parts.size() > 3 ? parts.get(3).getAsInt() : 0;
+        return LocalTime.of(
+                parts.get(0).getAsInt(),
+                parts.get(1).getAsInt(),
                 second,
                 nano
         );
