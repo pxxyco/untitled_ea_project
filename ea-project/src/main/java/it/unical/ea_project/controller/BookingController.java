@@ -22,6 +22,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getPrenotazioniUtente(user.id()));
     }
 
+    @GetMapping("/organizer/mine")
+    public ResponseEntity<List<BookingDTO>> getOrganizerBookings(@AuthenticationPrincipal AuthUser user) {
+        return ResponseEntity.ok(bookingService.getPrenotazioniOrganizzatore(user.id()));
+    }
+
     @PostMapping("/trips/{tripId}")
     public ResponseEntity<BookingDTO> bookTrip(@PathVariable Long tripId,
                                                 @RequestParam Integer seats,

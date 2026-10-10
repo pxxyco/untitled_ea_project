@@ -82,6 +82,15 @@ public class TripServiceImpl implements TripService {
         User creator = userRepository.findById(creatorId)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + creatorId));
         trip.setCreatedBy(creator);
+        if (trip.getStatus() == null) {
+            trip.setStatus(TripStatus.PUBLISHED);
+        }
+        if (trip.getAvailableSeats() == null) {
+            trip.setAvailableSeats(trip.getMaxSeats());
+        }
+        if (trip.getStages() != null) {
+            trip.getStages().forEach(stage -> stage.setTrip(trip));
+        }
         return tripRepository.save(trip);
     }
 

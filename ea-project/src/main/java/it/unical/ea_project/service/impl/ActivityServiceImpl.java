@@ -123,6 +123,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<ActivityDTO> getActivityDtosByCreator(Long creatorId) {
+        return toActivityDtos(activityRepository.findByCreatedByIdAndDeletedAtIsNullOrderByCreatedAtDesc(creatorId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ActivityHomeDTO> getTopActivityHomeDtos(int page, int size) {
         return toHomeDtos(getTopActivities(page, size));
     }
@@ -254,4 +260,3 @@ public class ActivityServiceImpl implements ActivityService {
         );
     }
 }
-

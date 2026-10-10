@@ -57,6 +57,7 @@ public class AttivitaController {
 
     @FXML private Label lblTotale;
     @FXML private Button btnPrenota;
+    @FXML private javafx.scene.layout.VBox bookingCard;
 
     @FXML private LoadingOverlayController loadingCardController;
     @FXML private StackPane loadingOverlay;
@@ -98,6 +99,9 @@ public class AttivitaController {
     void initialize() {
         
         loadingOverlay.setVisible(true);
+        boolean isOrganizer = "ORGANIZER".equalsIgnoreCase(UserSession.getInstance().getRole());
+        bookingCard.setVisible(!isOrganizer);
+        bookingCard.setManaged(!isOrganizer);
         
         btnInitialize();
 
@@ -342,6 +346,9 @@ public class AttivitaController {
 
     @FXML
     private void handlePrenota() {
+        if ("ORGANIZER".equalsIgnoreCase(UserSession.getInstance().getRole())) {
+            return;
+        }
         if (!UserSession.getInstance().isLoggedIn()) {
             showAlert(Alert.AlertType.WARNING, "Accesso richiesto", "Devi effettuare il login per prenotare.");
             return;

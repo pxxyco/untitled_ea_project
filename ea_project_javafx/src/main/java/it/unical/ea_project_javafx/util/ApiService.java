@@ -2,7 +2,10 @@ package it.unical.ea_project_javafx.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParseException;
 import it.unical.ea_project_javafx.dto.UserDTO;
 import it.unical.ea_project_javafx.model.UserSession;
 import javafx.application.Platform;
@@ -43,10 +46,50 @@ public class ApiService {
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, context) ->
-                    LocalDateTime.parse(json.getAsString()))
+                    deserializeLocalDateTime(json))
             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, context) ->
-                    LocalDate.parse(json.getAsString()))
+                    deserializeLocalDate(json))
             .create();
+
+    public static <T> T fromJson(String json, java.lang.reflect.Type type) {
+        return GSON.fromJson(json, type);
+    }
+
+    public static String toJson(Object value) {
+        return GSON.toJson(value);
+    }
+
+    private static LocalDate deserializeLocalDate(JsonElement json) {
+        if (!json.isJsonArray()) {
+            return LocalDate.parse(json.getAsString());
+        }
+        JsonArray parts = json.getAsJsonArray();
+        if (parts.size() != 3) {
+            throw new JsonParseException("Expected a LocalDate as an ISO string or a 3-part array.");
+        }
+        return LocalDate.of(parts.get(0).getAsInt(), parts.get(1).getAsInt(), parts.get(2).getAsInt());
+    }
+
+    private static LocalDateTime deserializeLocalDateTime(JsonElement json) {
+        if (!json.isJsonArray()) {
+            return LocalDateTime.parse(json.getAsString());
+        }
+        JsonArray parts = json.getAsJsonArray();
+        if (parts.size() < 5 || parts.size() > 7) {
+            throw new JsonParseException("Expected a LocalDateTime as an ISO string or a 5-to-7-part array.");
+        }
+        int second = parts.size() > 5 ? parts.get(5).getAsInt() : 0;
+        int nano = parts.size() > 6 ? parts.get(6).getAsInt() : 0;
+        return LocalDateTime.of(
+                parts.get(0).getAsInt(),
+                parts.get(1).getAsInt(),
+                parts.get(2).getAsInt(),
+                parts.get(3).getAsInt(),
+                parts.get(4).getAsInt(),
+                second,
+                nano
+        );
+    }
 
     @Setter
     private static Runnable onNetworkFailureGlobal;

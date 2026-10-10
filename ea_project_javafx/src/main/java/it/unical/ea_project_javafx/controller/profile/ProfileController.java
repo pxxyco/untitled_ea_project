@@ -118,16 +118,6 @@ public class ProfileController implements MainNavigator {
     }
 
     @Override
-    public void goToExperiences(Node sourceNode) {
-        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/experiences.fxml");
-    }
-
-    @Override
-    public void goToItinerari(Node sourceNode) {
-        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/itinerari.fxml");
-    }
-
-    @Override
     public void goToProfile(Node sourceNode) {
         // La pagina corrente e gia il profilo dell'utente autenticato.
     }
