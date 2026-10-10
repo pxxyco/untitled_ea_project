@@ -107,6 +107,9 @@ public class MainViewController implements MainNavigator {
             }
 
             navbarContainer.getChildren().setAll(navbarView);
+            if (experienceListController != null) {
+                experienceListController.loadHomeForCurrentUser();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,16 +134,6 @@ public class MainViewController implements MainNavigator {
     @Override
     public void goToLogin(Node sourceNode) {
         SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/login/login.fxml");
-    }
-
-    @Override
-    public void goToExperiences(Node sourceNode) {
-        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/experiences.fxml");
-    }
-
-    @Override
-    public void goToItinerari(Node sourceNode) {
-        SceneNavigator.getInstance().loadScene("/it/unical/ea_project_javafx/fxml/itinerari.fxml");
     }
 
     @Override

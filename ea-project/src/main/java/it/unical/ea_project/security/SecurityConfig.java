@@ -38,10 +38,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/exists").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
                         .requestMatchers("/api/me/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/activities/organizer/**").hasRole("ORGANIZER")
                         .requestMatchers(HttpMethod.GET, "/api/activities/**", "/api/trips/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/activities/**", "/api/trips/**").hasRole("ORGANIZER")
                         .requestMatchers(HttpMethod.PUT, "/api/activities/**", "/api/trips/**").hasRole("ORGANIZER")
                         .requestMatchers(HttpMethod.DELETE, "/api/activities/**", "/api/trips/**").hasRole("ORGANIZER")
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/organizer/**").hasRole("ORGANIZER")
+                        .requestMatchers(HttpMethod.GET, "/api/payments/organizer/**").hasRole("ORGANIZER")
                         .requestMatchers("/api/bookings/**").hasRole("TRAVELER")
                         .anyRequest().authenticated()
                 );

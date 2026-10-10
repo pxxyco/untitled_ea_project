@@ -89,6 +89,13 @@ public class BookingServiceImpl implements BookingService {
                 .stream().map(this::toDto).toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookingDTO> getPrenotazioniOrganizzatore(Long organizerId) {
+        return bookingRepository.findActiveBookingsForOrganizer(organizerId)
+                .stream().map(this::toDto).toList();
+    }
+
     private void validateSeats(Integer seats) {
         if (seats == null || seats < 1) {
             throw new IllegalArgumentException("Il numero di posti deve essere positivo");
@@ -120,6 +127,8 @@ public class BookingServiceImpl implements BookingService {
                 .userId(booking.getUser() != null ? booking.getUser().getId() : null)
                 .tripId(booking.getTrip() != null ? booking.getTrip().getTripId() : null)
                 .activityId(booking.getActivity() != null ? booking.getActivity().getActivityId() : null)
+                .participantName(booking.getUser() != null ? booking.getUser().getFullName() : null)
+                .participantEmail(booking.getUser() != null ? booking.getUser().getEmail() : null)
                 .itemTitle(title)
                 .itemDate(date)
                 .itemLocation(location)

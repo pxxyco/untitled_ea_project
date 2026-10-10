@@ -6,6 +6,7 @@ import it.unical.ea_project_javafx.util.SceneNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.input.MouseEvent;
 import lombok.Setter;
@@ -17,11 +18,17 @@ public class NavbarController {
     private MainNavigator navigator;
 
     @FXML private MenuButton userMenuButton;
+    @FXML private Label organizerNavItem;
 
     @FXML
     public void initialize() {
         if (userMenuButton != null && UserSession.getInstance().isLoggedIn()) {
             userMenuButton.setText(UserSession.getInstance().getUsername());
+        }
+        if (organizerNavItem != null) {
+            boolean isOrganizer = "ORGANIZER".equalsIgnoreCase(UserSession.getInstance().getRole());
+            organizerNavItem.setVisible(isOrganizer);
+            organizerNavItem.setManaged(isOrganizer);
         }
     }
 
@@ -40,16 +47,9 @@ public class NavbarController {
     }
 
     @FXML
-    void handleExperiences(MouseEvent event) {
-        if (navigator != null) {
-            navigator.goToExperiences((Node) event.getSource());
-        }
-    }
-
-    @FXML
-    void handleItinerari(MouseEvent event) {
-        if (navigator != null) {
-            navigator.goToItinerari((Node) event.getSource());
+    void handleOrganizer(MouseEvent event) {
+        if (navigator != null && "ORGANIZER".equalsIgnoreCase(UserSession.getInstance().getRole())) {
+            navigator.goToProfile((Node) event.getSource());
         }
     }
 
